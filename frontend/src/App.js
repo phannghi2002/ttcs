@@ -48,7 +48,7 @@ function App() {
     } else if (typeTrip === "Roundtrip") {
       setCompare(false);
     }
-    console.log(typeTrip);
+    // console.log(typeTrip);
   }, [typeTrip]);
 
   async function fetchAPI() {
@@ -61,10 +61,10 @@ function App() {
   }
 
   const handleShowFlight = () => {
-    const formElement = document.querySelector(".App");
+    const formElement = document.querySelector(".form");
     if (!show) {
-      formElement.classList.add("move");
       fetchAPI();
+      formElement.classList.add("move");
     } else {
       formElement.classList.remove("move");
     }
@@ -122,7 +122,7 @@ function App() {
           </div>
 
           <div>
-            FLYING TO anh nghi dep trai vai o
+            FLYING TO
             <br />
             <input
               type="text"
@@ -171,7 +171,7 @@ function App() {
         <DefaultPage2 data={data} typeTrip={typeTrip} />
       )}
 
-      <Check />
+      {false && <Check />}
     </div>
   );
 }

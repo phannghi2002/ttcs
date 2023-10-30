@@ -132,9 +132,9 @@ export const getTicketBySearch = async (req, res) => {
 
   const formattedDateReturn = new Date(DateReturn).toISOString();
 
-  console.log(formattedDateReturn);
+  // console.log(formattedDateReturn);
 
-  console.log("Convert Date:" + moment(DateGo).utc().format("YYYY-mm-DD"));
+  // console.log("Convert Date:" + moment(DateGo).utc().format("YYYY-mm-DD"));
   try {
     console.log("anh nghi dep trai", DateGo);
 

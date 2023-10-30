@@ -1,9 +1,32 @@
 .contain {
-    background-color: rgb(233, 127, 127,0.6);
-    height: 50%;
-    width: 50%;
+     background-color: rgb(233, 127, 127,0.6);
+    //background: transparent;
+    height: 95%;
+    width: 75%;
+}
+.title {
+    text-align: center;
+    width: 100%;
+   font-size: 2.6rem;
+    font-weight: 700;
+    font-family: fangsong;
 }
 .image {
+    height: 60px;
+    width: 60px;
+}
+
+.container {
+    border-radius: 5px;
+    width: 90%;
     height: 100px;
-    width: 100px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    background-color: #fff;
+    margin-bottom: 12px;
+    box-shadow: rgba(0, 0, 0, 0.45) 0px 5px 15px;
+}
+.info_flight {
+    text-align: center;
 }

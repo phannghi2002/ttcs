@@ -4,12 +4,19 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.scss";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Check from "./component/Check";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>
+  <BrowserRouter>
+    {/* <App /> */}
+
+    <Routes>
+      <Route path="/check" element={<Check />} />
+      <Route path="/" element={<App />} />
+    </Routes>
+  </BrowserRouter>
 );
 
 // If you want to start measuring performance in your app, pass a function
