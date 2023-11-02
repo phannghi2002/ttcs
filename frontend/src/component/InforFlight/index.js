@@ -10,6 +10,7 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
 function InforFlight({ item, name }) {
+  // const navigate = useNavigate();
   const [moneyAdult, setMoneyAdult] = useState(
     item.Oneway.BusinessClass.PriceAdult
   );
@@ -50,6 +51,15 @@ function InforFlight({ item, name }) {
     setSelectedValue(value);
     // console.log(value);
     // Perform further actions with the selected value
+  };
+
+  const handleSelect = () => {
+    // Store bookedButton in localStorage
+    console.log(item);
+    localStorage.setItem(
+      "inforFlight",
+      JSON.stringify({ item, selectedValue, value1, value2, total })
+    );
   };
 
   //change value money adult, money children when change select other
@@ -133,8 +143,10 @@ function InforFlight({ item, name }) {
         </span>
 
         <span className="ms-3">
+          {/* {navigate("/searchFlightRoundtrip")} */}
+          {/* if not use Link then can use ("/searchFlightRoundtrip/check") */}
           <Link to="check">
-            <Button className="select">
+            <Button className="select" onClick={handleSelect}>
               Select <FontAwesomeIcon icon={faArrowRight} />
             </Button>
           </Link>

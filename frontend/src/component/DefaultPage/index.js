@@ -74,7 +74,7 @@ export function DefaultPage2({ data, typeTrip }) {
   if (data[0]) {
     const d = new Date(data[0].DateGo);
     const dateConvert = d.toLocaleDateString("en-GB");
-    console.log(dateConvert);
+    // console.log(dateConvert);
     return (
       <div className="contain ms-3">
         <div className="info_flight mb-3">

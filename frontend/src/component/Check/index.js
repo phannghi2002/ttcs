@@ -1,43 +1,67 @@
 import { useState } from "react";
 import axios from "axios";
 import "./Check.scss";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
+import ToastCustom from "../../Toast";
 import "react-toastify/dist/ReactToastify.css";
 import { Link } from "react-router-dom";
+import { ModalSeatBooking } from "../../Modal";
 
 function Check() {
-  const [Username, setUserName] = useState("");
-  const [DayOfBirth, setDayOfBirth] = useState("");
-  const [Email, setEmail] = useState("");
-  const [Address, setAdress] = useState("");
-  const [ID_Card, setID_Card] = useState("");
-  const [Phone, setPhone] = useState("");
+  const [data, setData] = useState({
+    Username: "",
+    DayOfBirth: "",
+    Email: "",
+    Address: "",
+    ID_Card: "",
+    Phone: "",
+  });
+
+  const handleChange = (e) => {
+    const value = e.target.value;
+    const id = e.target.id;
+
+    setData({ ...data, [id]: value });
+  };
+
+  const [showModal, setShowModal] = useState(false);
 
   const handleSubmit = () => {
     axios
       .post("http://localhost:4000/auth/enterInfo", {
-        Username,
-        DayOfBirth,
-        Email,
-        Address,
-        ID_Card,
-        Phone,
+        Username: data.Username,
+        DayOfBirth: data.DayOfBirth,
+        Email: data.Email,
+        Address: data.Address,
+        ID_Card: data.ID_Card,
+        Phone: data.Phone,
       })
       .then((res) => {
         console.log(res);
         toast.success("Enter information successful");
+        setData({
+          Username: "",
+          DayOfBirth: "",
+          Email: "",
+          Address: "",
+          ID_Card: "",
+          Phone: "",
+        });
+
+        setTimeout(() => {
+          setShowModal(true);
+        }, 3000);
+
+        // Store bookedButton in localStorage
+        localStorage.setItem("inforPerson", JSON.stringify(data));
       })
       .catch((err) => {
         console.log(err);
         toast.error("Fail. Please try again");
+        setTimeout(() => {
+          setShowModal(true);
+        }, 3000);
       });
-
-    setUserName("");
-    setDayOfBirth("");
-    setAdress("");
-    setEmail("");
-    setID_Card("");
-    setPhone("");
   };
 
   return (
@@ -48,31 +72,31 @@ function Check() {
         <form className="form_1 mt-2">
           <div className="content_1 mb-2">
             <div className="col_6">
-              <label className="title_2 mb-1" htmlFor="username">
+              <label className="title_2 mb-1" htmlFor="Username">
                 Username
               </label>
 
               <input
                 type="text"
-                id="username"
+                id="Username"
                 placeholder="Enter Your Name"
-                value={Username}
-                onChange={(e) => setUserName(e.target.value)}
+                value={data.Username}
+                onChange={handleChange}
                 className="input_1"
               />
             </div>
 
             <div className="col_6">
-              <label className="title_2 mb-1" htmlFor="dayofbirth">
+              <label className="title_2 mb-1" htmlFor="DayOfBirth">
                 Day Of Birth
               </label>
 
               <input
                 type="text"
-                id="dayofbirth"
-                value={DayOfBirth}
+                id="DayOfBirth"
+                value={data.DayOfBirth}
                 placeholder="Day Of Birth"
-                onChange={(e) => setDayOfBirth(e.target.value)}
+                onChange={handleChange}
                 className="input_1"
               />
             </div>
@@ -80,31 +104,31 @@ function Check() {
 
           <div className="content_1 mb-2">
             <div className="col_6">
-              <label className="title_2 mb-1" htmlFor="email">
+              <label className="title_2 mb-1" htmlFor="Email">
                 Email
               </label>
 
               <input
                 type="text"
-                id="email"
-                value={Email}
+                id="Email"
+                value={data.Email}
                 placeholder="Email Address"
-                onChange={(e) => setEmail(e.target.value)}
+                onChange={handleChange}
                 className="input_1"
               />
             </div>
 
             <div className="col_6">
-              <label className="title_2 mb-1" htmlFor="adress">
+              <label className="title_2 mb-1" htmlFor="Address">
                 Address
               </label>
 
               <input
                 type="text"
-                id="address"
-                value={Address}
+                id="Address"
+                value={data.Address}
                 placeholder="Address"
-                onChange={(e) => setAdress(e.target.value)}
+                onChange={handleChange}
                 className="input_1"
               />
             </div>
@@ -112,31 +136,31 @@ function Check() {
 
           <div className="content_1">
             <div className="col_6">
-              <label className="title_2 mb-1" htmlFor="idcard">
+              <label className="title_2 mb-1" htmlFor="ID_Card">
                 ID_Card
               </label>
 
               <input
                 type="text"
-                value={ID_Card}
-                id="idcard"
+                value={data.ID_Card}
+                id="ID_Card"
                 placeholder="ID_Card"
-                onChange={(e) => setID_Card(e.target.value)}
+                onChange={handleChange}
                 className="input_1"
               />
             </div>
 
             <div className="col_6">
-              <label className="title_2 mb-1" htmlFor="phone">
+              <label className="title_2 mb-1" htmlFor="Phone">
                 Phone
               </label>
 
               <input
                 type="text"
-                id="phone"
-                value={Phone}
+                id="Phone"
+                value={data.Phone}
                 placeholder="Phone"
-                onChange={(e) => setPhone(e.target.value)}
+                onChange={handleChange}
                 className="input_1"
               />
             </div>
@@ -153,21 +177,14 @@ function Check() {
               <span>Submit</span>
             </div>
 
-            <ToastContainer
-              position="top-right"
-              autoClose={5000}
-              hideProgressBar={false}
-              newestOnTop={false}
-              closeOnClick
-              rtl={false}
-              pauseOnFocusLoss
-              draggable
-              pauseOnHover
-              theme="light"
-            />
+            <ToastCustom />
           </div>
         </form>
       </div>
+
+      {showModal && (
+        <ModalSeatBooking show={showModal} setShow={setShowModal} />
+      )}
     </div>
   );
 }
