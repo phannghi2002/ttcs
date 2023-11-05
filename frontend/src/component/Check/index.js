@@ -1,136 +1,190 @@
 import { useState } from "react";
 import axios from "axios";
+import "./Check.scss";
+import { toast } from "react-toastify";
+import ToastCustom from "../../Toast";
+import "react-toastify/dist/ReactToastify.css";
+import { Link } from "react-router-dom";
+import { ModalSeatBooking } from "../../Modal";
 
 function Check() {
-  const [Username, setUserName] = useState("");
-  const [DayOfBirth, setDayOfBirth] = useState("");
-  const [Email, setEmail] = useState("");
-  const [Address, setAdress] = useState("");
-  const [ID_Card, setID_Card] = useState("");
-  const [Phone, setPhone] = useState("");
+  const [data, setData] = useState({
+    Username: "",
+    DayOfBirth: "",
+    Email: "",
+    Address: "",
+    ID_Card: "",
+    Phone: "",
+  });
 
-  //trantung200@gmail.com
-  //155 khuat duy tien,HN
-  //30/07/2002
+  const handleChange = (e) => {
+    const value = e.target.value;
+    const id = e.target.id;
+
+    setData({ ...data, [id]: value });
+  };
+
+  const [showModal, setShowModal] = useState(false);
 
   const handleSubmit = () => {
     axios
       .post("http://localhost:4000/auth/enterInfo", {
-        Username,
-        DayOfBirth,
-        Email,
-        Address,
-        ID_Card,
-        Phone,
+        Username: data.Username,
+        DayOfBirth: data.DayOfBirth,
+        Email: data.Email,
+        Address: data.Address,
+        ID_Card: data.ID_Card,
+        Phone: data.Phone,
       })
       .then((res) => {
         console.log(res);
-        alert("success created");
+        toast.success("Enter information successful");
+        setData({
+          Username: "",
+          DayOfBirth: "",
+          Email: "",
+          Address: "",
+          ID_Card: "",
+          Phone: "",
+        });
+
+        setTimeout(() => {
+          setShowModal(true);
+        }, 3000);
+
+        // Store bookedButton in localStorage
+        localStorage.setItem("inforPerson", JSON.stringify(data));
       })
-      .catch((err) => console.log(err));
-
-    setUserName("");
-    setDayOfBirth("");
-    setAdress("");
-    setEmail("");
-    setID_Card("");
-    setPhone("");
+      .catch((err) => {
+        console.log(err);
+        toast.error("Fail. Please try again");
+        setTimeout(() => {
+          setShowModal(true);
+        }, 3000);
+      });
   };
+
   return (
-    <div>
-      <div>
-        <div>
-          <div>
-            <div>
-              <div>
-                <form>
-                  <div>
-                    <label htmlFor="username">Username</label>
-                    <div>
-                      <input
-                        type="text"
-                        name="username"
-                        placeholder="Enter Your Name"
-                        value={Username}
-                        onChange={(e) => setUserName(e.target.value)}
-                      />
-                    </div>
-                  </div>
+    <div className="wrapper_1">
+      <div className="container_0">
+        <h2 className="title_1 pb-2">Enter Information</h2>
 
-                  <div>
-                    <label htmlFor="dayofbirth">Day Of Birth</label>
-                    <div>
-                      <input
-                        type="text"
-                        name="dayofbirth"
-                        value={DayOfBirth}
-                        placeholder="Day Of Birth"
-                        onChange={(e) => setDayOfBirth(e.target.value)}
-                      />
-                    </div>
-                  </div>
+        <form className="form_1 mt-2">
+          <div className="content_1 mb-2">
+            <div className="col_6">
+              <label className="title_2 mb-1" htmlFor="Username">
+                Username
+              </label>
 
-                  <div>
-                    <label htmlFor="email">Email</label>
-                    <div>
-                      <input
-                        type="text"
-                        name="email"
-                        value={Email}
-                        placeholder="Email Address"
-                        onChange={(e) => setEmail(e.target.value)}
-                      />
-                    </div>
-                  </div>
+              <input
+                type="text"
+                id="Username"
+                placeholder="Enter Your Name"
+                value={data.Username}
+                onChange={handleChange}
+                className="input_1"
+              />
+            </div>
 
-                  <div>
-                    <label htmlFor="adress">Address</label>
-                    <div>
-                      <input
-                        type="text"
-                        name="address"
-                        value={Address}
-                        placeholder="Address"
-                        onChange={(e) => setAdress(e.target.value)}
-                      />
-                    </div>
-                  </div>
+            <div className="col_6">
+              <label className="title_2 mb-1" htmlFor="DayOfBirth">
+                Day Of Birth
+              </label>
 
-                  <div>
-                    <label htmlFor="idcard">ID_Card</label>
-                    <div>
-                      <input
-                        type="text"
-                        value={ID_Card}
-                        name="idcard"
-                        placeholder="ID_Card"
-                        onChange={(e) => setID_Card(e.target.value)}
-                      />
-                    </div>
-                  </div>
-                  <div>
-                    <label htmlFor="phone">Phone</label>
-                    <div>
-                      <input
-                        type="text"
-                        name="phone"
-                        value={Phone}
-                        placeholder="Phone"
-                        onChange={(e) => setPhone(e.target.value)}
-                      />
-                    </div>
-                  </div>
-                  <div>
-                    <div>
-                      <span onClick={handleSubmit}>Submit</span>
-                    </div>
-                  </div>
-                </form>
-              </div>
+              <input
+                type="text"
+                id="DayOfBirth"
+                value={data.DayOfBirth}
+                placeholder="Day Of Birth"
+                onChange={handleChange}
+                className="input_1"
+              />
             </div>
           </div>
-        </div>
+
+          <div className="content_1 mb-2">
+            <div className="col_6">
+              <label className="title_2 mb-1" htmlFor="Email">
+                Email
+              </label>
+
+              <input
+                type="text"
+                id="Email"
+                value={data.Email}
+                placeholder="Email Address"
+                onChange={handleChange}
+                className="input_1"
+              />
+            </div>
+
+            <div className="col_6">
+              <label className="title_2 mb-1" htmlFor="Address">
+                Address
+              </label>
+
+              <input
+                type="text"
+                id="Address"
+                value={data.Address}
+                placeholder="Address"
+                onChange={handleChange}
+                className="input_1"
+              />
+            </div>
+          </div>
+
+          <div className="content_1">
+            <div className="col_6">
+              <label className="title_2 mb-1" htmlFor="ID_Card">
+                ID_Card
+              </label>
+
+              <input
+                type="text"
+                value={data.ID_Card}
+                id="ID_Card"
+                placeholder="ID_Card"
+                onChange={handleChange}
+                className="input_1"
+              />
+            </div>
+
+            <div className="col_6">
+              <label className="title_2 mb-1" htmlFor="Phone">
+                Phone
+              </label>
+
+              <input
+                type="text"
+                id="Phone"
+                value={data.Phone}
+                placeholder="Phone"
+                onChange={handleChange}
+                className="input_1"
+              />
+            </div>
+          </div>
+
+          <div className="content_1 mt-5">
+            <Link to="/" className="button_submit col_6">
+              {/* <div className="button_submit col_6"> */}
+              <span>Return</span>
+            </Link>
+            {/* </div> */}
+
+            <div className="button_submit col_6" onClick={handleSubmit}>
+              <span>Submit</span>
+            </div>
+
+            <ToastCustom />
+          </div>
+        </form>
       </div>
+
+      {showModal && (
+        <ModalSeatBooking show={showModal} setShow={setShowModal} />
+      )}
     </div>
   );
 }
