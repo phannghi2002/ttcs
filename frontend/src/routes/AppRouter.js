@@ -4,6 +4,7 @@ import App from "../App";
 import { Routes, Route } from "react-router-dom";
 import SeatBooking from "../component/SeatBooking";
 import Paying from "../component/Paying";
+import Search from "../component/Search";
 
 function AppRouter() {
   return (
@@ -15,6 +16,7 @@ function AppRouter() {
       <Route path="*" element={<NotFound />} />
       <Route path="/seatBook" element={<SeatBooking />} />
       <Route path="/pay" element={<Paying />} />
+      <Route path="/search" element={<Search />} />
     </Routes>
   );
 }
