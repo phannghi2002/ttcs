@@ -1,8 +1,9 @@
-.wrapper{
+.wrapper {
     display: flex;
     justify-content: space-between;
     flex-direction: row;
     align-items: center;
+    width: 100%;
 }
 .info {
     display: flex;
@@ -21,7 +22,6 @@
 .time {
     font-size: 1.6rem;
     font-weight: 500;
-  
 }
 .duration {
     position: absolute;
@@ -36,17 +36,18 @@
 
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
+    -webkit-appearance: none;
+    margin: 0;
 }
 
-input[type="number"] {
+input[type='number'] {
     width: 30px;
     text-align: center;
     border: none;
 }
 
-.type_flight, .traveller {
+.type_flight,
+.traveller {
     display: flex;
     flex-direction: column;
 }
@@ -73,7 +74,7 @@ input[type="number"] {
     border-left: 1px solid rgb(158, 142, 142);
     border-right: 1px solid rgb(158, 142, 142);
 }
-.total_1{
+.total_1 {
     margin: 0;
     text-decoration: underline;
 }
@@ -81,6 +82,5 @@ input[type="number"] {
     color: orange;
 }
 .select {
-
-    background-color:#05203c;
+    background-color: #05203c;
 }
