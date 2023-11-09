@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import classNames from "classnames/bind";
 import styles from "./Search.module.scss";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -71,14 +72,23 @@ function Search() {
     return data1;
   }
 
+  const handleKeyPress = (e) => {
+    if (e.key === "Enter" && e.target.id === "txtDate") {
+      handleShowFlight();
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener("keydown", handleKeyPress);
+    return () => {
+      document.removeEventListener("keydown", handleKeyPress);
+    };
+  }, [depart, return1]);
   const handleShowFlight = () => {
     // const formElement = document.querySelector('.wrapper');
     if (!show) {
       console.log(AirportFrom, AirportTo, depart, typeTrip);
       fetchAPI();
-      // formElement.classList.add('move');
-    } else {
-      // formElement.classList.remove('move');
     }
     setShow(!show);
   };

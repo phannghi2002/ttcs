@@ -125,10 +125,10 @@ export const getTicketBySearch = async (req, res) => {
   const DateGo = new Date(req.query.DateGo);
   // const DateReturn = new Date(req.query.DateReturn);
 
-  console.log(DateGo);
+  console.log(AirportFrom);
 
   const DateReturn = "2024-01-02T14:30";
-  console.log(DateReturn);
+  // console.log(DateReturn);
   // const DateReturn = "01-02-2024";
 
   const formattedDateReturn = new Date(DateReturn).toISOString();

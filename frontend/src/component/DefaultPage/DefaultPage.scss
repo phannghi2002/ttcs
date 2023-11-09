@@ -1,32 +1,32 @@
 .contain {
-    background-color: rgb(233, 127, 127, 0.6);
-    //background: transparent;
-    height: 100%;
-    width: 100%;
+  // background-color: rgb(233, 127, 127, 0.6);
+  //background: transparent;
+  height: 100%;
+  width: 100%;
 }
 .title {
-    text-align: center;
-    width: 100%;
-    font-size: 2.6rem;
-    font-weight: 700;
-    font-family: fangsong;
+  text-align: center;
+  width: 100%;
+  font-size: 2.6rem;
+  font-weight: 700;
+  font-family: fangsong;
 }
 .image {
-    height: 60px;
-    width: 60px;
+  height: 60px;
+  width: 60px;
 }
 
 .container {
-    border-radius: 5px;
-    width: 70%;
-    height: 100px;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    background-color: #fff;
-    margin-bottom: 12px;
-    box-shadow: rgba(0, 0, 0, 0.45) 0px 5px 15px;
+  border-radius: 5px;
+  width: 70%;
+  height: 100px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  background-color: #fff;
+  margin-bottom: 12px;
+  box-shadow: rgba(0, 0, 0, 0.45) 0px 5px 15px;
 }
 .info_flight {
-    text-align: center;
+  text-align: center;
 }

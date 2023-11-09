@@ -1,6 +1,6 @@
 import classNames from "classnames/bind";
 import styles from "./Header.module.scss";
-import Navbar from "./Navbar";
+import Navbar from "./Navbar/Navbar";
 
 const cx = classNames.bind(styles);
 

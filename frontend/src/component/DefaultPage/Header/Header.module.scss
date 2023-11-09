@@ -7,19 +7,20 @@
   --header-height: 50px;
   --primary: #4469b0;
 
-  width: 100%;
+  width: 80%;
   background-color: #fff;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-direction: column;
+  margin-bottom: 20px;
 }
 
 .header-container {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  width: 1200px;
+  width: 100%;
   height: var(--header-height);
 }
 
