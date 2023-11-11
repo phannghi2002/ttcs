@@ -42,7 +42,7 @@ function InforFlight({ item, name }) {
     setValue2(value - 1);
   };
 
-  const [selectedValue, setSelectedValue] = useState("business");
+  const [selectedValue, setSelectedValue] = useState("Economy Class");
 
   //get value in element select
   const handleSelectChange = (event) => {
@@ -96,14 +96,14 @@ function InforFlight({ item, name }) {
 
   //change value money adult, money children when change select other
   useEffect(() => {
-    if (selectedValue === "economy") {
+    if (selectedValue === "Economy Class") {
       setMoneyAdult(item.Oneway.EconomyClass.PriceAdult);
       setMoneyChildren(item.Oneway.EconomyClass.PriceChildren);
-    } else if (selectedValue === "business") {
+    } else if (selectedValue === "Business Class") {
       setMoneyAdult(item.Oneway.BusinessClass.PriceAdult);
       setMoneyChildren(item.Oneway.BusinessClass.PriceChildren);
       // console.log(convertTime(item.Oneway.FlightTime));
-    } else if (selectedValue === "first") {
+    } else if (selectedValue === "First Class") {
       setMoneyAdult(item.Oneway.FirstClass.PriceAdult);
       setMoneyChildren(item.Oneway.FirstClass.PriceChildren);
       // console.log(convertTime(item.Oneway.FlightTime));
@@ -137,10 +137,10 @@ function InforFlight({ item, name }) {
             onChange={handleSelectChange}
             value={selectedValue}
           >
-            <option value="business">Business Class</option>
-            <option value="economy">Economy Class</option>
-            <option value="first">First Class</option>
-            <option value="premium">Premium Class</option>
+            <option value="Business Class">Business Class</option>
+            <option value="Economy Class">Economy Class</option>
+            <option value="First Class">First Class</option>
+            <option value="Premium Class">Premium Class</option>
           </select>
         </span>
         <span className="me-4 traveller">

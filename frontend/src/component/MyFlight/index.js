@@ -9,6 +9,9 @@ import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
 import GetAllData from "../GetAllData";
 import Header from "../DefaultPage/Header";
 
+import { toast } from "react-toastify";
+import ToastCustom from "../../Toast";
+
 const cx = classNames.bind(styles);
 
 function MyFlight() {
@@ -17,14 +20,32 @@ function MyFlight() {
   const [showInfo, setShowInfo] = useState(false);
 
   async function fetchAPI() {
-    let response = await fetch(
-      `${BOOKED_URL}/search/getInfoBookedBySearch?CodeTicket=${CodeTicket}`
-    );
+    try {
+      let response = await fetch(
+        `${BOOKED_URL}/search/getInfoBookedBySearch?CodeTicket=${CodeTicket}`
+      );
 
-    let data1 = await response.json();
-    setData(data1.data);
-    console.log(data);
-    return data1;
+      if (!response.ok) {
+        throw new Error("Failed to fetch data");
+      }
+
+      let data1 = await response.json();
+
+      if (!data1 || !data1.data || data1.data.length === 0) {
+        setShowInfo(false);
+        toast.error("Mã code không được tìm thấy");
+        throw new Error("Not Found");
+      }
+
+      setData(data1.data[0]);
+      setShowInfo(true);
+      return data1;
+    } catch (error) {
+      // Handle the error here
+      console.error(error);
+
+      // You can also set an error state or show an error message to the user
+    }
   }
 
   const handleKeyPress = (e) => {
@@ -43,7 +64,6 @@ function MyFlight() {
 
   const handleSearch = () => {
     fetchAPI();
-    setShowInfo(!showInfo);
   };
 
   return (
@@ -57,6 +77,7 @@ function MyFlight() {
           id="code"
           onChange={(e) => {
             setCodeTicket(e.target.value);
+            setShowInfo(false);
           }}
         ></input>
         <button onClick={handleSearch}>
@@ -66,9 +87,10 @@ function MyFlight() {
 
       {showInfo && (
         <div className={cx("show")}>
-          <GetAllData codeTicket={CodeTicket} />
+          <GetAllData data={data} />
         </div>
       )}
+      <ToastCustom />
     </div>
   );
 }

@@ -49,7 +49,7 @@ const infoBookedSchema = new mongoose.Schema(
     FlightNumber: {
       type: String,
       required: true,
-      unique: true,
+      // unique: true,
     },
     UserName: {
       type: String,
@@ -67,6 +67,7 @@ const infoBookedSchema = new mongoose.Schema(
     Email: {
       type: String,
       required: true,
+      unique: true,
     },
   }
   // { timestamps: Date.getTime() }
