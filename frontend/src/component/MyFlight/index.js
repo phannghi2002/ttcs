@@ -24,7 +24,7 @@ function MyFlight() {
       let response = await fetch(
         `${BOOKED_URL}/search/getInfoBookedBySearch?CodeTicket=${CodeTicket}`
       );
-
+      console.log(CodeTicket);
       if (!response.ok) {
         throw new Error("Failed to fetch data");
       }
@@ -36,8 +36,8 @@ function MyFlight() {
         toast.error("Mã code không được tìm thấy");
         throw new Error("Not Found");
       }
-
       setData(data1.data[0]);
+      console.log(data);
       setShowInfo(true);
       return data1;
     } catch (error) {

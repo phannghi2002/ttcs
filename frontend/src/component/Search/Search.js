@@ -89,6 +89,15 @@ function Search() {
     if (!show) {
       console.log(AirportFrom, AirportTo, depart, typeTrip);
       fetchAPI();
+
+      // localStorage.setItem("TypeTrip", typeTrip);
+
+      //convert string to JSON to storage in localStorage
+      localStorage.setItem("TypeTrip", JSON.stringify(typeTrip));
+
+      const storedTypeTrip = JSON.parse(localStorage.getItem("TypeTrip"));
+
+      console.log(storedTypeTrip);
     }
     setShow(!show);
   };

@@ -9,7 +9,7 @@ import userRoute from "./routes/user.js";
 import authRoute from "./routes/auth.js";
 import infoRoute from "./routes/info.js";
 
-// import sendEmailRoute from "./routes/sendEmail.js";
+import sendEmailRoute from "./routes/sendEmail.js";
 
 dotenv.config();
 
@@ -46,7 +46,7 @@ app.use("/tickets", ticketRoute);
 app.use("/users", userRoute);
 app.use("/info", infoRoute);
 
-// app.use("/sendEmail", sendEmailRoute);
+app.use("/sendEmail", sendEmailRoute);
 
 app.listen(port, () => {
   connect();

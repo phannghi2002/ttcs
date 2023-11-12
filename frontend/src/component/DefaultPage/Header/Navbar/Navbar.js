@@ -5,11 +5,14 @@ import { Link } from "react-router-dom";
 const cx = classNames.bind(styles);
 
 function Navbar() {
+  const handleClick = () => {
+    localStorage.clear();
+  };
   return (
     <div className={cx("wrapper")}>
       <div className={cx("header-container")}>
         <ul className={cx("navbar")}>
-          <Link to="/" className={cx("home")}>
+          <Link to="/" className={cx("home")} onClick={handleClick}>
             <li className={cx("navbar-item")}>Trang chủ</li>
           </Link>
 
