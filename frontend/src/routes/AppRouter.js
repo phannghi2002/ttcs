@@ -6,6 +6,7 @@ import SeatBooking from "../component/SeatBooking";
 import Paying from "../component/Paying";
 import Search from "../component/Search";
 import MyFlight from "../component/MyFlight";
+import Buy from '../component/Buy';
 
 function AppRouter() {
   return (
@@ -19,6 +20,7 @@ function AppRouter() {
       <Route path="/pay" element={<Paying />} />
       <Route path="/" element={<Search />} />
       <Route path="/myFlight" element={<MyFlight />} />
+      <Route path="/buy" element={<Buy />} />
     </Routes>
   );
 }
