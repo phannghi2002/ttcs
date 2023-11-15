@@ -2,12 +2,20 @@
 import { useState } from "react";
 
 import GetAllData from "../GetAllData";
-import "./Paying.scss";
+import classNames from 'classnames/bind';
+import styles from './Paying.module.scss';
 import Header from "../DefaultPage/Header";
+
+
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faHouse, faMoneyBill } from '@fortawesome/free-solid-svg-icons';
 
 const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 const numbers = "0123456789";
 let codeTicket = "";
+
+const cx = classNames.bind(styles);
+
 
 const randomCharacters = () => {
   for (let i = 0; i < 6; i++) {
@@ -101,6 +109,7 @@ function Paying() {
 
   const handlePay = () => {
     setShow(true);
+    console.log("success");
 
     sendInfoData();
     handleSendEmail();
@@ -128,22 +137,58 @@ function Paying() {
   };
 
   return (
-    <div className="wrapper_pay">
+    <div className={cx('wrapper_pay')}>
       <Header />
 
-      <div className="contain_pay">
-        <h3 className="pay">Infomation Pay</h3>
-
-        <div>
-          TypeCard
-          <select name="typeCard">
-            <option value="visa">Visa</option>
-            <option value="economy">Economy Class</option>
-          </select>
+      <div className={cx('contain_pay')}>
+      <div className={cx('wrapper')}>
+            <div className={cx('container')}>
+                <div className={cx('header')}>
+                    <img
+                        className={cx('Header_logo-img__tUcP2')}
+                        alt="logo"
+                        src="https://res.flynow.vn/logoflynow.png"
+                    />
+                </div>
+                <div className={cx('content')}>
+                    <div className={cx('information')}>
+                        <div className={cx('supplier')}>
+                            <div className={cx('title')}>
+                                <FontAwesomeIcon className={cx('title-icon')} icon={faHouse} />
+                                <span>Nhà cung cấp </span>
+                            </div>
+                            <span className={cx('information-line')}>Vietnam Airlines</span>
+                        </div>
+                        <div className={cx('supplier')}>
+                            <div className={cx('title')}>
+                                <FontAwesomeIcon className={cx('title-icon')} icon={faMoneyBill} />
+                                <span> Số tiền </span>
+                            </div>
+                            <span className={cx('information-line')}>1000000</span>
+                        </div>
+                    </div>
+                    <div className={cx('bank-card')}>
+                        <span className={cx('card-title')}>Chi tiết thẻ</span>
+                        <input className={cx('input-text')} type="text" placeholder="Số thẻ" />
+                        <input
+                            className={cx('input-text')}
+                            autoComplete="off"
+                            maxLength="5"
+                            inputMode="numeric"
+                            type="tel"
+                            placeholder="Ngày hết hạn"
+                        />
+                        <input className={cx('input-text')} placeholder="Họ tên chủ thẻ" />
+                        <div className={cx('submit-btn')}>
+                            <button className={cx('btn', 'return-btn')}>Trở lại</button>
+                            <button className={cx('btn', 'next-btn')} onClick={handlePay}>Thanh toán</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div>ID Card</div>
-
-        <button onClick={handlePay}>Paying</button>
+{/* 
+        <button onClick={handlePay}>Paying</button> */}
         {/* <button onClick={handleSendEmail}>Send Email</button> */}
         {show && <GetAllData data={data} />}
         {/* {show && <GetAllData data={storedMyData} />} */}
