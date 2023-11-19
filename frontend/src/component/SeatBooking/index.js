@@ -5,8 +5,8 @@ import ToastCustom from "../../Toast";
 import { useState } from "react";
 import { ModalPaying } from "../../Modal";
 import { useNavigate } from "react-router-dom";
-import ButtonSeat from "./ButtonSeat";
 import Button from "react-bootstrap/Button";
+import TypeSeat from "./TypeSeat";
 
 function SeatBooking() {
   const [bookedButton, setBookedButton] = useState([]);
@@ -24,10 +24,6 @@ function SeatBooking() {
     }
   };
 
-  // useEffect(() => {
-  //   console.log(bookedButton);
-  // }, [bookedButton]);
-
   const handleBooking = () => {
     toast.success("Booking success!");
     setTimeout(() => {
@@ -43,13 +39,42 @@ function SeatBooking() {
     navigate("/");
   };
 
-  const type = "Business Class";
+  // const type = "Business Class";
+
+  const storedInforFlight = JSON.parse(localStorage.getItem("inforFlight"));
+  let type = [
+    "Business Class",
+    "Economy Class",
+    "First Class",
+    "Premium Class",
+  ];
+
+  const compareType = (value) => {
+    switch (value) {
+      case "business":
+        return type[0];
+
+      case "economy":
+        return type[1];
+
+      case "first":
+        return type[2];
+
+      default:
+        return type[3];
+    }
+  };
+
+  const typeSeat = compareType(storedInforFlight.selectedValue);
+
   return (
     <>
       <div className="contain_0">
         <h4>RED is empty, GREEN is book sucess, X is booked </h4>
         <div className="depart">
+          {/* <h2 className="title_0">Depart: {storedInforFlight.item.DateGo}</h2> */}
           <h2 className="title_0">Depart</h2>
+
           <div
             className="wrapper_0"
             style={{
@@ -59,182 +84,40 @@ function SeatBooking() {
             }}
           >
             <span className="info_0">
-              Boeing 787/20 <br />
-              <span className="type_0">{type}</span>
+              {storedInforFlight.item.FlightNumber} <br />
+              <span className="type_0">{typeSeat}</span>
             </span>
           </div>
 
-          {type === "Economy Class" && (
-            <div className="body_0">
-              <div className="row_0">
-                <ButtonSeat
-                  handleButtonClick={handleButtonClick}
-                  bookedButton={bookedButton}
-                  seatCode="1A"
-                />
-                <ButtonSeat
-                  handleButtonClick={handleButtonClick}
-                  bookedButton={bookedButton}
-                  seatCode="1B"
-                />
-                <ButtonSeat
-                  handleButtonClick={handleButtonClick}
-                  bookedButton={bookedButton}
-                  seatCode="1C"
-                />
-                <ButtonSeat
-                  handleButtonClick={handleButtonClick}
-                  bookedButton={bookedButton}
-                  seatCode="1D"
-                />
-                <ButtonSeat
-                  handleButtonClick={handleButtonClick}
-                  bookedButton={bookedButton}
-                  seatCode="1E"
-                />
-                <ButtonSeat
-                  handleButtonClick={handleButtonClick}
-                  bookedButton={bookedButton}
-                  seatCode="1F"
-                />
-              </div>
-            </div>
+          {typeSeat === "Economy Class" && (
+            <TypeSeat
+              handleButtonClick={handleButtonClick}
+              bookedButton={bookedButton}
+              number={7}
+            />
           )}
-          {type === "Business Class" && (
-            <div className="body_0">
-              <div className="row_0 mt-3">
-                <div className="button_seat me-2">
-                  <ButtonSeat
-                    handleButtonClick={handleButtonClick}
-                    bookedButton={bookedButton}
-                    seatCode="5A"
-                  />
-                  <ButtonSeat
-                    handleButtonClick={handleButtonClick}
-                    bookedButton={bookedButton}
-                    seatCode="5B"
-                  />
-                  <ButtonSeat
-                    handleButtonClick={handleButtonClick}
-                    bookedButton={bookedButton}
-                    seatCode="5C"
-                  />
-                </div>
-
-                <div className="button_seat">
-                  <ButtonSeat
-                    handleButtonClick={handleButtonClick}
-                    bookedButton={bookedButton}
-                    seatCode="5D"
-                  />
-                  <ButtonSeat
-                    handleButtonClick={handleButtonClick}
-                    bookedButton={bookedButton}
-                    seatCode="5E"
-                  />
-                  <ButtonSeat
-                    handleButtonClick={handleButtonClick}
-                    bookedButton={bookedButton}
-                    seatCode="5F"
-                  />
-                </div>
-              </div>
-
-              <div className="row_0 mt-3">
-                <div className="button_seat me-2">
-                  <ButtonSeat
-                    handleButtonClick={handleButtonClick}
-                    bookedButton={bookedButton}
-                    seatCode="6A"
-                  />
-                  <ButtonSeat
-                    handleButtonClick={handleButtonClick}
-                    bookedButton={bookedButton}
-                    seatCode="6B"
-                  />
-                  <ButtonSeat
-                    handleButtonClick={handleButtonClick}
-                    bookedButton={bookedButton}
-                    seatCode="6C"
-                  />
-                </div>
-
-                <div className="button_seat">
-                  <ButtonSeat
-                    handleButtonClick={handleButtonClick}
-                    bookedButton={bookedButton}
-                    seatCode="6D"
-                  />
-                  <ButtonSeat
-                    handleButtonClick={handleButtonClick}
-                    bookedButton={bookedButton}
-                    seatCode="6E"
-                  />
-                  <ButtonSeat
-                    handleButtonClick={handleButtonClick}
-                    bookedButton={bookedButton}
-                    seatCode="6F"
-                  />
-                </div>
-              </div>
-            </div>
+          {typeSeat === "Business Class" && (
+            <TypeSeat
+              handleButtonClick={handleButtonClick}
+              bookedButton={bookedButton}
+              number={3}
+            />
+          )}
+          {typeSeat === "First Class" && (
+            <TypeSeat
+              handleButtonClick={handleButtonClick}
+              bookedButton={bookedButton}
+              number={1}
+            />
+          )}
+          {typeSeat === "Premium Class" && (
+            <TypeSeat
+              handleButtonClick={handleButtonClick}
+              bookedButton={bookedButton}
+              number={5}
+            />
           )}
         </div>
-        {/* <div className="depart">
-          <h2 className="title_0">Return</h2>
-          <div
-            className="wrapper_0"
-            style={{
-              backgroundImage: `url(${seatBook})`,
-              backgroundRepeat: "no-repeat",
-              backgroundSize: "contain",
-            }}
-          >
-            <span className="info_0">
-              Boeing 787/20 <br />
-              <span className="type_0">Economy Class</span>
-            </span>
-          </div>
-
-          <div className="body_0">
-            <button
-              onClick={handleButtonClick}
-              className={bookedButton.includes("5A") ? "booked" : "no_booked"}
-            >
-              5A
-            </button>
-            <button
-              onClick={handleButtonClick}
-              className={bookedButton.includes("5B") ? "booked" : "no_booked"}
-            >
-              5B
-            </button>
-            <button
-              onClick={handleButtonClick}
-              className={bookedButton.includes("5C") ? "booked" : "no_booked"}
-            >
-              5C
-            </button>
-            <button
-              onClick={handleButtonClick}
-              className={bookedButton.includes("5D") ? "booked" : "no_booked"}
-            >
-              5D
-            </button>
-            <button
-              onClick={handleButtonClick}
-              className={bookedButton.includes("5E") ? "booked" : "no_booked"}
-            >
-              5E
-            </button>
-            <button
-              onClick={handleButtonClick}
-              className={bookedButton.includes("5F") ? "booked" : "no_booked"}
-            >
-              5F
-            </button>
-          </div>
-        </div> */}
 
         <div className="mb-5 mt-3">
           <Button variant="info" onClick={handleBooking} className="me-3">
@@ -247,8 +130,8 @@ function SeatBooking() {
         </div>
 
         <ToastCustom />
-        {showModal && <ModalPaying show={showModal} setShow={setShowModal} />}
       </div>
+      {showModal && <ModalPaying show={showModal} setShow={setShowModal} />}
     </>
   );
 }

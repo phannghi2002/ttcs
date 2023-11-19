@@ -9,13 +9,10 @@ import Button from "react-bootstrap/Button";
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
-function InforFlight({ item, name }) {
-  // const navigate = useNavigate();
-  const [moneyAdult, setMoneyAdult] = useState(
-    item.Oneway.BusinessClass.PriceAdult
-  );
+function InforFlight({ item, name, select }) {
+  const [moneyAdult, setMoneyAdult] = useState(item.BusinessClass.PriceAdult);
   const [moneyChildren, setMoneyChildren] = useState(
-    item.Oneway.BusinessClass.PriceChildren
+    item.BusinessClass.PriceChildren
   );
 
   // const [show, setShow] = useState(true);
@@ -43,7 +40,7 @@ function InforFlight({ item, name }) {
     setValue2(value - 1);
   };
 
-  const [selectedValue, setSelectedValue] = useState("business");
+  const [selectedValue, setSelectedValue] = useState("Economy Class");
 
   //get value in element select
   const handleSelectChange = (event) => {
@@ -62,17 +59,56 @@ function InforFlight({ item, name }) {
     );
   };
 
+  const convertTime = (time) => {
+    const date = new Date(time);
+    const hour = String(date.getHours()).padStart(2, "0");
+    const minute = String(date.getMinutes()).padStart(2, "0");
+    const formattedDateTime = `${hour}:${minute}`;
+    return formattedDateTime;
+  };
+  const FlightTime = convertTime(item.FlightTime);
+  const LandingTime = convertTime(item.LandingTime);
+
+  const duration = (FlightTime, LandingTime) => {
+    const [startHour, startMinute] = FlightTime.split(":");
+    const [endHour, endMinute] = LandingTime.split(":");
+
+    // Convert the hours and minutes to numbers
+    const startHourNum = parseInt(startHour, 10);
+    const startMinuteNum = parseInt(startMinute, 10);
+    const endHourNum = parseInt(endHour, 10);
+    const endMinuteNum = parseInt(endMinute, 10);
+
+    // Calculate the difference in minutes
+    const hourDifference = endHourNum - startHourNum;
+    const minuteDifference = endMinuteNum - startMinuteNum;
+    const totalMinutes = hourDifference * 60 + minuteDifference;
+
+    return totalMinutes;
+  };
+  const convertMinutesToHourMinute = (minutes) => {
+    const hours = Math.floor(minutes / 60);
+    const remainingMinutes = minutes % 60;
+    return `${hours}h${remainingMinutes}`;
+  };
+
   //change value money adult, money children when change select other
   useEffect(() => {
-    if (selectedValue === "economy") {
-      setMoneyAdult(item.Oneway.EconomyClass.PriceAdult);
-      setMoneyChildren(item.Oneway.EconomyClass.PriceChildren);
-
-      console.log("he");
+    if (selectedValue === "Economy Class") {
+      setMoneyAdult(item.EconomyClass.PriceAdult);
+      setMoneyChildren(item.EconomyClass.PriceChildren);
+    } else if (selectedValue === "Business Class") {
+      setMoneyAdult(item.BusinessClass.PriceAdult);
+      setMoneyChildren(item.BusinessClass.PriceChildren);
+      // console.log(convertTime(item.FlightTime));
+    } else if (selectedValue === "First Class") {
+      setMoneyAdult(item.FirstClass.PriceAdult);
+      setMoneyChildren(item.FirstClass.PriceChildren);
+      // console.log(convertTime(item.FlightTime));
     } else {
-      setMoneyAdult(item.Oneway.BusinessClass.PriceAdult);
-      setMoneyChildren(item.Oneway.BusinessClass.PriceChildren);
-      console.log("ngu");
+      setMoneyAdult(item.PremiumClass.PriceAdult);
+      setMoneyChildren(item.PremiumClass.PriceChildren);
+      // console.log(convertTime(item.FlightTime));
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedValue]);
@@ -81,10 +117,12 @@ function InforFlight({ item, name }) {
     <div className="wrapper ms-3">
       <div className="container_1 me-3">
         <div className="info">
-          <div className="time">12h30</div>
-          <div className="duration">{item.Duration}</div>
+          <div className="time">{FlightTime}</div>
+          <div className="duration">
+            {convertMinutesToHourMinute(duration(FlightTime, LandingTime))}
+          </div>
           <div className="line"></div>
-          <div className="time">14h30</div>
+          <div className="time">{LandingTime}</div>
         </div>
 
         <div className="name">{name}</div>
@@ -97,8 +135,10 @@ function InforFlight({ item, name }) {
             onChange={handleSelectChange}
             value={selectedValue}
           >
-            <option value="business">Business Class</option>
-            <option value="economy">Economy Class</option>
+            <option value="Business Class">Business Class</option>
+            <option value="Economy Class">Economy Class</option>
+            <option value="First Class">First Class</option>
+            <option value="Premium Class">Premium Class</option>
           </select>
         </span>
         <span className="me-4 traveller">
@@ -119,7 +159,7 @@ function InforFlight({ item, name }) {
 
           {!!value1 && <span className="money"> {moneyAdult * value1}</span>}
         </span>
-        <span className="ms-4 traveller">
+        <span className="traveller">
           <span>
             Children:
             <button
@@ -142,15 +182,17 @@ function InforFlight({ item, name }) {
           <div className="total_2">{total}</div>
         </span>
 
-        <span className="ms-3">
-          {/* {navigate("/searchFlightRoundtrip")} */}
-          {/* if not use Link then can use ("/searchFlightRoundtrip/check") */}
-          <Link to="check">
-            <Button className="select" onClick={handleSelect}>
-              Select <FontAwesomeIcon icon={faArrowRight} />
-            </Button>
-          </Link>
-        </span>
+        {!select && (
+          <span className="ms-3">
+            {/* {navigate("/searchFlightRoundtrip")} */}
+            {/* if not use Link then can use ("/searchFlightRoundtrip/check") */}
+            <Link to="check">
+              <Button className="select" onClick={handleSelect}>
+                Select <FontAwesomeIcon icon={faArrowRight} />
+              </Button>
+            </Link>
+          </span>
+        )}
       </div>
     </div>
   );

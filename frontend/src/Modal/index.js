@@ -56,6 +56,7 @@ function ModalPaying({ show, setShow }) {
     <div
       className="modal show"
       style={{ display: "block", position: "fixed", left: "30%" }}
+      // style={{ display: "block", position: "initial" }}
     >
       <Modal.Dialog show={show.toString()}>
         <Modal.Header closeButton onClick={handleClose}>

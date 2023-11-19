@@ -91,7 +91,6 @@ export const getSingleTicket = async (req, res) => {
 export const getAllTicket = async (req, res) => {
   //for pagination
   const page = parseInt(req.query.page);
-  console.log(page);
 
   try {
     const tickets = await Ticket.find({})
@@ -99,6 +98,7 @@ export const getAllTicket = async (req, res) => {
       .limit(5);
 
     if (tickets.length > 0) {
+      console.log("kho vl");
       res.status(200).json({
         success: true,
         count: tickets.length,
@@ -125,9 +125,10 @@ export const getTicketBySearch = async (req, res) => {
   const DateGo = new Date(req.query.DateGo);
   // const DateReturn = new Date(req.query.DateReturn);
 
-  console.log(DateGo);
+  console.log(AirportFrom);
 
-  const DateReturn = "2024-05-05";
+  const DateReturn = "2024-01-02T14:30";
+  // console.log(DateReturn);
   // const DateReturn = "01-02-2024";
 
   const formattedDateReturn = new Date(DateReturn).toISOString();
@@ -136,7 +137,7 @@ export const getTicketBySearch = async (req, res) => {
 
   // console.log("Convert Date:" + moment(DateGo).utc().format("YYYY-mm-DD"));
   try {
-    console.log("anh nghi dep trai", DateGo);
+    // console.log("anh nghi dep trai", DateGo);
 
     // const tickets = await Ticket();
     // console.log(tickets);

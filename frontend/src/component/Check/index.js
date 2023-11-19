@@ -50,7 +50,7 @@ function Check() {
 
         setTimeout(() => {
           setShowModal(true);
-        }, 3000);
+        }, 4000);
 
         // Store bookedButton in localStorage
         localStorage.setItem("inforPerson", JSON.stringify(data));
@@ -58,9 +58,6 @@ function Check() {
       .catch((err) => {
         console.log(err);
         toast.error("Fail. Please try again");
-        setTimeout(() => {
-          setShowModal(true);
-        }, 3000);
       });
   };
 
