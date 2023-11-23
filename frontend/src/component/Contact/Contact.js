@@ -2,6 +2,7 @@ import classNames from 'classnames/bind';
 import styles from './Contact.module.scss';
 import Header from '../DefaultPage/Header';
 import img from '../../../src/asset/images/map.png';
+import Footer from '../DefaultPage/Footer';
 
 const cx = classNames.bind(styles);
 
@@ -38,8 +39,8 @@ function Contact() {
                     Cảm ơn quý khách đã ghé thăm Flynow! Nếu quý khách có nhu cầu trao đổi, liên hệ với chúng tôi vui
                     lòng liên hệ theo địa chỉ Văn phòng Hà nội.
                 </span>
-                <div></div>
             </div>
+            <Footer />
         </div>
     );
 }
