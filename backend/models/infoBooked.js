@@ -33,10 +33,7 @@ const infoBookedSchema = new mongoose.Schema(
       default: Date("<YYYY-mm-dd>"),
       required: true,
     },
-    DateReturn: {
-      type: Date,
-      default: Date("<YYYY-mm-dd>"),
-    },
+
     TotalMoney: {
       type: Number,
       required: true,
@@ -68,6 +65,28 @@ const infoBookedSchema = new mongoose.Schema(
       type: String,
       required: true,
       unique: true,
+    },
+
+    TypeTicketReturn: {
+      type: String,
+    },
+    FlightNumberReturn: {
+      type: String,
+    },
+    FlightTimeReturn: {
+      type: Date,
+      // default: Date("<YYYY-mm-ddTHH:MM>"),
+    },
+    LandingTimeReturn: {
+      type: Date,
+      // default: Date("<YYYY-mm-ddTHH:MM>"),
+    },
+    CodeSeatReturn: {
+      type: String,
+    },
+    DateReturn: {
+      type: Date,
+      // default: Date("<YYYY-mm-dd>"),
     },
   }
   // { timestamps: Date.getTime() }

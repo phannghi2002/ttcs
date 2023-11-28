@@ -1,14 +1,24 @@
-import styles from './SeatBook.module.scss';
-import classNames from 'classnames/bind';
+// import { useEffect, useState } from "react";
+import './SeatBook.scss';
 
-const cx = classNames.bind(styles);
+function ButtonSeat({ handleButtonClick, bookedButton, seatCode, dataNew }) {
+    // console.log(dataNew);
 
-function ButtonSeat({ handleButtonClick, bookedButton, seatCode }) {
+    let isContain = false;
+
+    if (dataNew.CodeSeat.includes(seatCode)) {
+        isContain = true;
+    } else {
+        isContain = false;
+    }
+
     return (
         <>
             <button
                 onClick={handleButtonClick}
-                className={cx(bookedButton.includes(seatCode) ? 'booked' : 'no_booked')}
+                // className={bookedButton.includes(seatCode) ? "booked" : "no_booked"}
+                className={isContain ? 'disable' : bookedButton.includes(seatCode) ? 'booked' : 'no_booked'}
+                disabled={isContain}
             >
                 {seatCode}
             </button>

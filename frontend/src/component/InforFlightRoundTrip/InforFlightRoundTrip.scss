@@ -4,7 +4,6 @@
     flex-direction: row;
     align-items: center;
     width: 100%;
-    margin-left: 25px;
 }
 .info {
     display: flex;
@@ -63,7 +62,7 @@ input[type='number'] {
     text-align: center;
 }
 
-.total_0 {
+.total {
     font-size: 1.4rem;
     font-weight: 600;
     display: flex;
@@ -73,7 +72,7 @@ input[type='number'] {
     height: 82px;
     width: 120px;
     border-left: 1px solid rgb(158, 142, 142);
-    // border-right: none;
+    border-right: 1px solid rgb(158, 142, 142);
 }
 .total_1 {
     margin: 0;

@@ -1,12 +1,12 @@
 import { useState } from 'react';
 import axios from 'axios';
+import styles from './Check.module.scss';
+import classNames from 'classnames/bind';
 import { toast } from 'react-toastify';
 import ToastCustom from '../../Toast';
 import 'react-toastify/dist/ReactToastify.css';
 import { Link } from 'react-router-dom';
 import { ModalSeatBooking } from '../../Modal';
-import classNames from 'classnames/bind';
-import styles from './Check.module.scss';
 
 const cx = classNames.bind(styles);
 
@@ -67,12 +67,12 @@ function Check() {
     return (
         <div className={cx('wrapper')}>
             <div className={cx('container')}>
-                <h2 className={cx('title_1', ' pb-2')}>Enter Information</h2>
+                <h2 className={cx('title_1', 'pb-2')}>Enter Information</h2>
 
-                <form className={cx('form_1', ' mt-2')}>
+                <form className={cx('form_1', 'mt-2')}>
                     <div className={cx('content', ' mb-2')}>
                         <div className={cx('col_6')}>
-                            <label className={cx('title_2', ' mb-1')} htmlFor="Username">
+                            <label className={cx('title_2', 'mb-1')} htmlFor="Username">
                                 Username
                             </label>
 
@@ -87,7 +87,7 @@ function Check() {
                         </div>
 
                         <div className={cx('col_6')}>
-                            <label className={cx('title_2', ' mb-1')} htmlFor="DayOfBirth">
+                            <label className={cx('title_2', 'mb-1')} htmlFor="DayOfBirth">
                                 Day Of Birth
                             </label>
 
@@ -102,9 +102,9 @@ function Check() {
                         </div>
                     </div>
 
-                    <div className={cx('content', ' mb-2')}>
+                    <div className={cx('content', 'mb-2')}>
                         <div className={cx('col_6')}>
-                            <label className={cx('title_2', ' mb-1')} htmlFor="Email">
+                            <label className={cx('title_2', 'mb-1')} htmlFor="Email">
                                 Email
                             </label>
 
@@ -119,7 +119,7 @@ function Check() {
                         </div>
 
                         <div className={cx('col_6')}>
-                            <label className={cx('title_2', ' mb-1')} htmlFor="Address">
+                            <label className={cx('title_2', 'mb-1')} htmlFor="Address">
                                 Address
                             </label>
 
@@ -136,7 +136,7 @@ function Check() {
 
                     <div className={cx('content')}>
                         <div className={cx('col_6')}>
-                            <label className={cx('title_2', ' mb-1')} htmlFor="ID_Card">
+                            <label className={cx('title_2', 'mb-1')} htmlFor="ID_Card">
                                 ID_Card
                             </label>
 
@@ -151,7 +151,7 @@ function Check() {
                         </div>
 
                         <div className={cx('col_6')}>
-                            <label className={cx('title_2', ' mb-1')} htmlFor="Phone">
+                            <label className={cx('title_2', 'mb-1')} htmlFor="Phone">
                                 Phone
                             </label>
 
@@ -166,7 +166,7 @@ function Check() {
                         </div>
                     </div>
 
-                    <div className={cx('content', 'mt-5')}>
+                    <div className={cx('content', ' mt-5')}>
                         <Link to="/" className={cx('button_submit', 'col_6')}>
                             {/* <div className={cx("button_submit col_6")}> */}
                             <span>Return</span>

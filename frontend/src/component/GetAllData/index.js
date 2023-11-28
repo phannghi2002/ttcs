@@ -1,27 +1,32 @@
-import classNames from 'classnames/bind';
-import styles from './GetAllData.module.scss';
-
-const cx = classNames.bind(styles);
+import './GetAllData.scss';
 
 function GetAllData({ data }) {
     return (
-        <div className={cx('contain', ' mt-3', ' ms-3')}>
-            <h3>YOUR FLIGHT INFORMATION</h3>
+        <div className="contain_00 mt-3 ms-3">
+            <h3>Thông tin chuyến bay của bạn</h3>
 
-            <div>Code Ticket: {data.CodeTicket} </div>
-            <div>Type Flight: {data.TypeFlight}</div>
+            <div>Mã vé: {data.CodeTicket} </div>
+            <div>Chặng đường: {data.TypeFlight}</div>
 
-            <div>Passenger: {data.UserName} </div>
+            <div>Tên hành khách: {data.UserName} </div>
 
             <div>
-                Trip: {data.AirportFrom}-{data.AirportTo}
+                Chuyến bay: {data.AirportFrom}-{data.AirportTo}
             </div>
 
-            <div>Class: {data.TypeTicket}</div>
+            <div>Loại vé đi: {data.TypeTicket}</div>
 
-            <div>Seat: {data.CodeSeat}</div>
+            <div>Chỗ ngồi đi: {data.CodeSeat}</div>
 
-            <div>Totel Money: {data.TotalMoney}</div>
+            {data.TypeFlight === 'Roundtrip' && (
+                <>
+                    <div>Loại vé về: {data.TypeTicketReturn}</div>
+
+                    <div>Chỗ ngồi về: {data.CodeSeatReturn}</div>
+                </>
+            )}
+
+            <div>Tổng tiền: {data.TotalMoney}</div>
         </div>
     );
 }

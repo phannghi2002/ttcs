@@ -1,133 +1,28 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+import classNames from 'classnames/bind';
+import styles from './DefaultPage.module.scss';
 import VNA from '../../asset/images/Vietnam_Airlines.png';
 import VJ from '../../asset/images/VietJet_Air_logo.svg.png';
 import QH from '../../asset/images/bambo.jpg';
 import BL from '../../asset/images/Pacific_Airline.png';
 import InforFlight from '../InforFlight';
-import classNames from 'classnames/bind';
-import styles from './DefaultPage.module.scss';
-
-// import InforFlightRoundTrip from '../InforFlightRoundTrip';
-// import { Link } from 'react-router-dom';
-// import Button from 'react-bootstrap/Button';
-// import { faArrowRight } from '@fortawesome/free-solid-svg-icons';
-// import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-// import { useState } from 'react';
-
-// export function DefaultPage1({ data, typeTrip, return1 }) {
-//   console.log(data, typeTrip, return1);
-//   // const formattedDateReturn = new Date(return1).toISOString();
-//   // console.log(formattedDateReturn);
-//   // let data1 = [];
-//   // let formattedDateReturn = new Date(return1).toISOString();
-
-//   // if (typeTrip === 'Roundtrip' && return1) {
-//   //   data1 = data.filter(
-//   //     (item) => item.Roundtrip.DateReturn === formattedDateReturn
-//   //   );
-//   // } else data1 = data;
-
-//   // console.log(data1);
-
-//   console.log(data);
-
-//   const handleSelect = () => {
-//     // Store bookedButton in localStorage
-//     console.log(data);
-//     // localStorage.setItem(
-//     //   'inforFlight',
-//     //   JSON.stringify({ item, selectedValue, value1, value2, total })
-//     // );
-//   };
-
-//   // const [total1, setTotal1] = useState(0);
-//   return (
-//     <div className='contain'>
-//       <h2 className='title'> Information Flight</h2>
-
-//       {/* eslint-disable-next-line array-callback-return */}
-//       {data.map((item, key) => {
-//         if (item.AirlineCode === 'VNA') {
-//           return (
-//             <div className='wrapper_info wrapper_add'>
-//               <div className='flight_info'>
-//                 {' '}
-//                 <div className='my-2 ps-3'>Chuyến bay đi:</div>
-//                 <div key={item._id} className='container add'>
-//                   <img src={VNA} alt='Vietnam Airlines' className='image' />
-
-//                   <InforFlight
-//                     item={item}
-//                     name='Vietnam Airlines'
-//                     select='true'
-//                   />
-//                 </div>
-//                 <div className='my-2 ps-3'>Chuyến bay về:</div>
-//                 <div key={item._id} className='container add'>
-//                   <img src={VNA} alt='Vietnam Airlines' className='image' />
-
-//                   <InforFlightRoundTrip item={item} name='Vietnam Airlines' />
-//                 </div>
-//               </div>
-
-//               <div className='contain_total'>
-//                 <div className='total_new'>Total All: 1000</div>
-//                 {
-//                   <Link to='check'>
-//                     <Button className='select' onClick={handleSelect}>
-//                       Select <FontAwesomeIcon icon={faArrowRight} />
-//                     </Button>
-//                   </Link>
-//                 }
-//               </div>
-//             </div>
-//           );
-//         } else if (item.AirlineCode === 'VJ') {
-//           return (
-//             <div key={item._id} className='container'>
-//               <img src={VJ} alt='VietJet' className='image' />
-//               {item.AirlineCode}
-
-//               <InforFlight item={item} />
-//             </div>
-//           );
-//         } else if (item.AirlineCode === 'QH') {
-//           return (
-//             <div key={item._id} className='container'>
-//               <img src={QH} alt='BamBo' className='image' />
-//               {item.AirlineCode}
-
-//               <InforFlight item={item} />
-//             </div>
-//           );
-//         } else if (item.AirlineCode === 'BL') {
-//           return (
-//             <div key={item._id} className='container'>
-//               <img src={BL} alt='Pacific' className='image' />
-//               {item.AirlineCode}
-
-//               <InforFlight item={item} />
-//             </div>
-//           );
-//         }
-
-//         // console.log(item);
-//         // return <div>Duration: {item.Duration}</div>;
-//       })}
-//     </div>
-//   );
-// }
+import InforFlightRoundTrip from '../InforFlightRoundTrip';
+import NotFoundFlight from '../NotFoundFlight';
+import { useState } from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCaretDown, faCaretUp } from '@fortawesome/free-solid-svg-icons';
 
 const cx = classNames.bind(styles);
 
-export function DefaultPage1({ data, typeTrip }) {
+export function DefaultPage1({ data, typeTrip, handleConvert, handleSwitchPage, switchPage }) {
     if (data[0]) {
         const d = new Date(data[0].DateGo);
         const dateConvert = d.toLocaleDateString('en-GB');
         // console.log(dateConvert);
         return (
-            <div className={cx('contain')}>
-                <div className={cx('info_flight', ' mb-5', ' pt-4')}>
-                    <h2 className={cx('title')}> Information Flight</h2>
+            <div className={cx('contain', ' roundtrip')}>
+                <div className={cx('info_flight ', 'mb-5', ' pt-4')}>
+                    <h2 className={cx('title')}> Thông tin chuyến bay</h2>
                     <h4>Ngày đi: {dateConvert}</h4>
                     <h5>Điểm đi: {data[0].AirportFrom}</h5>
                     <h5>Điểm đến: {data[0].AirportTo}</h5>
@@ -138,34 +33,58 @@ export function DefaultPage1({ data, typeTrip }) {
                     return (
                         <div key={item._id}>
                             {item.AirlineCode === 'VNA' && (
-                                <div className={cx('container')}>
+                                <div className={cx('container', ' wrapper_info')}>
                                     <img src={VNA} alt="Vietnam Airlines" className={cx('image')} />
 
-                                    <InforFlight item={item} name="Vietnam Airlines" />
+                                    <InforFlightRoundTrip
+                                        item={item}
+                                        name="Vietnam Airlines"
+                                        handleConvert={handleConvert}
+                                        handleSwitchPage={handleSwitchPage}
+                                        switchPage={switchPage}
+                                    />
                                 </div>
                             )}
 
                             {item.AirlineCode === 'VJ' && (
-                                <div className={cx('container')}>
+                                <div className={cx('container', ' wrapper_info')}>
                                     <img src={VJ} alt="VietJet" className={cx('image')} />
 
-                                    <InforFlight item={item} name="VietJet Air" />
+                                    <InforFlightRoundTrip
+                                        item={item}
+                                        name="VietJet Air"
+                                        handleConvert={handleConvert}
+                                        handleSwitchPage={handleSwitchPage}
+                                        switchPage={switchPage}
+                                    />
                                 </div>
                             )}
 
                             {item.AirlineCode === 'QH' && (
-                                <div className={cx('container')}>
+                                <div className={cx('container', ' wrapper_info')}>
                                     <img src={QH} alt="BamBo" className={cx('image')} />
 
-                                    <InforFlight item={item} name="BamBo Airways" />
+                                    <InforFlightRoundTrip
+                                        item={item}
+                                        name="BamBo Airways"
+                                        handleConvert={handleConvert}
+                                        handleSwitchPage={handleSwitchPage}
+                                        switchPage={switchPage}
+                                    />
                                 </div>
                             )}
 
                             {item.AirlineCode === 'BL' && (
-                                <div className={cx('container')}>
+                                <div className={cx('container', ' wrapper_info')}>
                                     <img src={BL} alt="Pacific" className={cx('image')} />
 
-                                    <InforFlight item={item} name="Jetstar Pacific Airlines" />
+                                    <InforFlightRoundTrip
+                                        item={item}
+                                        name="Jetstar Pacific Airlines"
+                                        handleConvert={handleConvert}
+                                        handleSwitchPage={handleSwitchPage}
+                                        switchPage={switchPage}
+                                    />
                                 </div>
                             )}
                         </div>
@@ -177,22 +96,176 @@ export function DefaultPage1({ data, typeTrip }) {
 }
 
 //Oneway
-export function DefaultPage2({ data, typeTrip }) {
-    if (data[0]) {
-        const d = new Date(data[0].DateGo);
-        const dateConvert = d.toLocaleDateString('en-GB');
-        // console.log(dateConvert);
-        return (
-            <div className={cx('contain', 'ms-3')}>
+export function DefaultPage2({ data, typeTrip, onData, AirportFrom, AirportTo, depart }) {
+    // console.log(AirportFrom, AirportTo, depart);
+    const formattedDate = new Date(depart).toLocaleDateString('en-GB');
+    // console.log(formattedDate);
+
+    const sendDataToParent = (value) => {
+        // onData(handleOption());
+        // console.log("kiemer tra lai xem", handleOption());
+
+        onData(value);
+        // console.log("Value sent to parent:", value);
+    };
+
+    // console.log("ko co du lieu:", data);
+
+    if (data.length === 0) {
+        console.log('m ngu lam nghi à');
+    }
+    const handleOption = (e) => {
+        return e.target.value;
+    };
+
+    const [progress, setProgress] = useState(240);
+
+    const convertToHourMinute = (progress) => {
+        const hours = Math.floor(progress / 60);
+        const minutes = progress % 60;
+        return `${hours}h${minutes < 10 ? '0' : ''}${minutes}`;
+    };
+
+    const handleProgressChange = (event) => {
+        const value = parseInt(event.target.value);
+        setProgress(value);
+        console.log(value);
+    };
+
+    let filteredData = data;
+    //const [filteredData, setFilterData] = useState(data);
+
+    if (data) {
+        filteredData = data.filter((item) => progress >= item.Duration);
+        console.log(filteredData);
+    }
+
+    // const handleFilter = () => {
+    //   if (filteredData) {
+    //     // filteredData = data.filter((item) => progress >= item.Duration);
+    //     setFilterData(data.filter((item) => progress >= item.Duration));
+
+    //     console.log(filteredData);
+    //   }
+    // };
+
+    const [isAction, setIsAction] = useState(false);
+
+    const handleSearchHidden = () => {
+        const downIcon = document.querySelector('#icon-1');
+        const upIcon = document.querySelector('#icon-2');
+        const rdo = document.querySelectorAll('#id-radio-dfpage');
+
+        if (!isAction) {
+            downIcon.style.display = 'none';
+            upIcon.style.display = 'block';
+            rdo.forEach((i) => {
+                i.style.display = 'block';
+            });
+            setIsAction(true);
+        } else {
+            downIcon.style.display = 'block';
+            upIcon.style.display = 'none';
+            rdo.forEach((i) => {
+                i.style.display = 'none';
+            });
+            setIsAction(false);
+        }
+    };
+
+    return (
+        <div className={cx('contain')}>
+            <div className={cx('wrapper_5')}>
                 <div className={cx('info_flight', ' mb-5', ' pt-4')}>
-                    <h2 className={cx('title')}> Information Flight</h2>
-                    <h4>Ngày đi: {dateConvert}</h4>
-                    <h5>Điểm đi: {data[0].AirportFrom}</h5>
-                    <h5>Điểm đến: {data[0].AirportTo}</h5>
+                    <h2 className={cx('title')}> Thông tin chuyến bay</h2>
+                    <h4>Ngày đi: {formattedDate}</h4>
+                    <h5>Điểm đi: {AirportFrom}</h5>
+                    <h5>Điểm đến: {AirportTo}</h5>
                 </div>
 
-                {/* eslint-disable-next-line array-callback-return */}
-                {data.map((item, key) => {
+                <div className={cx('info_flight_1', ' mb-5', ' pt-4')}>
+                    <div>
+                        <h6>
+                            Tìm kiếm theo hãng bay
+                            <span onClick={handleSearchHidden}>
+                                <FontAwesomeIcon id="icon-1" className={cx('search-icon')} icon={faCaretDown} />
+                                <FontAwesomeIcon
+                                    id="icon-2"
+                                    className={cx('search-icon')}
+                                    icon={faCaretUp}
+                                    style={{ display: 'none' }}
+                                />
+                            </span>
+                        </h6>
+                        <div
+                            id={'id-radio-dfpage'}
+                            className={cx('radio-content')}
+                            onClick={(e) => sendDataToParent(handleOption(e))}
+                        >
+                            <input type="radio" id="VNA" value="VNA" name="company" onChange={(e) => handleOption(e)} />
+                            <label htmlFor="VNA">Vietnam Airlines</label>
+                        </div>
+
+                        <div
+                            id={'id-radio-dfpage'}
+                            className={cx('radio-content')}
+                            onClick={(e) => sendDataToParent(handleOption(e))}
+                        >
+                            <input type="radio" id="QH" value="QH" name="company" onChange={(e) => handleOption(e)} />
+                            <label htmlFor="QH">BamBo Airways</label>
+                        </div>
+                        <div
+                            id={'id-radio-dfpage'}
+                            className={cx('radio-content')}
+                            onClick={(e) => sendDataToParent(handleOption(e))}
+                        >
+                            <input type="radio" id="BL" value="BL" name="company" onChange={(e) => handleOption(e)} />
+                            <label htmlFor="BL">Jetstar Pacific Airlines</label>
+                        </div>
+                        <div
+                            id={'id-radio-dfpage'}
+                            className={cx('radio-content')}
+                            onClick={(e) => sendDataToParent(handleOption(e))}
+                        >
+                            <input type="radio" id="VJ" value="VJ" name="company" onChange={(e) => handleOption(e)} />
+                            <label htmlFor="VJ">VietJet Air</label>
+                        </div>
+
+                        <div
+                            id={'id-radio-dfpage'}
+                            className={cx('radio-content')}
+                            onClick={(e) => sendDataToParent(handleOption(e))}
+                        >
+                            <input
+                                type="radio"
+                                id="all"
+                                value="all"
+                                name="company"
+                                defaultChecked
+                                onChange={(e) => handleOption(e)}
+                            />
+                            <label htmlFor="all">Tất cả</label>
+                        </div>
+                    </div>
+
+                    <div>
+                        Tìm kiếm theo thời lượng bay
+                        <input
+                            type="range"
+                            min="30"
+                            max="240"
+                            value={progress}
+                            onChange={handleProgressChange}
+                            // onMouseUp={handleFilter}
+                            className={cx('progress-bar')}
+                            step={15}
+                        />
+                        <p>Progress: 0.5h- {convertToHourMinute(progress)}</p>
+                    </div>
+                </div>
+            </div>
+            {filteredData[0] &&
+                filteredData.map((item, key) => {
                     return (
                         <div key={item._id}>
                             {item.AirlineCode === 'VNA' && (
@@ -229,7 +302,8 @@ export function DefaultPage2({ data, typeTrip }) {
                         </div>
                     );
                 })}
-            </div>
-        );
-    }
+
+            {filteredData.length === 0 && <NotFoundFlight />}
+        </div>
+    );
 }

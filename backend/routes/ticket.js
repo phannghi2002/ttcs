@@ -6,6 +6,7 @@ import {
   getSingleTicket,
   getAllTicket,
   getTicketBySearch,
+  getTicketBySearchCompany,
 } from "./../controllers/ticketController.js";
 
 const router = express.Router();
@@ -19,6 +20,8 @@ router.delete("/:id", deleteTicket);
 //update new ticket
 router.put("/:id", updateTicket);
 
+router.patch("/:id", updateTicket);
+
 //get single ticket
 router.get("/:id", getSingleTicket);
 
@@ -27,5 +30,8 @@ router.get("/", getAllTicket);
 
 //get all ticket by search
 router.get("/search/getTicketBySearch", getTicketBySearch);
+
+//get all ticket by search company
+router.get("/search/getTicketBySearchCompany", getTicketBySearchCompany);
 
 export default router;

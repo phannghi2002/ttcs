@@ -1,12 +1,9 @@
+import './InforFlight.scss';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMinus, faPlus, faArrowRight } from '@fortawesome/free-solid-svg-icons';
 import Button from 'react-bootstrap/Button';
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import classNames from 'classnames/bind';
-import styles from './InforFlight.module.scss';
-
-const cx = classNames.bind(styles);
 
 function InforFlight({ item, name, select }) {
     const [moneyAdult, setMoneyAdult] = useState(item.BusinessClass.PriceAdult);
@@ -37,7 +34,7 @@ function InforFlight({ item, name, select }) {
         setValue2(value - 1);
     };
 
-    const [selectedValue, setSelectedValue] = useState('Economy Class');
+    const [selectedValue, setSelectedValue] = useState('EconomyClass');
 
     //get value in element select
     const handleSelectChange = (event) => {
@@ -88,14 +85,14 @@ function InforFlight({ item, name, select }) {
 
     //change value money adult, money children when change select other
     useEffect(() => {
-        if (selectedValue === 'Economy Class') {
+        if (selectedValue === 'EconomyClass') {
             setMoneyAdult(item.EconomyClass.PriceAdult);
             setMoneyChildren(item.EconomyClass.PriceChildren);
-        } else if (selectedValue === 'Business Class') {
+        } else if (selectedValue === 'BusinessClass') {
             setMoneyAdult(item.BusinessClass.PriceAdult);
             setMoneyChildren(item.BusinessClass.PriceChildren);
             // console.log(convertTime(item.FlightTime));
-        } else if (selectedValue === 'First Class') {
+        } else if (selectedValue === 'FirstClass') {
             setMoneyAdult(item.FirstClass.PriceAdult);
             setMoneyChildren(item.FirstClass.PriceChildren);
             // console.log(convertTime(item.FlightTime));
@@ -107,38 +104,35 @@ function InforFlight({ item, name, select }) {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [selectedValue]);
 
+    // const time = 160;
+
+    // if (time > duration(FlightTime, LandingTime))
     return (
-        <div className={cx('wrapper', ' ms-3')}>
-            <div className={cx('container_1', ' me-3')}>
-                <div className={cx('info')}>
-                    <div className={cx('time')}>{FlightTime}</div>
-                    <div className={cx('duration')}>
-                        {convertMinutesToHourMinute(duration(FlightTime, LandingTime))}
-                    </div>
-                    <div className={cx('line')}></div>
-                    <div className={cx('time')}>{LandingTime}</div>
+        <div className="wrapper ms-3">
+            <div className="container_1 me-3">
+                <div className="info">
+                    <div className="time">{FlightTime}</div>
+                    <div className="duration">{convertMinutesToHourMinute(duration(FlightTime, LandingTime))}</div>
+                    <div className="line"></div>
+                    <div className="time">{LandingTime}</div>
                 </div>
 
-                <div className={cx('name')}>{name}</div>
+                <div className="name">{name}</div>
             </div>
 
-            <div className={cx('container_3')}>
-                <span className={cx('me-4 ', 'type_flight')}>
+            <div className="container_3">
+                <span className="me-4 type_flight">
                     <select name="travelClass" onChange={handleSelectChange} value={selectedValue}>
-                        <option value="Business Class">Business Class</option>
-                        <option value="Economy Class">Economy Class</option>
-                        <option value="First Class">First Class</option>
-                        <option value="Premium Class">Premium Class</option>
+                        <option value="BusinessClass">Business Class</option>
+                        <option value="EconomyClass">Economy Class</option>
+                        <option value="FirstClass">First Class</option>
+                        <option value="PremiumClass">Premium Class</option>
                     </select>
                 </span>
-                <span className={cx('me-4', ' traveller')}>
+                <span className="me-4 traveller">
                     <span>
                         Adult:
-                        <button
-                            className={cx('ms-1')}
-                            disabled={!value1}
-                            onClick={() => handleClickSubtractAdult(value1)}
-                        >
+                        <button className="ms-1" disabled={!value1} onClick={() => handleClickSubtractAdult(value1)}>
                             <FontAwesomeIcon icon={faMinus} />
                         </button>
                         <input type="number" value={value1} readOnly />
@@ -147,16 +141,12 @@ function InforFlight({ item, name, select }) {
                         </button>
                     </span>
 
-                    {!!value1 && <span className={cx('money')}> {moneyAdult * value1}</span>}
+                    {!!value1 && <span className="money"> {moneyAdult * value1}</span>}
                 </span>
-                <span className={cx('traveller')}>
+                <span className="traveller">
                     <span>
                         Children:
-                        <button
-                            className={cx('ms-1')}
-                            disabled={!value2}
-                            onClick={() => handleClickSubtractChildren(value2)}
-                        >
+                        <button className="ms-1" disabled={!value2} onClick={() => handleClickSubtractChildren(value2)}>
                             <FontAwesomeIcon icon={faMinus} />
                         </button>
                         <input type="number" value={value2} readOnly />
@@ -165,20 +155,20 @@ function InforFlight({ item, name, select }) {
                         </button>
                     </span>
 
-                    {!!value2 && <span className={cx('money')}> {moneyChildren * value2}</span>}
+                    {!!value2 && <span className="money"> {moneyChildren * value2}</span>}
                 </span>
-                <span className={cx('total', ' ms-3')}>
-                    <h5 className={cx('total_1')}>Total</h5>
-                    <div className={cx('total_2')}>{total}</div>
+                <span className="total ms-3">
+                    <h5 className="total_1">Total</h5>
+                    <div className="total_2">{total}</div>
                 </span>
 
                 {!select && (
-                    <span className={cx('ms-3')}>
-                        {/* {navigate('/searchFlightRoundtrip')} */}
-                        {/* if not use Link then can use ('/searchFlightRoundtrip/check') */}
+                    <span className="ms-3">
+                        {/* {navigate("/searchFlightRoundtrip")} */}
+                        {/* if not use Link then can use ("/searchFlightRoundtrip/check") */}
                         <Link to="check">
-                            <Button className={cx('select')} onClick={handleSelect}>
-                                Select <FontAwesomeIcon icon={faArrowRight} />
+                            <Button className="select" onClick={handleSelect}>
+                                Chọn <FontAwesomeIcon icon={faArrowRight} />
                             </Button>
                         </Link>
                     </span>
