@@ -47,6 +47,32 @@ export const updateTicket = async (req, res) => {
   }
 };
 
+//update seat ticket
+
+// export const updateSeat = async (req, res) => {
+//   const id = req.params.id;
+//   try {
+//     const updatedTicket = await Ticket.findByIdAndUpdate(
+//       id,
+//       {
+//         $set: req.body,
+//       },
+//       { new: true }
+//     );
+
+//     res.status(200).json({
+//       success: true,
+//       message: "Successfully updated",
+//       data: updatedTicket,
+//     });
+//   } catch (error) {
+//     res.status(500).json({
+//       success: false,
+//       message: "Failed to update. Try again ",
+//     });
+//   }
+// };
+
 //delete ticket
 
 export const deleteTicket = async (req, res) => {
@@ -161,6 +187,37 @@ export const getTicketBySearch = async (req, res) => {
 
     // const tickets = await Ticket.find({ Duration: { $gte: Duration } });
     // console.log(data);
+
+    res.status(200).json({
+      success: true,
+      message: "Successfully found search",
+      count: tickets.length,
+      data: tickets,
+    });
+  } catch (error) {
+    res.status(404).json({
+      success: false,
+      message: "Not found ",
+    });
+  }
+};
+
+export const getTicketBySearchCompany = async (req, res) => {
+  //here 'i' means case sensitive
+  const AirportFrom = new RegExp(req.query.AirportFrom, "i");
+  const AirportTo = new RegExp(req.query.AirportTo, "i");
+
+  const DateGo = new Date(req.query.DateGo);
+  const AirlineCode = new RegExp(req.query.AirlineCode, "i");
+  console.log("thoi xong anh roi", AirlineCode);
+
+  try {
+    const tickets = await Ticket.find({
+      AirportFrom,
+      AirportTo,
+      DateGo,
+      AirlineCode,
+    });
 
     res.status(200).json({
       success: true,

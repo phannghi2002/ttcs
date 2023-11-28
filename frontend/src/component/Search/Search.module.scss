@@ -147,7 +147,7 @@
 
 .info {
   justify-content: flex-start;
-  width: 100%;
+  width: 80%;
   height: 100vh;
   // margin-left: -32px;
 }
@@ -164,16 +164,20 @@
 }
 
 .depart {
-  background-color: rgb(59, 59, 206);
-  width: 60%;
+  background-color: #4469b0;
+  width: 85%;
 }
 .roundtrip {
   display: flex;
   flex-direction: row;
+  width: 100%;
 }
 .return {
-  width: 10%;
+  width: 15%;
 }
 .return_0 {
   display: none;
+}
+.add_roundtrip {
+  width: 80%;
 }
