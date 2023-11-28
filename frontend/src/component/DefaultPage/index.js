@@ -20,7 +20,7 @@ export function DefaultPage1({ data, typeTrip, handleConvert, handleSwitchPage, 
         const dateConvert = d.toLocaleDateString('en-GB');
         // console.log(dateConvert);
         return (
-            <div className={cx('contain', ' roundtrip')}>
+            <div className={cx('contain', ' roundtrip', 'ml-10')}>
                 <div className={cx('info_flight ', 'mb-5', ' pt-4')}>
                     <h2 className={cx('title')}> Thông tin chuyến bay</h2>
                     <h4>Ngày đi: {dateConvert}</h4>

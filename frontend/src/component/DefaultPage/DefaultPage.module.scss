@@ -5,6 +5,12 @@
     width: 100%;
     margin-left: 100px;
 }
+
+.ml-10 {
+    margin-left: 10px;
+    font-size: 14px;
+}
+
 .title {
     text-align: center;
     width: 100%;
@@ -15,11 +21,12 @@
 .image {
     height: 60px;
     width: 60px;
+    padding-left: 20px;
 }
 
 .container {
     border-radius: 5px;
-    width: 90%;
+    width: 98%;
 
     height: 100px;
     display: flex;
@@ -29,6 +36,7 @@
     margin-bottom: 12px;
     box-shadow: rgba(0, 0, 0, 0.45) 0px 5px 15px;
 }
+
 .info_flight {
     text-align: center;
 }
