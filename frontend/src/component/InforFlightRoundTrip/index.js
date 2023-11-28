@@ -135,7 +135,7 @@ function InforFlightRoundTrip({ item, name, handleConvert, handleSwitchPage, swi
                 </span>
                 <span className="me-4 traveller">
                     <span>
-                        Adult:
+                        Người lớn:
                         <button className="ms-1" disabled={!value1} onClick={() => handleClickSubtractAdult(value1)}>
                             <FontAwesomeIcon icon={faMinus} />
                         </button>
@@ -149,7 +149,7 @@ function InforFlightRoundTrip({ item, name, handleConvert, handleSwitchPage, swi
                 </span>
                 <span className="traveller">
                     <span>
-                        Children:
+                        Trẻ em:
                         <button className="ms-1" disabled={!value2} onClick={() => handleClickSubtractChildren(value2)}>
                             <FontAwesomeIcon icon={faMinus} />
                         </button>
@@ -162,7 +162,7 @@ function InforFlightRoundTrip({ item, name, handleConvert, handleSwitchPage, swi
                     {!!value2 && <span className="money"> {moneyChildren * value2}</span>}
                 </span>
                 <span className="total ms-3">
-                    <h5 className="total_1">Total</h5>
+                    <h5 className="total_1">Tổng</h5>
                     <div className="total_2">{total}</div>
                 </span>
 
@@ -187,12 +187,12 @@ function InforFlightRoundTrip({ item, name, handleConvert, handleSwitchPage, swi
             )} */}
                         {!switchPage ? (
                             <Button className="select" onClick={handleSelect}>
-                                Select <FontAwesomeIcon icon={faArrowRight} />
+                                Chọn <FontAwesomeIcon icon={faArrowRight} />
                             </Button>
                         ) : (
                             <Link to="check">
                                 <Button className="select" onClick={handleSelect}>
-                                    Select <FontAwesomeIcon icon={faArrowRight} />
+                                    Chọn <FontAwesomeIcon icon={faArrowRight} />
                                 </Button>
                             </Link>
                         )}

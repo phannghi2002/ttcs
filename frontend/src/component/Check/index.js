@@ -41,7 +41,7 @@ function Check() {
             })
             .then((res) => {
                 console.log(res);
-                toast.success('Enter information successful');
+                toast.success('Nhập thông tin thành công');
                 setData({
                     Username: '',
                     DayOfBirth: '',
@@ -60,26 +60,26 @@ function Check() {
             })
             .catch((err) => {
                 console.log(err);
-                toast.error('Fail. Please try again');
+                toast.error('Vui lòng nhập lại thông tin');
             });
     };
 
     return (
         <div className={cx('wrapper')}>
             <div className={cx('container')}>
-                <h2 className={cx('title_1', 'pb-2')}>Enter Information</h2>
+                <h2 className={cx('title_1', 'pb-2')}>Nhập thông tin</h2>
 
                 <form className={cx('form_1', 'mt-2')}>
                     <div className={cx('content', ' mb-2')}>
                         <div className={cx('col_6')}>
                             <label className={cx('title_2', 'mb-1')} htmlFor="Username">
-                                Username
+                                Họ tên
                             </label>
 
                             <input
                                 type="text"
                                 id="Username"
-                                placeholder="Enter Your Name"
+                                placeholder="Họ và tên"
                                 value={data.Username}
                                 onChange={handleChange}
                                 className={cx('input')}
@@ -88,14 +88,14 @@ function Check() {
 
                         <div className={cx('col_6')}>
                             <label className={cx('title_2', 'mb-1')} htmlFor="DayOfBirth">
-                                Day Of Birth
+                                Ngày sinh
                             </label>
 
                             <input
                                 type="text"
                                 id="DayOfBirth"
                                 value={data.DayOfBirth}
-                                placeholder="Day Of Birth"
+                                placeholder="Ngày sinh"
                                 onChange={handleChange}
                                 className={cx('input')}
                             />
@@ -112,7 +112,7 @@ function Check() {
                                 type="text"
                                 id="Email"
                                 value={data.Email}
-                                placeholder="Email Address"
+                                placeholder="Địa chỉ email"
                                 onChange={handleChange}
                                 className={cx('input')}
                             />
@@ -120,14 +120,14 @@ function Check() {
 
                         <div className={cx('col_6')}>
                             <label className={cx('title_2', 'mb-1')} htmlFor="Address">
-                                Address
+                                Địa chỉ
                             </label>
 
                             <input
                                 type="text"
                                 id="Address"
                                 value={data.Address}
-                                placeholder="Address"
+                                placeholder="Địa chỉ"
                                 onChange={handleChange}
                                 className={cx('input')}
                             />
@@ -137,14 +137,14 @@ function Check() {
                     <div className={cx('content')}>
                         <div className={cx('col_6')}>
                             <label className={cx('title_2', 'mb-1')} htmlFor="ID_Card">
-                                ID_Card
+                                Số CMND
                             </label>
 
                             <input
                                 type="text"
                                 value={data.ID_Card}
                                 id="ID_Card"
-                                placeholder="ID_Card"
+                                placeholder="Số CMND"
                                 onChange={handleChange}
                                 className={cx('input')}
                             />
@@ -152,14 +152,14 @@ function Check() {
 
                         <div className={cx('col_6')}>
                             <label className={cx('title_2', 'mb-1')} htmlFor="Phone">
-                                Phone
+                                Số điện thoại
                             </label>
 
                             <input
                                 type="text"
                                 id="Phone"
                                 value={data.Phone}
-                                placeholder="Phone"
+                                placeholder="Số điện thoại"
                                 onChange={handleChange}
                                 className={cx('input')}
                             />
@@ -169,12 +169,12 @@ function Check() {
                     <div className={cx('content', ' mt-5')}>
                         <Link to="/" className={cx('button_submit', 'col_6')}>
                             {/* <div className={cx("button_submit col_6")}> */}
-                            <span>Return</span>
+                            <span>Trở về</span>
                         </Link>
                         {/* </div> */}
 
                         <div className={cx('button_submit', 'col_6')} onClick={handleSubmit}>
-                            <span>Submit</span>
+                            <span>Tiếp theo</span>
                         </div>
 
                         <ToastCustom />
