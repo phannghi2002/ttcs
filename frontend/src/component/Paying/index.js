@@ -8,6 +8,7 @@ import Header from '../DefaultPage/Header';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHouse, faMoneyBill } from '@fortawesome/free-solid-svg-icons';
 import axios from 'axios';
+import { fakeApi } from './fakeApi';
 
 const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 const numbers = '0123456789';
@@ -46,7 +47,6 @@ function Paying() {
     const [expirationDate, setExpirationDate] = useState('');
     const [name, setName] = useState('');
     const [isNumberCard, setIsNumberCard] = useState(false);
-    const [isDate, setIsDate] = useState(false);
 
     let storedInforFlightReturn, storedInforSeatReturn;
 
@@ -237,7 +237,7 @@ function Paying() {
 
     const handlePay = (e) => {
         if (numberCard !== '' && expirationDate !== '' && name !== '') {
-            if (isNumberCard && isDate) {
+            if (isNumberCard) {
                 setShow(true);
                 console.log('success');
 
@@ -259,8 +259,6 @@ function Paying() {
             }
         } else {
             handleInputNumberCard(e);
-            handleInputName(e);
-            handleInputDate(e);
         }
     };
 
@@ -319,63 +317,13 @@ function Paying() {
             cardNumber.style.outlineColor = '#4469b0';
             error.innerText = 'Vui lòng nhập số thẻ';
             error.style.color = 'transparent';
+            fakeApi.forEach((value) => {
+                if (value.cardNumber === e.target.value) {
+                    setName(value.name);
+                    setExpirationDate(value.exp);
+                }
+            });
             setIsNumberCard(true);
-        }
-    };
-
-    const handleInputDate = (e) => {
-        setExpirationDate(e.target.value);
-        const date = document.querySelector('#date');
-        const error = document.querySelector('#ip-2');
-        const dateSplit = expirationDate.slice(2, 3);
-        const dateCard = Number(expirationDate.slice(0, 2));
-        const monthCard = Number(e.target.value.slice(3, 5));
-
-        if (e.target.value.length === 5 && dateSplit === '/') {
-            if ((monthCard === 4 || monthCard === 6 || monthCard === 9 || monthCard === 11) && dateCard > 30) {
-                error.innerText = 'Ngày tháng không hợp lệ';
-                error.style.color = 'red';
-                setIsDate(false);
-            } else if (
-                (monthCard === 3 ||
-                    monthCard === 5 ||
-                    monthCard === 7 ||
-                    monthCard === 8 ||
-                    monthCard === 10 ||
-                    monthCard === 12) &&
-                dateCard > 31
-            ) {
-                error.innerText = 'Ngày tháng không hợp lệ';
-                error.style.color = 'red';
-                setIsDate(false);
-            } else if (monthCard === 2 && dateCard > 29) {
-                error.innerText = 'Ngày tháng không hợp lệ';
-                error.style.color = 'red';
-                setIsDate(false);
-            } else {
-                date.style.outlineColor = '#4469b0';
-                error.innerText = 'Phải nhập ngày tháng (VD: 01/01)';
-                error.style.color = 'transparent';
-                setIsDate(true);
-            }
-        } else {
-            date.style.outlineColor = 'red';
-            error.style.color = 'red';
-            setIsDate(false);
-        }
-    };
-
-    const handleInputName = (e) => {
-        setName(e.target.value);
-        const error = document.querySelector('#ip-3');
-        const name = document.querySelector('#name');
-
-        if (e.target.value.trim() === '') {
-            error.style.color = 'red';
-            name.style.outlineColor = 'red';
-        } else {
-            error.style.color = 'transparent';
-            name.style.outlineColor = '#4469b0';
         }
     };
 
@@ -429,25 +377,23 @@ function Paying() {
                                     id="date"
                                     className={cx('input-text')}
                                     autoComplete="off"
-                                    maxLength="5"
+                                    maxLength="7"
                                     value={expirationDate}
                                     inputMode="numeric"
                                     type="tel"
                                     placeholder="Ngày hết hạn"
-                                    onChange={handleInputDate}
                                 />
                                 <span id="ip-2" className={cx('title-input')}>
-                                    Phải nhập ngày tháng (VD: 01/01)
+                                    Không được bỏ trống trường này
                                 </span>
                                 <input
                                     id="name"
                                     className={cx('input-text')}
                                     value={name}
-                                    onChange={handleInputName}
                                     placeholder="Họ tên chủ thẻ"
                                 />
                                 <span id="ip-3" className={cx('title-input')}>
-                                    Không được bỏ trống
+                                    Không được bỏ trống trường này
                                 </span>
                                 <div className={cx('submit-btn')}>
                                     <Link to="/seatBook" className={cx('btn', 'return-btn')}>
