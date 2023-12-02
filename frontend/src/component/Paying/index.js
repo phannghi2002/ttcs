@@ -293,17 +293,31 @@ function Paying() {
         }
     }, [planeCode]);
 
+    function is_creditCard(str) {
+        const regexp =
+            /^(?:(4[0-9]{12}(?:[0-9]{3})?)|(5[1-5][0-9]{14})|(6(?:011|5[0-9]{2})[0-9]{12})|(3[47][0-9]{13})|(3(?:0[0-5]|[68][0-9])[0-9]{11})|((?:2131|1800|35[0-9]{3})[0-9]{11}))$/;
+
+        if (regexp.test(str)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     const handleInputNumberCard = (e) => {
         setNumberCard(e.target.value);
 
         const cardNumber = document.querySelector('#card-number');
         const error = document.querySelector('#ip-1');
-        if (e.target.value.length !== 16 && e.target.value.length !== 19) {
+
+        if (!is_creditCard(e.target.value)) {
             cardNumber.style.outlineColor = 'red';
+            error.innerText = 'Số thẻ không hợp lệ';
             error.style.color = 'red';
             setIsNumberCard(false);
         } else {
             cardNumber.style.outlineColor = '#4469b0';
+            error.innerText = 'Vui lòng nhập số thẻ';
             error.style.color = 'transparent';
             setIsNumberCard(true);
         }
@@ -409,7 +423,7 @@ function Paying() {
                                     onChange={handleInputNumberCard}
                                 />
                                 <span id="ip-1" className={cx('title-input')}>
-                                    Số thẻ phải có 16 hoặc 19 chữ số
+                                    Không được bỏ trống trường này
                                 </span>
                                 <input
                                     id="date"
