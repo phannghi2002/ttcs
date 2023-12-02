@@ -30,6 +30,7 @@ function Check() {
     const [showModal, setShowModal] = useState(false);
 
     const handleSubmit = () => {
+        handleCheckForm();
         axios
             .post('http://localhost:4000/auth/enterInfo', {
                 Username: data.Username,
@@ -64,13 +65,94 @@ function Check() {
             });
     };
 
+    const handleCheckForm = () => {
+        handleCheckName();
+        handleCheckDate();
+        handleCheckEmail();
+        handleCheckAdress();
+        handleCheckCCCD();
+        handleCheckPhone();
+    };
+
+    const handleCheckName = () => {
+        const errorUsename = document.querySelector('#check-1');
+
+        if (data.Username.trim() === '') {
+            errorUsename.style.color = 'red';
+        } else {
+            errorUsename.style.color = 'transparent';
+        }
+    };
+
+    const handleCheckDate = () => {
+        const errorDay = document.querySelector('#check-2');
+        const day = data.DayOfBirth.split('/');
+        const validteDay = day[1] + '/' + day[0] + '/' + day[2];
+
+        if (!isDateValid(validteDay)) {
+            errorDay.style.color = 'red';
+        } else {
+            errorDay.style.color = 'transparent';
+        }
+    };
+
+    const handleCheckEmail = () => {
+        const errorEmail = document.querySelector('#check-3');
+        const redex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+
+        if (!redex.test(data.Email)) {
+            errorEmail.style.color = 'red';
+        } else {
+            errorEmail.style.color = 'transparent';
+        }
+    };
+
+    const handleCheckAdress = () => {
+        const errorAdress = document.querySelector('#check-4');
+        if (data.Address.trim() === '') {
+            errorAdress.style.color = 'red';
+        } else {
+            errorAdress.style.color = 'transparent';
+        }
+    };
+
+    const handleCheckCCCD = () => {
+        const errorCMND = document.querySelector('#check-5');
+        const isNumberCCCD = isNaN(data.ID_Card.trim());
+
+        if (data.ID_Card.trim() === '') {
+            errorCMND.innerText = 'Trường này không được bỏ trống';
+            errorCMND.style.color = 'red';
+        } else if (data.ID_Card.trim().length === 12 && !isNumberCCCD) {
+            errorCMND.style.color = 'transparent';
+        } else {
+            errorCMND.innerText = 'Số CCCD không hơp lệ';
+            errorCMND.style.color = 'red';
+        }
+    };
+
+    const handleCheckPhone = () => {
+        const errorPhone = document.querySelector('#check-6');
+        const phoneRegex = /((09|03|07|08|05)+([0-9]{8})\b)/g;
+
+        if (!phoneRegex.test(data.Phone)) {
+            errorPhone.style.color = 'red';
+        } else {
+            errorPhone.style.color = 'transparent';
+        }
+    };
+
+    function isDateValid(dateStr) {
+        return !isNaN(new Date(dateStr));
+    }
+
     return (
         <div className={cx('wrapper')}>
             <div className={cx('container')}>
                 <h2 className={cx('title_1', 'pb-2')}>Nhập thông tin</h2>
 
                 <form className={cx('form_1', 'mt-2')}>
-                    <div className={cx('content', ' mb-2')}>
+                    <div className={cx('content')}>
                         <div className={cx('col_6')}>
                             <label className={cx('title_2', 'mb-1')} htmlFor="Username">
                                 Họ tên
@@ -84,6 +166,9 @@ function Check() {
                                 onChange={handleChange}
                                 className={cx('input')}
                             />
+                            <span id="check-1" className={cx('error-message')}>
+                                Trường này không được bỏ trống
+                            </span>
                         </div>
 
                         <div className={cx('col_6')}>
@@ -99,10 +184,13 @@ function Check() {
                                 onChange={handleChange}
                                 className={cx('input')}
                             />
+                            <span id="check-2" className={cx('error-message')}>
+                                Vui lòng nhập ngày sinh
+                            </span>
                         </div>
                     </div>
 
-                    <div className={cx('content', 'mb-2')}>
+                    <div className={cx('content')}>
                         <div className={cx('col_6')}>
                             <label className={cx('title_2', 'mb-1')} htmlFor="Email">
                                 Email
@@ -116,6 +204,9 @@ function Check() {
                                 onChange={handleChange}
                                 className={cx('input')}
                             />
+                            <span id="check-3" className={cx('error-message')}>
+                                Trường này phải là email
+                            </span>
                         </div>
 
                         <div className={cx('col_6')}>
@@ -131,23 +222,29 @@ function Check() {
                                 onChange={handleChange}
                                 className={cx('input')}
                             />
+                            <span id="check-4" className={cx('error-message')}>
+                                Trường này không được bỏ trống
+                            </span>
                         </div>
                     </div>
 
                     <div className={cx('content')}>
                         <div className={cx('col_6')}>
                             <label className={cx('title_2', 'mb-1')} htmlFor="ID_Card">
-                                Số CMND
+                                Số CCCD
                             </label>
 
                             <input
                                 type="text"
                                 value={data.ID_Card}
                                 id="ID_Card"
-                                placeholder="Số CMND"
+                                placeholder="Số CCCD"
                                 onChange={handleChange}
                                 className={cx('input')}
                             />
+                            <span id="check-5" className={cx('error-message')}>
+                                Trường này không được bỏ trống
+                            </span>
                         </div>
 
                         <div className={cx('col_6')}>
@@ -163,6 +260,9 @@ function Check() {
                                 onChange={handleChange}
                                 className={cx('input')}
                             />
+                            <span id="check-6" className={cx('error-message')}>
+                                Trường này phải nhập số điện thoại
+                            </span>
                         </div>
                     </div>
 
