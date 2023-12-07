@@ -1,98 +1,98 @@
-import mongoose from "mongoose";
+import mongoose from 'mongoose';
 
 const ticketSchema = new mongoose.Schema({
-  FlightNumber: {
-    type: String,
-    required: true,
-    unique: true,
-  },
-  AirlineCode: {
-    type: String,
-    required: true,
-  },
-  AirportFrom: {
-    type: String,
-    required: true,
-  },
-  AirportTo: {
-    type: String,
-    required: true,
-  },
-  DateGo: {
-    type: Date,
-    default: Date("<YYYY-mm-dd>"),
-    required: true,
-  },
-  FirstClass: {
-    PriceAdult: {
-      type: Number,
-      required: true,
+    FlightNumber: {
+        type: String,
+        required: true,
+        unique: true,
     },
-    PriceChildren: {
-      type: Number,
-      required: true,
+    AirlineCode: {
+        type: String,
+        required: true,
     },
-    CodeSeat: {
-      type: [String],
-      default: [],
+    AirportFrom: {
+        type: String,
+        required: true,
     },
-  },
-  BusinessClass: {
-    PriceAdult: {
-      type: Number,
-      required: true,
+    AirportTo: {
+        type: String,
+        required: true,
     },
-    PriceChildren: {
-      type: Number,
-      required: true,
+    DateGo: {
+        type: Date,
+        default: Date('<YYYY-mm-dd>'),
+        required: true,
     },
-    CodeSeat: {
-      type: [String],
-      default: [],
+    FirstClass: {
+        PriceAdult: {
+            type: Number,
+            required: true,
+        },
+        PriceChildren: {
+            type: Number,
+            required: true,
+        },
+        CodeSeat: {
+            type: [String],
+            default: [],
+        },
     },
-  },
-  PremiumClass: {
-    PriceAdult: {
-      type: Number,
-      required: true,
+    BusinessClass: {
+        PriceAdult: {
+            type: Number,
+            required: true,
+        },
+        PriceChildren: {
+            type: Number,
+            required: true,
+        },
+        CodeSeat: {
+            type: [String],
+            default: [],
+        },
     },
-    PriceChildren: {
-      type: Number,
-      required: true,
+    PremiumClass: {
+        PriceAdult: {
+            type: Number,
+            required: true,
+        },
+        PriceChildren: {
+            type: Number,
+            required: true,
+        },
+        CodeSeat: {
+            type: [String],
+            default: [],
+        },
     },
-    CodeSeat: {
-      type: [String],
-      default: [],
+    EconomyClass: {
+        PriceAdult: {
+            type: Number,
+            required: true,
+        },
+        PriceChildren: {
+            type: Number,
+            required: true,
+        },
+        CodeSeat: {
+            type: [String],
+            default: [],
+        },
     },
-  },
-  EconomyClass: {
-    PriceAdult: {
-      type: Number,
-      required: true,
+    FlightTime: {
+        type: Date,
+        default: Date('<YYYY-mm-ddTHH:MM>'),
+        required: true,
     },
-    PriceChildren: {
-      type: Number,
-      required: true,
+    LandingTime: {
+        type: Date,
+        default: Date('<YYYY-mm-ddTHH:MM>'),
+        required: true,
     },
-    CodeSeat: {
-      type: [String],
-      default: [],
+    Duration: {
+        type: Number,
+        default: 0,
     },
-  },
-  FlightTime: {
-    type: Date,
-    default: Date("<YYYY-mm-ddTHH:MM>"),
-    required: true,
-  },
-  LandingTime: {
-    type: Date,
-    default: Date("<YYYY-mm-ddTHH:MM>"),
-    required: true,
-  },
-  Duration: {
-    type: Number,
-    default: 0,
-  },
 });
 
 // // Define virtual property 'duration'
@@ -106,15 +106,15 @@ const ticketSchema = new mongoose.Schema({
 // // Ensure virtual properties are included when converting to JSON
 // ticketSchema.set("toJSON", { virtuals: true });
 
-ticketSchema.pre("save", function (next) {
-  const flightTime = this.FlightTime.getTime();
-  const landingTime = this.LandingTime.getTime();
-  const durationInMinutes = Math.floor((landingTime - flightTime) / 60000);
-  this.Duration = durationInMinutes;
-  next();
+ticketSchema.pre('save', function (next) {
+    const flightTime = this.FlightTime.getTime();
+    const landingTime = this.LandingTime.getTime();
+    const durationInMinutes = Math.floor((landingTime - flightTime) / 60000);
+    this.Duration = durationInMinutes;
+    next();
 });
 
-export default mongoose.model("Ticket", ticketSchema);
+export default mongoose.model('Ticket', ticketSchema);
 
 // const ticket = await Ticket.findOne({ FlightNumber: "ABC123" });
 // console.log("Duration:", ticket.duration);

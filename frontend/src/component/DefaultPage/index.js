@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import classNames from 'classnames/bind';
 import styles from './DefaultPage.module.scss';
-import VNA from '../../asset/images/Vietnam_Airlines.png';
+import VNA from '../../asset/images/Vietnam_Airlines.jpg';
 import VJ from '../../asset/images/VietJet_Air_logo.svg.png';
 import QH from '../../asset/images/bambo.jpg';
 import BL from '../../asset/images/Pacific_Airline.png';
@@ -11,10 +11,11 @@ import NotFoundFlight from '../NotFoundFlight';
 import { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCaretDown, faCaretUp } from '@fortawesome/free-solid-svg-icons';
+import HandlePlace from '../HandlePlace';
 
 const cx = classNames.bind(styles);
 
-export function DefaultPage1({ data, typeTrip, handleConvert, handleSwitchPage, switchPage }) {
+export function DefaultPage1({ data, handleConvert, handleSwitchPage, switchPage }) {
     if (data[0]) {
         const d = new Date(data[0].DateGo);
         const dateConvert = d.toLocaleDateString('en-GB');
@@ -24,8 +25,12 @@ export function DefaultPage1({ data, typeTrip, handleConvert, handleSwitchPage, 
                 <div className={cx('info_flight ', 'mb-5', ' pt-4')}>
                     <h2 className={cx('title')}> Thông tin chuyến bay</h2>
                     <h4>Ngày đi: {dateConvert}</h4>
-                    <h5>Điểm đi: {data[0].AirportFrom}</h5>
-                    <h5>Điểm đến: {data[0].AirportTo}</h5>
+                    <h5>
+                        Điểm đi: {data[0].AirportFrom} (<HandlePlace place={data[0].AirportFrom} />)
+                    </h5>
+                    <h5>
+                        Điểm đến: {data[0].AirportTo} (<HandlePlace place={data[0].AirportTo} />)
+                    </h5>
                 </div>
 
                 {/* eslint-disable-next-line array-callback-return */}
@@ -90,6 +95,8 @@ export function DefaultPage1({ data, typeTrip, handleConvert, handleSwitchPage, 
                         </div>
                     );
                 })}
+
+                {data.length === 0 && <NotFoundFlight />}
             </div>
         );
     }
@@ -179,8 +186,8 @@ export function DefaultPage2({ data, typeTrip, onData, AirportFrom, AirportTo, d
                 <div className={cx('info_flight', ' mb-5', ' pt-4')}>
                     <h2 className={cx('title')}> Thông tin chuyến bay</h2>
                     <h4>Ngày đi: {formattedDate}</h4>
-                    <h5>Điểm đi: {AirportFrom}</h5>
-                    <h5>Điểm đến: {AirportTo}</h5>
+                    <h5>Điểm đi: {AirportFrom && <HandlePlace place={AirportFrom} />}</h5>
+                    <h5>Điểm đến: {AirportTo && <HandlePlace place={AirportTo} />}</h5>
                 </div>
 
                 <div className={cx('info_flight_1', ' mb-5', ' pt-4')}>

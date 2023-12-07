@@ -1,37 +1,45 @@
-import express from "express";
+import express from 'express';
 import {
-  createTicket,
-  deleteTicket,
-  updateTicket,
-  getSingleTicket,
-  getAllTicket,
-  getTicketBySearch,
-  getTicketBySearchCompany,
-} from "./../controllers/ticketController.js";
+    createTicket,
+    deleteTicket,
+    updateTicket,
+    getSingleTicket,
+    getAllTicket,
+    getTicketBySearch,
+    getTicketBySearchCompany,
+    getTicketBySearchDuration,
+    getTicketBySearchCompanyAndDuration,
+} from './../controllers/ticketController.js';
 
 const router = express.Router();
 
 //create new ticket
-router.post("/", createTicket);
+router.post('/', createTicket);
 
 //delete new ticket
-router.delete("/:id", deleteTicket);
+router.delete('/:id', deleteTicket);
 
 //update new ticket
-router.put("/:id", updateTicket);
+router.put('/:id', updateTicket);
 
-router.patch("/:id", updateTicket);
+router.patch('/:id', updateTicket);
 
 //get single ticket
-router.get("/:id", getSingleTicket);
+router.get('/:id', getSingleTicket);
 
 //get all ticket
-router.get("/", getAllTicket);
+router.get('/', getAllTicket);
 
 //get all ticket by search
-router.get("/search/getTicketBySearch", getTicketBySearch);
+router.get('/search/getTicketBySearch', getTicketBySearch);
 
 //get all ticket by search company
-router.get("/search/getTicketBySearchCompany", getTicketBySearchCompany);
+router.get('/search/getTicketBySearchCompany', getTicketBySearchCompany);
+
+//get all ticket by search duration
+router.get('/search/getTicketBySearchDuration', getTicketBySearchDuration);
+
+//get all ticket by search company and duration
+router.get('/search/getTicketBySearchCompanyAndDuration', getTicketBySearchCompanyAndDuration);
 
 export default router;

@@ -8,12 +8,15 @@ import Header from '../DefaultPage/Header';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHouse, faMoneyBill } from '@fortawesome/free-solid-svg-icons';
 import axios from 'axios';
+import { toast } from 'react-toastify';
+import ToastCustom from '../../Toast';
 
 const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 const numbers = '0123456789';
 let codeTicket = '';
 
 const cx = classNames.bind(styles);
+// let i = 0;
 
 const randomCharacters = () => {
     for (let i = 0; i < 6; i++) {
@@ -106,12 +109,7 @@ function Paying() {
 
     if (checkTypeTrip(storedTypeTrip)) {
         data00 = valueDepart();
-        console.log('m bi ngao a');
     } else data00 = valueReturn();
-
-    console.log('in ra cho t: ' + storedInforFlightReturn);
-
-    console.log('in ra cho t ngay: ' + storedInforFlight);
 
     const sendInfoData = () => {
         fetch('http://localhost:4000/info', {
@@ -145,6 +143,7 @@ function Paying() {
         let response = await fetch(`http://localhost:4000/tickets/${id}`);
         let data1 = await response.json();
         setDataNew(data1.data);
+        console.log(dataNew);
         return data1.data;
     }
 
@@ -155,40 +154,47 @@ function Paying() {
         return data1.data;
     }
     let array1, array2;
-    if (dataNew) {
-        console.log(dataNew);
-        console.log(dataNew[data00.TypeTicket]);
-        array1 = dataNew[data00.TypeTicket].CodeSeat;
-        array1.push(...storedInforSeat);
-        console.log(array1);
 
-        console.log(dataNew[data00.TypeTicket].PriceChildren);
-        // console.log(dataNew[data00.FirstClass].PriceChildren);
-        console.log('dcm');
-    } else {
-        fetchAPI1(storedInforFlight.item._id);
+    if (numberCard && expirationDate && name && isNumberCard && isDate) {
+        if (dataNew) {
+            console.log(dataNew);
+            console.log(dataNew[data00.TypeTicket]);
+            console.log(storedInforSeat);
+            array1 = dataNew[data00.TypeTicket].CodeSeat;
+            array1.push(...storedInforSeat);
+            // if (array1 === storedInforSeat) {
+            //     array1.push(...storedInforSeat);
+            // }
+            console.log(array1);
+
+            console.log(dataNew[data00.TypeTicket].PriceChildren);
+            // console.log(dataNew[data00.FirstClass].PriceChildren);
+        } else {
+            fetchAPI1(storedInforFlight.item._id);
+        }
     }
 
     if (checkTypeTrip()) {
-        if (dataNew2) {
-            console.log(dataNew2);
-            console.log(data00);
-            console.log(dataNew2[data00.TypeTicketReturn]);
-            array2 = dataNew2[data00.TypeTicketReturn].CodeSeat;
-            array2.push(...storedInforSeatReturn);
-            console.log(array2);
+        if (numberCard && expirationDate && name && isNumberCard && isDate) {
+            if (dataNew2) {
+                console.log(dataNew2);
+                console.log(data00);
+                console.log(dataNew2[data00.TypeTicketReturn]);
+                array2 = dataNew2[data00.TypeTicketReturn].CodeSeat;
+                array2.push(...storedInforSeatReturn);
+                console.log(array2);
 
-            // console.log(dataNew2[data00.TypeTicketReturn].PriceChildren);
+                // console.log(dataNew2[data00.TypeTicketReturn].PriceChildren);
 
-            console.log('dcm no');
-        } else {
-            console.log(storedInforFlightReturn.item);
-            fetchAPI2(storedInforFlightReturn.item._id);
+                console.log('dcm no');
+            } else {
+                console.log(storedInforFlightReturn.item);
+                fetchAPI2(storedInforFlightReturn.item._id);
+            }
         }
     }
 
     const pushSeat = (id) => {
-        console.log('ma no cay that chu');
         const data = {
             [data00.TypeTicket]: {
                 // PriceAdult: dataNew[data00.FirstClass].PriceAdult,
@@ -239,9 +245,6 @@ function Paying() {
         if (numberCard !== '' && expirationDate !== '' && name !== '') {
             if (isNumberCard && isDate) {
                 setShow(true);
-                console.log('success');
-
-                console.log(data00);
 
                 sendInfoData();
                 handleSendEmail();
@@ -249,10 +252,10 @@ function Paying() {
                 pushSeat(storedInforFlight.item._id);
 
                 if (checkTypeTrip()) {
-                    console.log('nham roi em ơis');
                     pushSeat2(storedInforFlightReturn.item._id);
                 }
 
+                toast.success('Thanh toán thành công!');
                 setTimeout(() => {
                     localStorage.clear();
                 });
@@ -448,11 +451,8 @@ function Paying() {
                     </div>
                 </div>
 
-                {/* 
-        <button onClick={handlePay}>Paying</button> */}
-                {/* <button onClick={handleSendEmail}>Send Email</button> */}
                 {show && <GetAllData data={data00} />}
-                {/* {show && <GetAllData data={storedMyData} />} */}
+                <ToastCustom />
             </div>
         </div>
     );
@@ -460,7 +460,7 @@ function Paying() {
 
 export default Paying;
 // "TypeFlight": "OneWay",
-//     "TypeTicket" : "Economy Class",
+//     "TypeTicket" : "EconomyClass",
 //     "AirportFrom": "HAN",
 //     "AirportTo": "SGN",
 //     "FlightTime": "2024-01-01T04:30:00.000Z",
