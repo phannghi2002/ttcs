@@ -10,7 +10,7 @@ import BL from '../../asset/images/Pacific_Airline.png';
 import HandlePlace from '../HandlePlace';
 
 const cx = classNames.bind(styles);
-function GetAllData({ data }) {
+function GetAllData({ data, className }) {
     const convertDate = (date) => {
         const dateConvert = new Date(date);
 
@@ -78,6 +78,7 @@ function GetAllData({ data }) {
     }
 
     return (
+        // <div className={cx('contain')} >
         <div className={cx('contain')}>
             <h3 className={cx('title')}>THÔNG TIN CHUYẾN BAY CỦA BẠN</h3>
 
