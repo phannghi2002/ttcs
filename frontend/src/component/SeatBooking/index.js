@@ -140,7 +140,11 @@ function SeatBooking() {
         return (
             <>
                 <div className="contain_0">
-                    <h4>ĐỎ là chỗ trống, XANH là đặt thành công, X là đã được đặt </h4>
+                    <div className="instruction">
+                        <span>Màu ĐỎ là chỗ trống</span>
+                        <span>Màu XANH là đặt thành công</span>
+                        <span>Dấu X là đã được đặt </span>
+                    </div>
 
                     <TypeCommon
                         storedInforFlight={storedInforFlight}
@@ -152,17 +156,24 @@ function SeatBooking() {
                     />
 
                     {typeTrip === 'Roundtrip' && dataNew2 && (
-                        <TypeCommon
-                            storedInforFlight={storedInforFlightReturn}
-                            typeSeat1={typeSeat2}
-                            handleButtonClick={handleButtonClick2}
-                            bookedButton={bookedButton2}
-                            title="Chuyến về"
-                            dataNew={dataNew2}
-                        />
+                        <div className="return">
+                            <div className="instruction">
+                                <span>Màu ĐỎ là chỗ trống</span>
+                                <span>Màu XANH là đặt thành công</span>
+                                <span>Dấu X là đã được đặt </span>
+                            </div>
+                            <TypeCommon
+                                storedInforFlight={storedInforFlightReturn}
+                                typeSeat1={typeSeat2}
+                                handleButtonClick={handleButtonClick2}
+                                bookedButton={bookedButton2}
+                                title="Chuyến về"
+                                dataNew={dataNew2}
+                            />
+                        </div>
                     )}
 
-                    <div className="mb-5 mt-3">
+                    <div className="mb-5 final_book">
                         <Button variant="info" onClick={handleBooking} className="me-3">
                             Đặt vé
                         </Button>
@@ -171,10 +182,10 @@ function SeatBooking() {
                             Trở lại
                         </Button>
                     </div>
-
-                    <ToastCustom />
                 </div>
+
                 {showModal && <ModalPaying show={showModal} setShow={setShowModal} />}
+                <ToastCustom />
             </>
         );
     }

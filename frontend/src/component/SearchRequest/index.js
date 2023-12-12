@@ -8,7 +8,7 @@ import { faCaretDown, faCaretUp } from '@fortawesome/free-solid-svg-icons';
 const cx = classNames.bind(styles);
 
 function SearchRequest({ onData2, getDuration }) {
-    const [isAction, setIsAction] = useState(false);
+    const [isAction, setIsAction] = useState(true);
 
     const handleSearchHidden = () => {
         const downIcon = document.querySelector('#icon-1');
@@ -19,17 +19,18 @@ function SearchRequest({ onData2, getDuration }) {
             downIcon.style.display = 'none';
             upIcon.style.display = 'block';
             rdo.forEach((i) => {
-                i.style.display = 'block';
+                i.style.display = 'none';
             });
             setIsAction(true);
         } else {
             downIcon.style.display = 'block';
             upIcon.style.display = 'none';
             rdo.forEach((i) => {
-                i.style.display = 'none';
+                i.style.display = 'block';
             });
             setIsAction(false);
         }
+        console.log('e cu');
     };
     const sendDataToParent = (value) => {
         onData2(value);
@@ -57,12 +58,17 @@ function SearchRequest({ onData2, getDuration }) {
     };
 
     return (
-        <>
+        <div className={cx('search_request')}>
             <div>
-                <h6>
+                <h6 className={cx('search_title')}>
                     Tìm kiếm theo hãng bay
                     <span onClick={handleSearchHidden}>
-                        <FontAwesomeIcon id="icon-1" className={cx('search-icon')} icon={faCaretDown} />
+                        <FontAwesomeIcon
+                            id="icon-1"
+                            className={cx('search-icon')}
+                            icon={faCaretDown}
+                            style={{ display: 'block' }}
+                        />
                         <FontAwesomeIcon
                             id="icon-2"
                             className={cx('search-icon')}
@@ -71,40 +77,50 @@ function SearchRequest({ onData2, getDuration }) {
                         />
                     </span>
                 </h6>
-                <div
-                    id={'id-radio-dfpage'}
-                    className={cx('radio-content')}
-                    onClick={(e) => sendDataToParent(handleOption(e))}
-                >
-                    <input type="radio" id="VNA" value="VNA" name="company" onChange={(e) => handleOption(e)} />
-                    <label htmlFor="VNA">Vietnam Airlines</label>
-                </div>
 
-                <div
-                    id={'id-radio-dfpage'}
-                    className={cx('radio-content')}
-                    onClick={(e) => sendDataToParent(handleOption(e))}
-                >
-                    <input type="radio" id="QH" value="QH" name="company" onChange={(e) => handleOption(e)} />
-                    <label htmlFor="QH">BamBo Airways</label>
-                </div>
-                <div
-                    id={'id-radio-dfpage'}
-                    className={cx('radio-content')}
-                    onClick={(e) => sendDataToParent(handleOption(e))}
-                >
-                    <input type="radio" id="BL" value="BL" name="company" onChange={(e) => handleOption(e)} />
-                    <label htmlFor="BL">Jetstar Pacific Airlines</label>
-                </div>
-                <div
-                    id={'id-radio-dfpage'}
-                    className={cx('radio-content')}
-                    onClick={(e) => sendDataToParent(handleOption(e))}
-                >
-                    <input type="radio" id="VJ" value="VJ" name="company" onChange={(e) => handleOption(e)} />
-                    <label htmlFor="VJ">VietJet Air</label>
-                </div>
+                <div>
+                    <div
+                        id={'id-radio-dfpage'}
+                        className={cx('radio-content')}
+                        onClick={(e) => sendDataToParent(handleOption(e))}
+                    >
+                        <input type="radio" id="VNA" value="VNA" name="company" onChange={(e) => handleOption(e)} />
+                        <label htmlFor="VNA" className="ms-2">
+                            Vietnam Airlines
+                        </label>
+                    </div>
 
+                    <div
+                        id={'id-radio-dfpage'}
+                        className={cx('radio-content')}
+                        onClick={(e) => sendDataToParent(handleOption(e))}
+                    >
+                        <input type="radio" id="QH" value="QH" name="company" onChange={(e) => handleOption(e)} />
+                        <label htmlFor="QH" className="ms-2">
+                            BamBo Airways
+                        </label>
+                    </div>
+                    <div
+                        id={'id-radio-dfpage'}
+                        className={cx('radio-content')}
+                        onClick={(e) => sendDataToParent(handleOption(e))}
+                    >
+                        <input type="radio" id="BL" value="BL" name="company" onChange={(e) => handleOption(e)} />
+                        <label htmlFor="BL" className="ms-2">
+                            Jetstar Pacific Airlines
+                        </label>
+                    </div>
+                    <div
+                        id={'id-radio-dfpage'}
+                        className={cx('radio-content')}
+                        onClick={(e) => sendDataToParent(handleOption(e))}
+                    >
+                        <input type="radio" id="VJ" value="VJ" name="company" onChange={(e) => handleOption(e)} />
+                        <label htmlFor="VJ" className="ms-2">
+                            VietJet Air
+                        </label>
+                    </div>
+                </div>
                 <div
                     id={'id-radio-dfpage'}
                     className={cx('radio-content')}
@@ -118,12 +134,14 @@ function SearchRequest({ onData2, getDuration }) {
                         defaultChecked
                         onChange={(e) => handleOption(e)}
                     />
-                    <label htmlFor="all">Tất cả</label>
+                    <label htmlFor="all" className="ms-2">
+                        Tất cả
+                    </label>
                 </div>
             </div>
 
             <div>
-                Tìm kiếm theo thời lượng bay
+                <h6 className={cx('search_title')}>Tìm kiếm theo thời lượng bay</h6>
                 <input
                     type="range"
                     min="30"
@@ -134,9 +152,9 @@ function SearchRequest({ onData2, getDuration }) {
                     className={cx('progress-bar')}
                     step={15}
                 />
-                <p>Progress: 0.5h- {convertToHourMinute(progress)}</p>
+                <p className="ms-2">Thời lượng: 0.5h - {convertToHourMinute(progress)}</p>
             </div>
-        </>
+        </div>
     );
 }
 

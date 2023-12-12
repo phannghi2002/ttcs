@@ -3,7 +3,10 @@
     //background: transparent;
     height: 100%;
     width: 100%;
-    margin-left: 100px;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
 }
 
 .ml-10 {
@@ -73,9 +76,9 @@
     // width: 97%;
     display: flex;
 }
-.flight_info {
-    width: 80%;
-}
+// .flight_info {
+//     width: 80%;
+// }
 .contain_total {
     flex: 1;
     display: flex;
@@ -87,30 +90,59 @@
     width: 98%;
     margin: auto;
     padding-bottom: 30px;
+    min-height: 600px;
+    display: block;
 }
 .wrapper_info {
     width: 100%;
     border: none;
     box-shadow: rgb(241 174 174 / 45%) 0px 5px 15px;
 }
-// .wrapper_5 {
-//   display: flex;
-// }
+
 .info_flight_1 {
-    position: fixed;
-    top: 20%;
-    left: 5px;
-    background-color: #d5cece;
+    position: absolute;
+    // top: 50%;
+    left: 50px;
+    width: 222px;
+    height: 50%;
+    background-color: #d6c1c1;
     padding: 6px;
+    margin-right: 12px;
 }
 
 .search-icon {
-    position: absolute;
-    top: 17px;
-    right: 0;
-    padding: 10px;
+    padding-left: 10px;
 }
 
 .radio-content {
-    display: none;
+    display: block;
+    padding-left: 6px;
+}
+.wrapper_5 {
+    display: flex;
+    justify-content: center;
+    flex-direction: row;
+    width: 100%;
+}
+.progress-bar {
+    width: 95%;
+    margin-left: 6px;
+}
+.show_data {
+    width: 72%;
+    margin-left: 125px;
+}
+.search_request {
+    display: flex;
+    flex-direction: column;
+    width: 222px;
+    height: 100%;
+    background-color: #d6c1c1;
+    padding: 6px;
+    margin: 0 12px;
+}
+.search_title {
+    font-size: 1.2rem;
+    display: flex;
+    align-items: center;
 }

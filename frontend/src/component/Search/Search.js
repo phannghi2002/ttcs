@@ -341,8 +341,13 @@ function Search() {
                 <div className={cx('info')}>
                     {typeTrip === 'Roundtrip' && (
                         <span className={cx('roundtrip')}>
+                            <SearchRequest onData2={handleDataFromChild2} getDuration={getDuration} />
+
                             <div className={cx({ depart: convert, return: !convert })}>
-                                <span onClick={handleConvert}> Chuyến đi</span>
+                                <span onClick={handleConvert} className={cx('title')}>
+                                    {' '}
+                                    Chuyến đi
+                                </span>
                                 <div className={cx({ return_0: !convert })}>
                                     <DefaultPage1
                                         data={data}
@@ -355,7 +360,10 @@ function Search() {
                             </div>
 
                             <div className={cx({ depart: !convert, return: convert })}>
-                                <span onClick={handleConvert}> Chuyến về</span>
+                                <span onClick={handleConvert} className={cx('title')}>
+                                    {' '}
+                                    Chuyến về
+                                </span>
                                 <div className={cx({ return_0: convert })}>
                                     <DefaultPage1
                                         data={data2}
@@ -366,8 +374,6 @@ function Search() {
                                     {!data2.length && <NotFoundFlight />}
                                 </div>
                             </div>
-
-                            <SearchRequest onData2={handleDataFromChild2} getDuration={getDuration} />
                         </span>
                     )}
                     {typeTrip === 'Oneway' && (

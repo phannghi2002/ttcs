@@ -21,8 +21,8 @@ export function DefaultPage1({ data, handleConvert, handleSwitchPage, switchPage
         const dateConvert = d.toLocaleDateString('en-GB');
         // console.log(dateConvert);
         return (
-            <div className={cx('contain', ' roundtrip', 'ml-10')}>
-                <div className={cx('info_flight ', 'mb-5', ' pt-4')}>
+            <div className={cx('contain', 'roundtrip', 'ml-10')}>
+                <center className={cx('info_flight ', 'mb-5', ' pt-4')}>
                     <h2 className={cx('title')}> Thông tin chuyến bay</h2>
                     <h4>Ngày đi: {dateConvert}</h4>
                     <h5>
@@ -31,7 +31,7 @@ export function DefaultPage1({ data, handleConvert, handleSwitchPage, switchPage
                     <h5>
                         Điểm đến: {data[0].AirportTo} (<HandlePlace place={data[0].AirportTo} />)
                     </h5>
-                </div>
+                </center>
 
                 {/* eslint-disable-next-line array-callback-return */}
                 {data.map((item, key) => {
@@ -156,7 +156,7 @@ export function DefaultPage2({ data, typeTrip, onData, AirportFrom, AirportTo, d
     //   }
     // };
 
-    const [isAction, setIsAction] = useState(false);
+    const [isAction, setIsAction] = useState(true);
 
     const handleSearchHidden = () => {
         const downIcon = document.querySelector('#icon-1');
@@ -167,150 +167,194 @@ export function DefaultPage2({ data, typeTrip, onData, AirportFrom, AirportTo, d
             downIcon.style.display = 'none';
             upIcon.style.display = 'block';
             rdo.forEach((i) => {
-                i.style.display = 'block';
+                i.style.display = 'none';
             });
             setIsAction(true);
         } else {
             downIcon.style.display = 'block';
             upIcon.style.display = 'none';
             rdo.forEach((i) => {
-                i.style.display = 'none';
+                i.style.display = 'block';
             });
             setIsAction(false);
         }
+        console.log('e cu');
     };
 
     return (
         <div className={cx('contain')}>
+            <div className={cx('info_flight', ' mb-5', ' pt-2')}>
+                <h2 className={cx('title')}> Thông tin chuyến bay</h2>
+                <h4>Ngày đi: {formattedDate}</h4>
+                <h5>Điểm đi: {AirportFrom && <HandlePlace place={AirportFrom} />}</h5>
+                <h5>Điểm đến: {AirportTo && <HandlePlace place={AirportTo} />}</h5>
+            </div>
+
             <div className={cx('wrapper_5')}>
-                <div className={cx('info_flight', ' mb-5', ' pt-4')}>
-                    <h2 className={cx('title')}> Thông tin chuyến bay</h2>
-                    <h4>Ngày đi: {formattedDate}</h4>
-                    <h5>Điểm đi: {AirportFrom && <HandlePlace place={AirportFrom} />}</h5>
-                    <h5>Điểm đến: {AirportTo && <HandlePlace place={AirportTo} />}</h5>
+                <div className="search_option">
+                    <div className={cx('info_flight_1', ' mb-5', ' pt-4')}>
+                        <div>
+                            <h6 className={cx('search_title')}>
+                                Tìm kiếm theo hãng bay
+                                <span onClick={handleSearchHidden}>
+                                    <FontAwesomeIcon
+                                        id="icon-1"
+                                        className={cx('search-icon')}
+                                        icon={faCaretDown}
+                                        style={{ display: 'block' }}
+                                    />
+                                    <FontAwesomeIcon
+                                        id="icon-2"
+                                        className={cx('search-icon')}
+                                        icon={faCaretUp}
+                                        style={{ display: 'none' }}
+                                    />
+                                </span>
+                            </h6>
+                            <div
+                                id={'id-radio-dfpage'}
+                                className={cx('radio-content')}
+                                onClick={(e) => sendDataToParent(handleOption(e))}
+                            >
+                                <input
+                                    type="radio"
+                                    id="VNA"
+                                    value="VNA"
+                                    name="company"
+                                    onChange={(e) => handleOption(e)}
+                                />
+                                <label htmlFor="VNA" className="ms-2">
+                                    Vietnam Airlines
+                                </label>
+                            </div>
+
+                            <div
+                                id={'id-radio-dfpage'}
+                                className={cx('radio-content')}
+                                onClick={(e) => sendDataToParent(handleOption(e))}
+                            >
+                                <input
+                                    type="radio"
+                                    id="QH"
+                                    value="QH"
+                                    name="company"
+                                    onChange={(e) => handleOption(e)}
+                                />
+                                <label htmlFor="QH" className="ms-2">
+                                    BamBo Airways
+                                </label>
+                            </div>
+                            <div
+                                id={'id-radio-dfpage'}
+                                className={cx('radio-content')}
+                                onClick={(e) => sendDataToParent(handleOption(e))}
+                            >
+                                <input
+                                    type="radio"
+                                    id="BL"
+                                    value="BL"
+                                    name="company"
+                                    onChange={(e) => handleOption(e)}
+                                />
+                                <label htmlFor="BL" className="ms-2">
+                                    Jetstar Pacific Airlines
+                                </label>
+                            </div>
+                            <div
+                                id={'id-radio-dfpage'}
+                                className={cx('radio-content')}
+                                onClick={(e) => sendDataToParent(handleOption(e))}
+                            >
+                                <input
+                                    type="radio"
+                                    id="VJ"
+                                    value="VJ"
+                                    name="company"
+                                    onChange={(e) => handleOption(e)}
+                                />
+                                <label htmlFor="VJ" className="ms-2">
+                                    VietJet Air
+                                </label>
+                            </div>
+
+                            <div
+                                id={'id-radio-dfpage'}
+                                className={cx('radio-content')}
+                                onClick={(e) => sendDataToParent(handleOption(e))}
+                            >
+                                <input
+                                    type="radio"
+                                    id="all"
+                                    value="all"
+                                    name="company"
+                                    defaultChecked
+                                    onChange={(e) => handleOption(e)}
+                                />
+                                <label htmlFor="all" className="ms-2">
+                                    Tất cả
+                                </label>
+                            </div>
+                        </div>
+
+                        <div>
+                            <h6 className={cx('search_title')}>Tìm kiếm theo thời lượng bay</h6>
+                            <input
+                                type="range"
+                                min="30"
+                                max="240"
+                                value={progress}
+                                onChange={handleProgressChange}
+                                // onMouseUp={handleFilter}
+                                className={cx('progress-bar')}
+                                step={15}
+                            />
+                            <p className="ms-2">Thời lượng: 0.5h {convertToHourMinute(progress)}</p>
+                        </div>
+                    </div>
                 </div>
 
-                <div className={cx('info_flight_1', ' mb-5', ' pt-4')}>
-                    <div>
-                        <h6>
-                            Tìm kiếm theo hãng bay
-                            <span onClick={handleSearchHidden}>
-                                <FontAwesomeIcon id="icon-1" className={cx('search-icon')} icon={faCaretDown} />
-                                <FontAwesomeIcon
-                                    id="icon-2"
-                                    className={cx('search-icon')}
-                                    icon={faCaretUp}
-                                    style={{ display: 'none' }}
-                                />
-                            </span>
-                        </h6>
-                        <div
-                            id={'id-radio-dfpage'}
-                            className={cx('radio-content')}
-                            onClick={(e) => sendDataToParent(handleOption(e))}
-                        >
-                            <input type="radio" id="VNA" value="VNA" name="company" onChange={(e) => handleOption(e)} />
-                            <label htmlFor="VNA">Vietnam Airlines</label>
-                        </div>
+                <div className={cx('show_data')}>
+                    {filteredData[0] &&
+                        filteredData.map((item, key) => {
+                            return (
+                                <div key={item._id}>
+                                    {item.AirlineCode === 'VNA' && (
+                                        <div className={cx('container')}>
+                                            <img src={VNA} alt="Vietnam Airlines" className={cx('image')} />
 
-                        <div
-                            id={'id-radio-dfpage'}
-                            className={cx('radio-content')}
-                            onClick={(e) => sendDataToParent(handleOption(e))}
-                        >
-                            <input type="radio" id="QH" value="QH" name="company" onChange={(e) => handleOption(e)} />
-                            <label htmlFor="QH">BamBo Airways</label>
-                        </div>
-                        <div
-                            id={'id-radio-dfpage'}
-                            className={cx('radio-content')}
-                            onClick={(e) => sendDataToParent(handleOption(e))}
-                        >
-                            <input type="radio" id="BL" value="BL" name="company" onChange={(e) => handleOption(e)} />
-                            <label htmlFor="BL">Jetstar Pacific Airlines</label>
-                        </div>
-                        <div
-                            id={'id-radio-dfpage'}
-                            className={cx('radio-content')}
-                            onClick={(e) => sendDataToParent(handleOption(e))}
-                        >
-                            <input type="radio" id="VJ" value="VJ" name="company" onChange={(e) => handleOption(e)} />
-                            <label htmlFor="VJ">VietJet Air</label>
-                        </div>
+                                            <InforFlight item={item} name="Vietnam Airlines" />
+                                        </div>
+                                    )}
 
-                        <div
-                            id={'id-radio-dfpage'}
-                            className={cx('radio-content')}
-                            onClick={(e) => sendDataToParent(handleOption(e))}
-                        >
-                            <input
-                                type="radio"
-                                id="all"
-                                value="all"
-                                name="company"
-                                defaultChecked
-                                onChange={(e) => handleOption(e)}
-                            />
-                            <label htmlFor="all">Tất cả</label>
-                        </div>
-                    </div>
+                                    {item.AirlineCode === 'VJ' && (
+                                        <div className={cx('container')}>
+                                            <img src={VJ} alt="VietJet" className={cx('image')} />
 
-                    <div>
-                        Tìm kiếm theo thời lượng bay
-                        <input
-                            type="range"
-                            min="30"
-                            max="240"
-                            value={progress}
-                            onChange={handleProgressChange}
-                            // onMouseUp={handleFilter}
-                            className={cx('progress-bar')}
-                            step={15}
-                        />
-                        <p>Progress: 0.5h- {convertToHourMinute(progress)}</p>
-                    </div>
+                                            <InforFlight item={item} name="VietJet Air" />
+                                        </div>
+                                    )}
+
+                                    {item.AirlineCode === 'QH' && (
+                                        <div className={cx('container')}>
+                                            <img src={QH} alt="BamBo" className={cx('image')} />
+
+                                            <InforFlight item={item} name="BamBo Airways" />
+                                        </div>
+                                    )}
+
+                                    {item.AirlineCode === 'BL' && (
+                                        <div className={cx('container')}>
+                                            <img src={BL} alt="Pacific" className={cx('image')} />
+
+                                            <InforFlight item={item} name="Jetstar Pacific Airlines" />
+                                        </div>
+                                    )}
+                                </div>
+                            );
+                        })}
+                    {filteredData.length === 0 && <NotFoundFlight />}
                 </div>
             </div>
-            {filteredData[0] &&
-                filteredData.map((item, key) => {
-                    return (
-                        <div key={item._id}>
-                            {item.AirlineCode === 'VNA' && (
-                                <div className={cx('container')}>
-                                    <img src={VNA} alt="Vietnam Airlines" className={cx('image')} />
-
-                                    <InforFlight item={item} name="Vietnam Airlines" />
-                                </div>
-                            )}
-
-                            {item.AirlineCode === 'VJ' && (
-                                <div className={cx('container')}>
-                                    <img src={VJ} alt="VietJet" className={cx('image')} />
-
-                                    <InforFlight item={item} name="VietJet Air" />
-                                </div>
-                            )}
-
-                            {item.AirlineCode === 'QH' && (
-                                <div className={cx('container')}>
-                                    <img src={QH} alt="BamBo" className={cx('image')} />
-
-                                    <InforFlight item={item} name="BamBo Airways" />
-                                </div>
-                            )}
-
-                            {item.AirlineCode === 'BL' && (
-                                <div className={cx('container')}>
-                                    <img src={BL} alt="Pacific" className={cx('image')} />
-
-                                    <InforFlight item={item} name="Jetstar Pacific Airlines" />
-                                </div>
-                            )}
-                        </div>
-                    );
-                })}
-
-            {filteredData.length === 0 && <NotFoundFlight />}
         </div>
     );
 }
