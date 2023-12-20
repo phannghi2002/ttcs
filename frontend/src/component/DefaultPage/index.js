@@ -308,7 +308,7 @@ export function DefaultPage2({ data, typeTrip, onData, AirportFrom, AirportTo, d
                                 className={cx('progress-bar')}
                                 step={15}
                             />
-                            <p className="ms-2">Thời lượng: 0.5h {convertToHourMinute(progress)}</p>
+                            <p className="ms-2">Thời lượng: 0.5h - {convertToHourMinute(progress)}</p>
                         </div>
                     </div>
                 </div>
