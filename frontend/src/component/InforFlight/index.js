@@ -11,9 +11,9 @@ function InforFlight({ item, name, select }) {
     const storedQuantity = JSON.parse(localStorage.getItem('Quantity'));
 
     // const [show, setShow] = useState(true);
-    const value1 = storedQuantity.adults;
-    const value2 = storedQuantity.children;
-    const value3 = storedQuantity.baby;
+    const value1 = Number(storedQuantity.adults);
+    const value2 = Number(storedQuantity.children);
+    const value3 = Number(storedQuantity.baby);
     const moneyBaby = moneyAdult / 2;
     const [total, setTotal] = useState(moneyAdult);
 
@@ -36,7 +36,7 @@ function InforFlight({ item, name, select }) {
     const handleSelect = () => {
         // Store bookedButton in localStorage
         console.log(item);
-        localStorage.setItem('inforFlight', JSON.stringify({ item, selectedValue, value1, value2, total }));
+        localStorage.setItem('inforFlight', JSON.stringify({ item, selectedValue, value1, value2, value3, total }));
     };
 
     const convertTime = (time) => {

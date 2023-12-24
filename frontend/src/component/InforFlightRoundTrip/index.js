@@ -11,15 +11,17 @@ function InforFlightRoundTrip({ item, name, handleConvert, handleSwitchPage, swi
     const storedQuantity = JSON.parse(localStorage.getItem('Quantity'));
 
     // const [show, setShow] = useState(true);
-    const value1 = storedQuantity.adults;
-    const value2 = storedQuantity.children;
+    const value1 = Number(storedQuantity.adults);
+    const value2 = Number(storedQuantity.children);
+    const value3 = Number(storedQuantity.baby);
+    const moneyBaby = moneyAdult / 2;
     const [total, setTotal] = useState(moneyAdult);
 
     //change value total when click add or subtract quantity
     useEffect(() => {
-        setTotal(moneyAdult * value1 + moneyChildren * value2);
+        setTotal(moneyAdult * value1 + moneyChildren * value2 + moneyBaby * value3);
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [value1, value2, moneyAdult, moneyChildren]);
+    }, [value1, value2, value3, moneyAdult, moneyChildren, moneyBaby]);
 
     const [selectedValue, setSelectedValue] = useState('EconomyClass');
 
@@ -35,10 +37,13 @@ function InforFlightRoundTrip({ item, name, handleConvert, handleSwitchPage, swi
         // Store bookedButton in localStorage
         console.log(item);
         if (switchPage) {
-            localStorage.setItem('inforFlightReturn', JSON.stringify({ item, selectedValue, value1, value2, total }));
+            localStorage.setItem(
+                'inforFlightReturn',
+                JSON.stringify({ item, selectedValue, value1, value2, value3, total }),
+            );
             handleSwitchPage();
         } else {
-            localStorage.setItem('inforFlight', JSON.stringify({ item, selectedValue, value1, value2, total }));
+            localStorage.setItem('inforFlight', JSON.stringify({ item, selectedValue, value1, value2, value3, total }));
 
             handleConvert();
         }
@@ -128,13 +133,21 @@ function InforFlightRoundTrip({ item, name, handleConvert, handleSwitchPage, swi
 
                     {!!value1 && <span className="money"> {moneyAdult * value1}</span>}
                 </span>
-                <span className="traveller">
+                <span className="me-4 traveller">
                     <span>
                         Trẻ em:
                         <input type="number" value={value2} readOnly />
                     </span>
 
                     {!!value2 && <span className="money"> {moneyChildren * value2}</span>}
+                </span>
+                <span className="traveller">
+                    <span>
+                        Em bé:
+                        <input type="number" value={value3} readOnly />
+                    </span>
+
+                    {!!value3 && <span className="money"> {moneyBaby * value3}</span>}
                 </span>
                 <span className="total ms-3">
                     <h5 className="total_1">Tổng</h5>
