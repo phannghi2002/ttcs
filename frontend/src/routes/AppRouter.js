@@ -7,6 +7,8 @@ import Paying from '../component/Paying';
 import Search from '../component/Search';
 import MyFlight from '../component/MyFlight';
 import Contact from '../component/Contact';
+import SignIn from '../component/SignIn/SignIn';
+import Admin from '../component/Admin/Admin';
 
 function AppRouter() {
     return (
@@ -20,6 +22,8 @@ function AppRouter() {
             <Route path="/" element={<Search />} />
             <Route path="/myFlight" element={<MyFlight />} />
             <Route path="/contact" element={<Contact />} />
+            <Route path="/signin" element={<SignIn />} />
+            <Route path="/admin" element={<Admin />} />
         </Routes>
     );
 }

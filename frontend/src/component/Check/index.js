@@ -286,7 +286,7 @@ function Check() {
                         </div>
                     </div>
 
-                    <div className={cx('content', ' mt-5')}>
+                    <div className={cx('content')}>
                         <Link to="/" className={cx('button_submit', 'col_6')}>
                             <span>Trở về</span>
                         </Link>
@@ -294,9 +294,8 @@ function Check() {
                         <div className={cx('button_submit', 'col_6')} onClick={handleSubmit}>
                             <span>Tiếp theo</span>
                         </div>
-
-                        <ToastCustom />
                     </div>
+                    <ToastCustom />
                 </form>
             </div>
             {showModal && <ModalSeatBooking show={showModal} setShow={setShowModal} />}

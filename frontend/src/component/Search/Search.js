@@ -194,7 +194,7 @@ function Search() {
         if (typeTrip === 'Roundtrip') {
             fetch_API_Return();
         }
-
+        handleSetQuantity();
         setShow(!show);
     };
 
@@ -207,10 +207,17 @@ function Search() {
         setSwitchPage(true);
     };
     const functionNothing = () => {};
+
+    const handleSetQuantity = () => {
+        const adults = document.querySelector('#Adults').value;
+        const children = document.querySelector('#Children').value;
+        const baby = document.querySelector('#Inf').value;
+        localStorage.setItem('Quantity', JSON.stringify({ adults, children, baby }));
+    };
+
     return (
         <div className={cx('container')}>
             <Header />
-
             {!show && (
                 <div className={cx('wrapper')}>
                     <div className={cx('radio')}>
@@ -237,7 +244,11 @@ function Search() {
                     <div className={cx('location')}>
                         <FontAwesomeIcon className={cx('location-icon')} icon={faLocationDot} />
                         <span className={cx('name-field')}>Điểm đi</span>
-                        <select className={cx('location-list')} onChange={handleGetValueAirportFrom}>
+                        <select
+                            id="select-search-departure"
+                            className={cx('location-list')}
+                            onChange={handleGetValueAirportFrom}
+                        >
                             <optgroup label="MIỀN BẮC">
                                 <option value="HAN">Hà Nội (HAN) </option>
                                 <option value="HPH"> Hải Phòng (HPH) </option>
@@ -271,7 +282,11 @@ function Search() {
                     <div className={cx('location')}>
                         <FontAwesomeIcon className={cx('location-icon')} icon={faLocationDot} />
                         <span className={cx('name-field')}>Điểm đến</span>
-                        <select className={cx('location-list')} onChange={handleGetValueAirportTo}>
+                        <select
+                            id="select-search-destination"
+                            className={cx('location-list')}
+                            onChange={handleGetValueAirportTo}
+                        >
                             <optgroup label="MIỀN BẮC">
                                 <option value="HAN">Hà Nội (HAN) </option>
                                 <option value="HPH"> Hải Phòng (HPH) </option>
@@ -327,6 +342,61 @@ function Search() {
                                 />
                             </div>
                         )}
+                    </div>
+                    <div className={cx('quantity')}>
+                        <div className={cx('quantity-item')}>
+                            <span className={cx('name-field')}>Người lớn:</span>
+                            <select className={cx('quantity-select')} id="Adults" aria-invalid="false">
+                                <option value="-1" disabled="disabled">
+                                    &gt; 12 tuổi
+                                </option>
+                                <option value="1">01</option>
+                                <option value="2">02</option>
+                                <option value="3">03</option>
+                                <option value="4">04</option>
+                                <option value="5">05</option>
+                                <option value="6">06</option>
+                                <option value="7">07</option>
+                                <option value="8">08</option>
+                                <option value="9">09</option>
+                            </select>
+                        </div>
+                        <div className={cx('quantity-item', 'left-6')}>
+                            <span className={cx('name-field')}>Trẻ em:</span>
+                            <select className={cx('quantity-select')} id="Children" aria-invalid="false">
+                                <option value="-1" disabled="disabled">
+                                    2-12 tuổi
+                                </option>
+                                <option value="0">00</option>
+                                <option value="1">01</option>
+                                <option value="2">02</option>
+                                <option value="3">03</option>
+                                <option value="4">04</option>
+                                <option value="5">05</option>
+                                <option value="6">06</option>
+                                <option value="7">07</option>
+                                <option value="8">08</option>
+                                <option value="9">09</option>
+                            </select>
+                        </div>
+                        <div className={cx('quantity-item', 'left-6')}>
+                            <span className={cx('name-field')}>Em bé:</span>
+                            <select className={cx('quantity-select')} id="Inf" aria-invalid="false">
+                                <option value="-1" disabled="disabled">
+                                    &lt; 24 tháng
+                                </option>
+                                <option value="0">00</option>
+                                <option value="1">01</option>
+                                <option value="2">02</option>
+                                <option value="3">03</option>
+                                <option value="4">04</option>
+                                <option value="5">05</option>
+                                <option value="6">06</option>
+                                <option value="7">07</option>
+                                <option value="8">08</option>
+                                <option value="9">09</option>
+                            </select>
+                        </div>
                     </div>
 
                     <div className={cx('submit')}>
@@ -389,7 +459,7 @@ function Search() {
                 </div>
             )}
 
-            <Content />
+            <Content airF={setAirportFrom} airT={setAirportTo} dp={setDepart} />
             <Footer />
         </div>
     );

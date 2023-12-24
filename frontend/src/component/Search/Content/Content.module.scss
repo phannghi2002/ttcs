@@ -39,6 +39,64 @@
     margin-top: 12px;
 }
 
+.sale-ticket {
+}
+
+.sale-title {
+    display: block;
+    text-align: center;
+    margin-top: 25px;
+}
+
+.sale-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 30px;
+}
+
+.sale-location {
+    text-transform: uppercase;
+    font-weight: 600;
+    margin-left: 8px;
+}
+
+.sale-time {
+    margin-left: 8px;
+}
+
+.sale-price {
+    font-size: 22px;
+    text-align: end;
+    color: #4489cd;
+    margin-right: 8px;
+}
+
+.sale-content {
+    display: flex;
+    flex-direction: column;
+    background-color: #eef1f6;
+    width: 25%;
+    margin: 0 8px;
+}
+
+.sale-btn {
+    outline: none;
+    margin-top: 10px;
+    background-color: #ffa801;
+    border: none;
+    color: #fff;
+    height: 36px;
+
+    &:hover {
+        background-color: #ff7801;
+    }
+}
+
+.arrow-icon {
+    padding-right: 4px;
+}
+
 .payment {
     text-align: center;
     margin-top: 40px;
