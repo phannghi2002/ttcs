@@ -18,6 +18,15 @@ function Check() {
     let isAddress = false;
     let isCCCD = false;
     let isDate = false;
+    let isDateChildren = false;
+    let isDateBaby = false;
+
+    const storedQuantity = JSON.parse(localStorage.getItem('Quantity'));
+
+    const [adults, setAdults] = useState(Number(storedQuantity.adults));
+    const [children, setChildren] = useState(Number(storedQuantity.children));
+    const [baby, setBaby] = useState(Number(storedQuantity.baby));
+    let total = adults + children + baby;
 
     const [data, setData] = useState({
         Username: '',
@@ -37,12 +46,25 @@ function Check() {
 
     const [showModal, setShowModal] = useState(false);
 
-    const handleCheckForm = () => {
+    const handleCheckFormAdults = () => {
         handleCheckName();
         handleCheckDate();
-        handleCheckEmail();
         handleCheckAdress();
+        handleCheckPhone();
+        handleCheckEmail();
         handleCheckCCCD();
+    };
+
+    const handleCheckFormChildren = () => {
+        handleCheckName();
+        handleCheckDateChildren();
+        handleCheckAdress();
+        handleCheckPhone();
+    };
+    const handleCheckFormBaby = () => {
+        handleCheckName();
+        handleCheckDateBaby();
+        handleCheckAdress();
         handleCheckPhone();
     };
     const handleCheckName = () => {
@@ -69,6 +91,95 @@ function Check() {
         }
         return isDate;
     };
+
+    const handleCheckDateChildren = () => {
+        const time = new Date();
+        const curDay = time.getDate();
+        const curMonth = time.getMonth() + 1;
+        const curYear = time.getFullYear();
+
+        const errorDay = document.querySelector('#check-2');
+        const day = data.DayOfBirth.split('/');
+        const validteDay = day[1] + '/' + day[0] + '/' + day[2];
+        if (!isDateValid(validteDay)) {
+            errorDay.innerText = 'Ngày không hợp lệ !';
+            errorDay.style.color = 'red';
+            isDateChildren = false;
+        } else {
+            if (curYear - Number(day[2]) > 12 || curYear - Number(day[2]) <= 2) {
+                errorDay.innerText = 'Tuổi không hợp lệ !';
+                errorDay.style.color = 'red';
+                isDateChildren = false;
+            } else if (curYear - Number(day[2]) === 12) {
+                if (curMonth - Number(day[1]) > 0) {
+                    errorDay.innerText = 'Tuổi không hợp lệ !';
+                    errorDay.style.color = 'red';
+                    isDateChildren = false;
+                } else if (curMonth - Number(day[1]) < 0) {
+                    errorDay.style.color = 'transparent';
+                    isDateChildren = true;
+                } else {
+                    if (curDay - Number(day[0]) > 0) {
+                        errorDay.innerText = 'Tuổi không hợp lệ !';
+                        errorDay.style.color = 'red';
+                        isDateChildren = false;
+                    } else {
+                        errorDay.style.color = 'transparent';
+                        isDateChildren = true;
+                    }
+                }
+            } else {
+                errorDay.style.color = 'transparent';
+                isDateChildren = true;
+            }
+        }
+        return isDateChildren;
+    };
+
+    const handleCheckDateBaby = () => {
+        const time = new Date();
+        const curDay = time.getDate();
+        const curMonth = time.getMonth() + 1;
+        const curYear = time.getFullYear();
+
+        const errorDay = document.querySelector('#check-2');
+        const day = data.DayOfBirth.split('/');
+        const validteDay = day[1] + '/' + day[0] + '/' + day[2];
+        if (!isDateValid(validteDay)) {
+            errorDay.innerText = 'Ngày không hợp lệ !';
+            errorDay.style.color = 'red';
+            isDateBaby = false;
+        } else {
+            if (curYear - Number(day[2]) > 2) {
+                errorDay.innerText = 'Tuổi không hợp lệ !';
+                errorDay.style.color = 'red';
+                isDateBaby = false;
+            } else if (curYear - Number(day[2]) === 2) {
+                if (curMonth - Number(day[1]) > 0) {
+                    errorDay.innerText = 'Tuổi không hợp lệ !';
+                    errorDay.style.color = 'red';
+                    isDateBaby = false;
+                } else if (curMonth - Number(day[1]) < 0) {
+                    errorDay.style.color = 'transparent';
+                    isDateBaby = true;
+                } else {
+                    if (curDay - Number(day[0]) > 0) {
+                        errorDay.innerText = 'Tuổi không hợp lệ !';
+                        errorDay.style.color = 'red';
+                        isDateBaby = false;
+                    } else {
+                        errorDay.style.color = 'transparent';
+                        isDateBaby = true;
+                    }
+                }
+            } else {
+                errorDay.style.color = 'transparent';
+                isDateBaby = true;
+            }
+        }
+        return isDateBaby;
+    };
+
     const handleCheckEmail = () => {
         const errorEmail = document.querySelector('#check-3');
         const redex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
@@ -126,178 +237,460 @@ function Check() {
     }
 
     const handleSubmit = () => {
-        handleCheckForm();
-        if (isAddress && isDate && isEmail && isCCCD && isName && isPhone) {
-            axios
-                .post('http://localhost:4000/auth/enterInfo', {
-                    Username: data.Username,
-                    DayOfBirth: data.DayOfBirth,
-                    Email: data.Email,
-                    Address: data.Address,
-                    ID_Card: data.ID_Card,
-                    Phone: data.Phone,
-                })
-                .then((res) => {
-                    console.log(res);
-                    toast.success('Nhập thông tin thành công');
-                    setData({
-                        Username: '',
-                        DayOfBirth: '',
-                        Email: '',
-                        Address: '',
-                        ID_Card: '',
-                        Phone: '',
+        if (adults !== 0) {
+            handleCheckFormAdults();
+            if (isAddress && isDate && isEmail && isCCCD && isName && isPhone) {
+                axios
+                    .post('http://localhost:4000/auth/enterInfo', {
+                        Username: data.Username,
+                        DayOfBirth: data.DayOfBirth,
+                        Email: data.Email,
+                        Address: data.Address,
+                        ID_Card: data.ID_Card,
+                        Phone: data.Phone,
+                    })
+                    .then((res) => {
+                        console.log(res);
+                        toast.success('Nhập thông tin thành công');
+                        setData({
+                            Username: '',
+                            DayOfBirth: '',
+                            Email: '',
+                            Address: '',
+                            ID_Card: '',
+                            Phone: '',
+                        });
+
+                        setAdults(adults - 1);
+
+                        if (total === 1) {
+                            setTimeout(() => {
+                                setShowModal(true);
+                            }, 1000);
+                        }
+
+                        // Store bookedButton in localStorage
+                        localStorage.setItem('inforPerson', JSON.stringify(data));
+                    })
+                    .catch((err) => {
+                        console.log(err);
+                        toast.error('Vui lòng nhập lại thông tin');
                     });
+            } else {
+                toast.error('Vui lòng nhập lại thông tin');
+            }
+        } else if (adults === 0 && children !== 0) {
+            handleCheckFormChildren();
+            if (isAddress && isDateChildren && isName && isPhone) {
+                axios
+                    .post('http://localhost:4000/auth/enterInfo', {
+                        Username: data.Username,
+                        DayOfBirth: data.DayOfBirth,
+                        Email: data.Email,
+                        Address: data.Address,
+                        ID_Card: data.ID_Card,
+                        Phone: data.Phone,
+                    })
+                    .then((res) => {
+                        console.log(res);
+                        toast.success('Nhập thông tin thành công');
+                        setData({
+                            Username: '',
+                            DayOfBirth: '',
+                            Email: '',
+                            Address: '',
+                            ID_Card: '',
+                            Phone: '',
+                        });
 
-                    setTimeout(() => {
-                        setShowModal(true);
-                    }, 4000);
+                        setChildren(children - 1);
 
-                    // Store bookedButton in localStorage
-                    localStorage.setItem('inforPerson', JSON.stringify(data));
-                })
-                .catch((err) => {
-                    console.log(err);
-                    toast.error('Vui lòng nhập lại thông tin');
-                });
-        } else {
-            toast.error('Vui lòng nhập lại thông tin');
+                        if (total === 1) {
+                            setTimeout(() => {
+                                setShowModal(true);
+                            }, 1000);
+                        }
+
+                        // Store bookedButton in localStorage
+                        localStorage.setItem('inforPerson', JSON.stringify(data));
+                    })
+                    .catch((err) => {
+                        console.log(err);
+                        toast.error('Vui lòng nhập lại thông tin');
+                    });
+            } else {
+                toast.error('Vui lòng nhập lại thông tin');
+            }
+        } else if (adults === 0 && children === 0 && baby !== 0) {
+            handleCheckFormBaby();
+            if (isAddress && isDateBaby && isName && isPhone) {
+                axios
+                    .post('http://localhost:4000/auth/enterInfo', {
+                        Username: data.Username,
+                        DayOfBirth: data.DayOfBirth,
+                        Email: data.Email,
+                        Address: data.Address,
+                        ID_Card: data.ID_Card,
+                        Phone: data.Phone,
+                    })
+                    .then((res) => {
+                        console.log(res);
+                        toast.success('Nhập thông tin thành công');
+                        setData({
+                            Username: '',
+                            DayOfBirth: '',
+                            Email: '',
+                            Address: '',
+                            ID_Card: '',
+                            Phone: '',
+                        });
+
+                        setBaby(baby - 1);
+
+                        if (total === 1) {
+                            setTimeout(() => {
+                                setShowModal(true);
+                            }, 1000);
+                        }
+
+                        // Store bookedButton in localStorage
+                        localStorage.setItem('inforPerson', JSON.stringify(data));
+                    })
+                    .catch((err) => {
+                        console.log(err);
+                        toast.error('Vui lòng nhập lại thông tin');
+                    });
+            } else {
+                toast.error('Vui lòng nhập lại thông tin');
+            }
         }
     };
 
     return (
         <div className={cx('wrapper')}>
-            <div className={cx('container')}>
-                <h2 className={cx('title_1', 'pb-2')}>Nhập thông tin</h2>
+            {adults !== 0 && (
+                <div className={cx('container')}>
+                    <h2 className={cx('title_1', 'pb-2')}>Nhập thông tin</h2>
 
-                <form className={cx('form_1', 'mt-2')}>
-                    <div className={cx('content')}>
-                        <div className={cx('col_6')}>
-                            <label className={cx('title_2', 'mb-1')} htmlFor="Username">
-                                Họ tên
-                            </label>
+                    <form className={cx('form_1', 'mt-2')}>
+                        <div className={cx('content')}>
+                            <div className={cx('col_6')}>
+                                <label className={cx('title_2', 'mb-1')} htmlFor="Username">
+                                    Họ tên
+                                </label>
 
-                            <input
-                                type="text"
-                                id="Username"
-                                placeholder="Họ và tên"
-                                value={data.Username}
-                                onChange={handleChange}
-                                className={cx('input')}
-                            />
-                            <span id="check-1" className={cx('error-message')}>
-                                Trường này không được bỏ trống
-                            </span>
+                                <input
+                                    type="text"
+                                    id="Username"
+                                    placeholder="Họ và tên"
+                                    value={data.Username}
+                                    onChange={handleChange}
+                                    className={cx('input')}
+                                />
+                                <span id="check-1" className={cx('error-message')}>
+                                    Trường này không được bỏ trống
+                                </span>
+                            </div>
+
+                            <div className={cx('col_6')}>
+                                <label className={cx('title_2', 'mb-1')} htmlFor="DayOfBirth">
+                                    Ngày sinh
+                                </label>
+
+                                <input
+                                    type="text"
+                                    id="DayOfBirth"
+                                    value={data.DayOfBirth}
+                                    placeholder="Ngày sinh"
+                                    onChange={handleChange}
+                                    className={cx('input')}
+                                />
+
+                                <span id="check-2" className={cx('error-message')}>
+                                    Vui lòng nhập ngày sinh
+                                </span>
+                            </div>
                         </div>
 
-                        <div className={cx('col_6')}>
-                            <label className={cx('title_2', 'mb-1')} htmlFor="DayOfBirth">
-                                Ngày sinh
-                            </label>
+                        <div className={cx('content')}>
+                            <div className={cx('col_6')}>
+                                <label className={cx('title_2', 'mb-1')} htmlFor="Email">
+                                    Email
+                                </label>
 
-                            <input
-                                type="text"
-                                id="DayOfBirth"
-                                value={data.DayOfBirth}
-                                placeholder="Ngày sinh"
-                                onChange={handleChange}
-                                className={cx('input')}
-                            />
+                                <input
+                                    type="text"
+                                    id="Email"
+                                    value={data.Email}
+                                    placeholder="Địa chỉ email"
+                                    onChange={handleChange}
+                                    className={cx('input')}
+                                />
+                                <span id="check-3" className={cx('error-message')}>
+                                    Trường này phải là email
+                                </span>
+                            </div>
 
-                            <span id="check-2" className={cx('error-message')}>
-                                Vui lòng nhập ngày sinh
-                            </span>
-                        </div>
-                    </div>
+                            <div className={cx('col_6')}>
+                                <label className={cx('title_2', 'mb-1')} htmlFor="Address">
+                                    Địa chỉ
+                                </label>
 
-                    <div className={cx('content')}>
-                        <div className={cx('col_6')}>
-                            <label className={cx('title_2', 'mb-1')} htmlFor="Email">
-                                Email
-                            </label>
-
-                            <input
-                                type="text"
-                                id="Email"
-                                value={data.Email}
-                                placeholder="Địa chỉ email"
-                                onChange={handleChange}
-                                className={cx('input')}
-                            />
-                            <span id="check-3" className={cx('error-message')}>
-                                Trường này phải là email
-                            </span>
-                        </div>
-
-                        <div className={cx('col_6')}>
-                            <label className={cx('title_2', 'mb-1')} htmlFor="Address">
-                                Địa chỉ
-                            </label>
-
-                            <input
-                                type="text"
-                                id="Address"
-                                value={data.Address}
-                                placeholder="Địa chỉ"
-                                onChange={handleChange}
-                                className={cx('input')}
-                            />
-                            <span id="check-4" className={cx('error-message')}>
-                                Trường này không được bỏ trống
-                            </span>
-                        </div>
-                    </div>
-
-                    <div className={cx('content')}>
-                        <div className={cx('col_6')}>
-                            <label className={cx('title_2', 'mb-1')} htmlFor="ID_Card">
-                                Số CCCD
-                            </label>
-
-                            <input
-                                type="text"
-                                value={data.ID_Card}
-                                id="ID_Card"
-                                placeholder="Số CCCD"
-                                onChange={handleChange}
-                                className={cx('input')}
-                            />
-                            <span id="check-5" className={cx('error-message')}>
-                                Trường này không được bỏ trống
-                            </span>
+                                <input
+                                    type="text"
+                                    id="Address"
+                                    value={data.Address}
+                                    placeholder="Địa chỉ"
+                                    onChange={handleChange}
+                                    className={cx('input')}
+                                />
+                                <span id="check-4" className={cx('error-message')}>
+                                    Trường này không được bỏ trống
+                                </span>
+                            </div>
                         </div>
 
-                        <div className={cx('col_6')}>
-                            <label className={cx('title_2', 'mb-1')} htmlFor="Phone">
-                                Số điện thoại
-                            </label>
+                        <div className={cx('content')}>
+                            <div className={cx('col_6')}>
+                                <label className={cx('title_2', 'mb-1')} htmlFor="ID_Card">
+                                    Số CCCD
+                                </label>
 
-                            <input
-                                type="text"
-                                id="Phone"
-                                value={data.Phone}
-                                placeholder="Số điện thoại"
-                                onChange={handleChange}
-                                className={cx('input')}
-                            />
-                            <span id="check-6" className={cx('error-message')}>
-                                Trường này phải nhập số điện thoại
-                            </span>
+                                <input
+                                    type="text"
+                                    value={data.ID_Card}
+                                    id="ID_Card"
+                                    placeholder="Số CCCD"
+                                    onChange={handleChange}
+                                    className={cx('input')}
+                                />
+                                <span id="check-5" className={cx('error-message')}>
+                                    Trường này không được bỏ trống
+                                </span>
+                            </div>
+
+                            <div className={cx('col_6')}>
+                                <label className={cx('title_2', 'mb-1')} htmlFor="Phone">
+                                    Số điện thoại
+                                </label>
+
+                                <input
+                                    type="text"
+                                    id="Phone"
+                                    value={data.Phone}
+                                    placeholder="Số điện thoại"
+                                    onChange={handleChange}
+                                    className={cx('input')}
+                                />
+                                <span id="check-6" className={cx('error-message')}>
+                                    Trường này phải nhập số điện thoại
+                                </span>
+                            </div>
                         </div>
-                    </div>
 
-                    <div className={cx('content')}>
-                        <Link to="/" className={cx('button_submit', 'col_6')}>
-                            <span>Trở về</span>
-                        </Link>
+                        <div className={cx('content')}>
+                            <Link to="/" className={cx('button_submit', 'col_6')}>
+                                <span>Trở về</span>
+                            </Link>
 
-                        <div className={cx('button_submit', 'col_6')} onClick={handleSubmit}>
-                            <span>Tiếp theo</span>
+                            <div className={cx('button_submit', 'col_6')} onClick={handleSubmit}>
+                                <span>Tiếp theo</span>
+                            </div>
                         </div>
-                    </div>
-                    <ToastCustom />
-                </form>
-            </div>
+                        <ToastCustom />
+                    </form>
+                </div>
+            )}
+            {adults === 0 && children !== 0 && (
+                <div className={cx('container')}>
+                    <h2 className={cx('title_1', 'pb-2')}>Nhập thông tin trẻ em</h2>
+
+                    <form className={cx('form_1', 'mt-2')}>
+                        <div className={cx('content')}>
+                            <div className={cx('col_6')}>
+                                <label className={cx('title_2', 'mb-1')} htmlFor="Username">
+                                    Họ tên
+                                </label>
+
+                                <input
+                                    type="text"
+                                    id="Username"
+                                    placeholder="Họ và tên"
+                                    value={data.Username}
+                                    onChange={handleChange}
+                                    className={cx('input')}
+                                />
+                                <span id="check-1" className={cx('error-message')}>
+                                    Trường này không được bỏ trống
+                                </span>
+                            </div>
+
+                            <div className={cx('col_6')}>
+                                <label className={cx('title_2', 'mb-1')} htmlFor="DayOfBirth">
+                                    Ngày sinh
+                                </label>
+
+                                <input
+                                    type="text"
+                                    id="DayOfBirth"
+                                    value={data.DayOfBirth}
+                                    placeholder="Ngày sinh"
+                                    onChange={handleChange}
+                                    className={cx('input')}
+                                />
+
+                                <span id="check-2" className={cx('error-message')}>
+                                    Số tuổi vượt quá quy định
+                                </span>
+                            </div>
+                        </div>
+
+                        <div className={cx('content')}>
+                            <div className={cx('col_6')}>
+                                <label className={cx('title_2', 'mb-1')} htmlFor="Phone">
+                                    Số điện thoại người giám hộ
+                                </label>
+
+                                <input
+                                    type="text"
+                                    id="Phone"
+                                    value={data.Phone}
+                                    placeholder="Số điện thoại người giám hộ"
+                                    onChange={handleChange}
+                                    className={cx('input')}
+                                />
+                                <span id="check-6" className={cx('error-message')}>
+                                    Trường này phải nhập số điện thoại
+                                </span>
+                            </div>
+
+                            <div className={cx('col_6')}>
+                                <label className={cx('title_2', 'mb-1')} htmlFor="Address">
+                                    Địa chỉ
+                                </label>
+
+                                <input
+                                    type="text"
+                                    id="Address"
+                                    value={data.Address}
+                                    placeholder="Địa chỉ"
+                                    onChange={handleChange}
+                                    className={cx('input')}
+                                />
+                                <span id="check-4" className={cx('error-message')}>
+                                    Trường này không được bỏ trống
+                                </span>
+                            </div>
+                        </div>
+
+                        <div className={cx('content')}>
+                            <Link to="/" className={cx('button_submit', 'col_6')}>
+                                <span>Trở về</span>
+                            </Link>
+
+                            <div className={cx('button_submit', 'col_6')} onClick={handleSubmit}>
+                                <span>Tiếp theo</span>
+                            </div>
+                        </div>
+                        <ToastCustom />
+                    </form>
+                </div>
+            )}
+            {adults === 0 && children === 0 && baby !== 0 && (
+                <div className={cx('container')}>
+                    <h2 className={cx('title_1', 'pb-2')}>Nhập thông tin em bé</h2>
+
+                    <form className={cx('form_1', 'mt-2')}>
+                        <div className={cx('content')}>
+                            <div className={cx('col_6')}>
+                                <label className={cx('title_2', 'mb-1')} htmlFor="Username">
+                                    Họ tên
+                                </label>
+
+                                <input
+                                    type="text"
+                                    id="Username"
+                                    placeholder="Họ và tên"
+                                    value={data.Username}
+                                    onChange={handleChange}
+                                    className={cx('input')}
+                                />
+                                <span id="check-1" className={cx('error-message')}>
+                                    Trường này không được bỏ trống
+                                </span>
+                            </div>
+
+                            <div className={cx('col_6')}>
+                                <label className={cx('title_2', 'mb-1')} htmlFor="DayOfBirth">
+                                    Ngày sinh
+                                </label>
+
+                                <input
+                                    type="text"
+                                    id="DayOfBirth"
+                                    value={data.DayOfBirth}
+                                    placeholder="Ngày sinh"
+                                    onChange={handleChange}
+                                    className={cx('input')}
+                                />
+
+                                <span id="check-2" className={cx('error-message')}>
+                                    Số tuổi vượt quá quy định
+                                </span>
+                            </div>
+                        </div>
+
+                        <div className={cx('content')}>
+                            <div className={cx('col_6')}>
+                                <label className={cx('title_2', 'mb-1')} htmlFor="Phone">
+                                    Số điện thoại người giám hộ
+                                </label>
+
+                                <input
+                                    type="text"
+                                    id="Phone"
+                                    value={data.Phone}
+                                    placeholder="Số điện thoại người giám hộ"
+                                    onChange={handleChange}
+                                    className={cx('input')}
+                                />
+                                <span id="check-6" className={cx('error-message')}>
+                                    Trường này phải nhập số điện thoại
+                                </span>
+                            </div>
+
+                            <div className={cx('col_6')}>
+                                <label className={cx('title_2', 'mb-1')} htmlFor="Address">
+                                    Địa chỉ
+                                </label>
+
+                                <input
+                                    type="text"
+                                    id="Address"
+                                    value={data.Address}
+                                    placeholder="Địa chỉ"
+                                    onChange={handleChange}
+                                    className={cx('input')}
+                                />
+                                <span id="check-4" className={cx('error-message')}>
+                                    Trường này không được bỏ trống
+                                </span>
+                            </div>
+                        </div>
+
+                        <div className={cx('content')}>
+                            <Link to="/" className={cx('button_submit', 'col_6')}>
+                                <span>Trở về</span>
+                            </Link>
+
+                            <div className={cx('button_submit', 'col_6')} onClick={handleSubmit}>
+                                <span>Tiếp theo</span>
+                            </div>
+                        </div>
+                        <ToastCustom />
+                    </form>
+                </div>
+            )}
             {showModal && <ModalSeatBooking show={showModal} setShow={setShowModal} />}
         </div>
     );

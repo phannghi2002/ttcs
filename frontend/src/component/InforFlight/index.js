@@ -13,13 +13,15 @@ function InforFlight({ item, name, select }) {
     // const [show, setShow] = useState(true);
     const value1 = storedQuantity.adults;
     const value2 = storedQuantity.children;
+    const value3 = storedQuantity.baby;
+    const moneyBaby = moneyAdult / 2;
     const [total, setTotal] = useState(moneyAdult);
 
     //change value total when click add or subtract quantity
     useEffect(() => {
-        setTotal(moneyAdult * value1 + moneyChildren * value2);
+        setTotal(moneyAdult * value1 + moneyChildren * value2 + moneyBaby * value3);
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [value1, value2, moneyAdult, moneyChildren]);
+    }, [value1, value2, value3, moneyAdult, moneyChildren, moneyBaby]);
 
     const [selectedValue, setSelectedValue] = useState('EconomyClass');
 
@@ -124,13 +126,21 @@ function InforFlight({ item, name, select }) {
 
                     {!!value1 && <span className="money"> {moneyAdult * value1}</span>}
                 </span>
-                <span className="traveller">
+                <span className="me-4 traveller">
                     <span>
                         Trẻ em:
                         <input type="number" value={value2} readOnly />
                     </span>
 
                     {!!value2 && <span className="money"> {moneyChildren * value2}</span>}
+                </span>
+                <span className="traveller">
+                    <span>
+                        Em bé:
+                        <input type="number" value={value3} readOnly />
+                    </span>
+
+                    {!!value3 && <span className="money"> {moneyBaby * value3}</span>}
                 </span>
                 <span className="total ms-3">
                     <h5 className="total_1">Tổng tiền</h5>
