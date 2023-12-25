@@ -1,31 +1,38 @@
-import express from "express";
+import express from 'express';
 import {
-  createInfoBooked,
-  deleteInfoBooked,
-  updateInfoBooked,
-  getSingleInfoBooked,
-  getAllInfoBooked,
-  getInfoBookedBySearch,
-} from "./../controllers/infoBookedController.js";
+    createInfoBooked,
+    deleteInfoBooked,
+    updateInfoBooked,
+    getSingleInfoBooked,
+    getAllInfoBooked,
+    getInfoBookedBySearch,
+    getInfoBookedMonthOnewayNow,
+    getInfoBookedMonthRoundtripNow,
+} from './../controllers/infoBookedController.js';
 
 const router = express.Router();
 
 //create new ticket
-router.post("/", createInfoBooked);
+router.post('/', createInfoBooked);
 
 //delete new ticket
-router.delete("/:id", deleteInfoBooked);
+router.delete('/:id', deleteInfoBooked);
 
 //update new ticket
-router.put("/:id", updateInfoBooked);
+router.put('/:id', updateInfoBooked);
 
 //get single ticket
-router.get("/:id", getSingleInfoBooked);
+router.get('/:id', getSingleInfoBooked);
 
 //get all ticket
-router.get("/", getAllInfoBooked);
+router.get('/', getAllInfoBooked);
 
 //get all ticket by search
-router.get("/search/getInfoBookedBySearch", getInfoBookedBySearch);
+router.get('/search/getInfoBookedBySearch', getInfoBookedBySearch);
 
+//get all ticket oneway month now
+router.get('/search/getInfoBookedOnewayMonthNow', getInfoBookedMonthOnewayNow);
+
+//get all ticket roundtrip month now
+router.get('/search/getInfoBookedRoundtripMonthNow', getInfoBookedMonthRoundtripNow);
 export default router;

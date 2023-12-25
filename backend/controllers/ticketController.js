@@ -296,3 +296,145 @@ export const getTicketBySearchDuration = async (req, res) => {
         });
     }
 };
+
+//get ticket by day
+export const getTicketByToday = async (req, res) => {
+    const DateGo = new Date(req.query.DateGo);
+
+    const DateReturn = '2024-01-02T14:30';
+
+    const formattedDateReturn = new Date(DateReturn).toISOString();
+
+    try {
+        const tickets = await Ticket.find({
+            DateGo,
+            // Roundtrip: {
+            //   DateReturn: DateReturn,
+            // },
+            //function filter in mongdb: { DateGo: { $eq:ISODate("2024-01-01T17:00:00.000Z") } }
+        });
+
+        console.log(tickets);
+        // const ticket = tickets.map((ticket) => ticket.Roundtrip.DateReturn);
+        // console.log(ticket);
+
+        // const tickets = await Ticket.find({ Duration: { $gte: Duration } });
+        // console.log(data);
+
+        res.status(200).json({
+            success: true,
+            message: 'Successfully found search',
+            count: tickets.length,
+            data: tickets,
+        });
+    } catch (error) {
+        res.status(404).json({
+            success: false,
+            message: 'Not found ',
+        });
+    }
+};
+
+export const getTicketCompleted = async (req, res) => {
+    const LandingTime = new Date(req.query.LandingTime);
+
+    try {
+        const currentDate = new Date();
+
+        const tickets = await Ticket.find({
+            LandingTime: { $lt: currentDate },
+        });
+
+        console.log(tickets);
+
+        res.status(200).json({
+            success: true,
+            message: 'Successfully found search',
+            count: tickets.length,
+            data: tickets,
+        });
+    } catch (error) {
+        res.status(404).json({
+            success: false,
+            message: 'Not found ',
+        });
+    }
+};
+
+export const getTicketIncompleted = async (req, res) => {
+    const LandingTime = new Date(req.query.LandingTime);
+
+    try {
+        const currentDate = new Date();
+
+        const tickets = await Ticket.find({
+            LandingTime: { $gt: currentDate },
+        });
+
+        console.log(tickets);
+
+        res.status(200).json({
+            success: true,
+            message: 'Successfully found search',
+            count: tickets.length,
+            data: tickets,
+        });
+    } catch (error) {
+        res.status(404).json({
+            success: false,
+            message: 'Not found ',
+        });
+    }
+};
+
+// const { MongoClient } = require('mongodb');
+
+// import { MongoClient } from 'mongodb';
+
+// const uri = 'mongodb+srv://phannghi2002nk:123@cluster0.xlueoxp.mongodb.net/?retryWrites=true&w=majority';
+// const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
+
+// async function getMonthlyTotalMoney() {
+//     try {
+//         await client.connect();
+
+//         const database = client.db('test');
+//         const collection = database.collection('infobookeds');
+
+//         const currentMonthStart = new Date();
+//         currentMonthStart.setDate(1);
+//         currentMonthStart.setHours(0, 0, 0, 0);
+
+//         const currentMonthEnd = new Date();
+//         currentMonthEnd.setMonth(currentMonthEnd.getMonth() + 1, 0);
+//         currentMonthEnd.setHours(23, 59, 59, 999);
+//         console.log(currentMonthEnd);
+
+//         const pipeline = [
+//             {
+//                 $match: {
+//                     LandingTime: { $lt: currentMonthEnd },
+//                 },
+//             },
+//             {
+//                 $group: {
+//                     _id: null,
+//                     TotalMoney: { $sum: '$TotalMoney' },
+//                 },
+//             },
+//         ];
+
+//         const result = await collection.aggregate(pipeline).toArray();
+
+//         if (result.length > 0) {
+//             const monthlyTotalMoney = result[0].totalMoney;
+//             console.log('Monthly Total Money:', monthlyTotalMoney);
+//         } else {
+//             console.log('No matching records for the current month.');
+//         }
+//     } finally {
+//         await client.close();
+//     }
+// }
+
+// getMonthlyTotalMoney();

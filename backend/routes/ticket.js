@@ -9,6 +9,9 @@ import {
     getTicketBySearchCompany,
     getTicketBySearchDuration,
     getTicketBySearchCompanyAndDuration,
+    getTicketByToday,
+    getTicketCompleted,
+    getTicketIncompleted,
 } from './../controllers/ticketController.js';
 
 const router = express.Router();
@@ -41,5 +44,14 @@ router.get('/search/getTicketBySearchDuration', getTicketBySearchDuration);
 
 //get all ticket by search company and duration
 router.get('/search/getTicketBySearchCompanyAndDuration', getTicketBySearchCompanyAndDuration);
+
+//get all ticket by today
+router.get('/search/getTicketByToday', getTicketByToday);
+
+//get all ticket completed
+router.get('/search/getTicketCompleted', getTicketCompleted);
+
+//get all ticket incompleted
+router.get('/search/getTicketIncompleted', getTicketIncompleted);
 
 export default router;

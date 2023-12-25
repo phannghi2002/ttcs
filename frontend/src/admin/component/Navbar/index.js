@@ -17,7 +17,7 @@ import NotificationsIcon from '@mui/icons-material/Notifications';
 import MoreIcon from '@mui/icons-material/MoreVert';
 import { Helmet } from 'react-helmet';
 
-import { useAppStore } from '../index';
+import { useAppStore } from '../../index';
 
 const AppBar = styled(
     MuiAppBar,

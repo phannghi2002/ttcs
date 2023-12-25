@@ -20,13 +20,15 @@ import ConnectingAirportsIcon from '@mui/icons-material/ConnectingAirports';
 import ManageAccountsIcon from '@mui/icons-material/ManageAccounts';
 import MonetizationOnIcon from '@mui/icons-material/MonetizationOn';
 import PersonIcon from '@mui/icons-material/Person';
-import Flight3D from '../../asset/images/flight3d.png';
+import Flight3D from '../../../asset/images/flight3d.png';
 
 import { useNavigate } from 'react-router-dom';
-import { useAppStore } from '../index';
+import { useAppStore } from '../../index';
+// import { useState } from 'react';
 
 import classNames from 'classnames/bind';
 import styles from './Sidenav.module.scss';
+// import CustomList from './CustomList';
 const cx = classNames.bind(styles);
 
 const drawerWidth = 240;
@@ -81,6 +83,12 @@ export default function Sidenav() {
     const open = useAppStore((state) => state.dopen);
 
     const navigate = useNavigate();
+    // const [isClicked,setIsClicked] = React.useState(true);
+
+    // const handleClick = () => {
+    //     setIsClicked(true);
+    //     navigate(path);
+    //   };
 
     return (
         <Box sx={{ display: 'flex' }}>
@@ -93,7 +101,12 @@ export default function Sidenav() {
                 </DrawerHeader>
                 <Divider />
                 <List>
-                    <ListItem disablePadding sx={{ display: 'block' }} onClick={() => navigate('/admin')}>
+                    <ListItem
+                        disablePadding
+                        sx={{ display: 'block' }}
+                        onClick={() => navigate('/admin')}
+                        // className={isClicked ?  'clicked' : ''}
+                    >
                         <ListItemButton
                             sx={{
                                 minHeight: 48,
@@ -114,6 +127,9 @@ export default function Sidenav() {
                         </ListItemButton>
                     </ListItem>
                 </List>
+
+                {/* <CustomList path="/admin" icon={<HomeIcon />} primary="Trang chủ" /> */}
+
                 <Divider />
                 <List>
                     <ListItem disablePadding sx={{ display: 'block' }} onClick={() => navigate('/admin/flight')}>

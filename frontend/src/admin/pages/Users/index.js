@@ -1,6 +1,6 @@
-import Sidenav from '../component/Sidenav';
-import Navbar from '../component/Navbar';
-
+import Sidenav from '../../component/Sidenav';
+import Navbar from '../../component/Navbar';
+// import TableFlight from '../../component/TableFlight';
 import Box from '@mui/material/Box';
 
 function Users() {
@@ -11,7 +11,8 @@ function Users() {
             <Box sx={{ display: 'flex' }}>
                 <Sidenav />
                 <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
-                    <h1>Day la trang Users</h1>
+                    {/* <TableFlight /> */}
+                    daay laf usee
                 </Box>
             </Box>
         </>
