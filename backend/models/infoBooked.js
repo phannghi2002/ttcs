@@ -55,7 +55,6 @@ const infoBookedSchema = new mongoose.Schema(
         ID_Card: {
             type: String,
             required: true,
-            unique: true,
         },
         CodeSeat: {
             type: String,
@@ -64,7 +63,6 @@ const infoBookedSchema = new mongoose.Schema(
         Email: {
             type: String,
             required: true,
-            unique: true,
         },
 
         TypeTicketReturn: {

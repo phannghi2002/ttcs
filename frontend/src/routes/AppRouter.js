@@ -15,6 +15,8 @@ import AdminUsers from '../admin/pages/AdminUsers';
 
 import Revenue from '../admin/pages/Revenue';
 
+import SignIn from '../component/SignIn';
+
 function AppRouter() {
     return (
         <Routes>
@@ -28,7 +30,7 @@ function AppRouter() {
             <Route path="/myFlight" element={<MyFlight />} />
             <Route path="/contact" element={<Contact />} />
 
-            <Route path="/contact" element={<Contact />} />
+            <Route path="/signin" element={<SignIn />} />
 
             <Route path="/admin" element={<Home />} />
             <Route path="/admin/flight" element={<Flight />} />
