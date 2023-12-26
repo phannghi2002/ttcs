@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React from 'react';
 import MaterialTable from 'material-table';
 
@@ -42,8 +43,8 @@ const Table = ({ param, title }) => {
     const columns = [
         {
             title: 'STT',
-            headerStyle: { ...commonHeaderStyle, paddingRight: '0', maxWidth: 40 },
-            cellStyle: { width: '1%', paddingLeft: '26px', maxWidth: 40 },
+            headerStyle: { ...commonHeaderStyle, paddingRight: '0', width: '1%', maxWidth: 40 },
+            cellStyle: { width: '1%', paddingLeft: '26px' },
 
             render: (rowData) => data.indexOf(rowData) + 1,
             // render: (rowData) => <div style={{ minWidth: '40px' }}> {data.indexOf(rowData) + 1} </div>,
@@ -54,12 +55,7 @@ const Table = ({ param, title }) => {
             headerStyle: commonHeaderStyle,
             cellStyle: commonCellStyle,
         },
-        // {
-        //     title: 'Mã máy bay',
-        //     field: 'AirlineCode',
-        //     headerStyle: commonHeaderStyle,
-        //     cellStyle: commonCellStyle,
-        // },
+
         {
             title: 'Sân bay đi',
             field: 'AirportFrom',
@@ -94,19 +90,58 @@ const Table = ({ param, title }) => {
         },
     ];
 
+    // const [page, setPage] = useState(0);
+
     useEffect(() => {
-        fetch(`http://localhost:4000/tickets/search/getTicket${param}`)
+        fetch(`http://localhost:4000/tickets${param}`)
+            // fetch(`http://localhost:4000/tickets/search/getTicket${param}All`)
             .then((res) => res.json())
-            .then((res) => setData(res.data));
-        // eslint-disable-next-line react-hooks/exhaustive-deps
+            .then((res) => {
+                setData(res.data);
+
+                // eslint-disable-next-line react-hooks/exhaustive-deps
+                // if (res.data && res.data.length > 0) {
+                //     setPage(5);
+                //     console.log('hello cu em', page);
+                // } else {
+                //     setPage(0);
+                //     console.log('hong duoc', page);
+                // }
+            });
     }, []);
+
+    // const handleOrderChange = (orderBy, orderDirection) => {
+    //     // Update data when sorting changes
+    //     // For example, sort the data based on the current sorting
+    //     // This assumes that your data is an array of objects with unique keys
+    //     setData((prevData) =>
+    //         prevData.slice().sort((a, b) => {
+    //             const order = orderDirection === 'asc' ? 1 : -1;
+    //             return a[orderBy] > b[orderBy] ? order : -order;
+    //         }),
+    //     );
+    // };
+
+    // const options = {
+    //     search: true,
+    //     paging: true,
+    //     pageSize: data.length > 0 ? 5 : 0, // Set pageSize to 5 if data exists, 0 otherwise
+    //     filtering: true,
+    //     exportButton: true,
+    // };
+
     return (
-        <MaterialTable
-            title={<div className={cx('column')}>{title}</div>}
-            data={data}
-            columns={columns}
-            options={{ search: true, paging: false, filtering: false, exportButton: true }}
-        />
+        <div className={cx('table')}>
+            <MaterialTable
+                title={<div className={cx('column')}>{title}</div>}
+                data={data}
+                columns={columns}
+                // onOrderChange={handleOrderChange}
+
+                options={{ search: true, paging: true, filtering: false, exportButton: true }}
+                // options={options}
+            />
+        </div>
     );
 };
 

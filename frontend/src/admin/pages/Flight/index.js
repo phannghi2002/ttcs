@@ -12,9 +12,11 @@ function Flight() {
             <Box sx={{ display: 'flex' }}>
                 <Sidenav />
                 <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
-                    <TableFlight param="Incompleted" title="Chuyến bay chưa hoàn thành" />
+                    <TableFlight param="/search/getTicketIncompletedMonthNow" title="Chuyến bay chưa hoàn thành" />
 
-                    <TableFlight sx={{ marginTop: 30 }} param="Completed" title="Chuyến bay đã hoàn thành" />
+                    <TableFlight param="/search/getTicketCompletedMonthNow" title="Chuyến bay đã hoàn thành" />
+
+                    <TableFlight param="/" title="Tất cả các chuyến bay" />
                 </Box>
             </Box>
         </>

@@ -116,12 +116,12 @@ export const getSingleTicket = async (req, res) => {
 
 export const getAllTicket = async (req, res) => {
     //for pagination
-    const page = parseInt(req.query.page);
+    // const page = parseInt(req.query.page);
 
     try {
-        const tickets = await Ticket.find({})
-            .skip(page * 5)
-            .limit(5);
+        const tickets = await Ticket.find({});
+        // .skip(page * 5)
+        // .limit(5);
 
         if (tickets.length > 0) {
             console.log('kho vl');
@@ -335,7 +335,7 @@ export const getTicketByToday = async (req, res) => {
     }
 };
 
-export const getTicketCompleted = async (req, res) => {
+export const getTicketCompletedAll = async (req, res) => {
     const LandingTime = new Date(req.query.LandingTime);
 
     try {
@@ -361,7 +361,25 @@ export const getTicketCompleted = async (req, res) => {
     }
 };
 
-export const getTicketIncompleted = async (req, res) => {
+const getMonth = () => {
+    const currentMonthStart = new Date();
+    currentMonthStart.setDate(1);
+    currentMonthStart.setMonth(currentMonthStart.getMonth(), 0);
+    currentMonthStart.setHours(0, 0, 0, 0);
+    console.log(currentMonthStart);
+
+    const currentMonthEnd = new Date();
+    currentMonthEnd.setMonth(currentMonthEnd.getMonth() + 1, 0);
+    currentMonthEnd.setHours(23, 59, 59, 999);
+    console.log(currentMonthEnd);
+
+    return {
+        currentMonthStart: currentMonthStart,
+        currentMonthEnd: currentMonthEnd,
+    };
+};
+
+export const getTicketIncompletedAll = async (req, res) => {
     const LandingTime = new Date(req.query.LandingTime);
 
     try {
@@ -387,54 +405,52 @@ export const getTicketIncompleted = async (req, res) => {
     }
 };
 
-// const { MongoClient } = require('mongodb');
+export const getTicketIncompletedMonthNow = async (req, res) => {
+    const LandingTime = new Date(req.query.LandingTime);
 
-// import { MongoClient } from 'mongodb';
+    const currentDate = new Date();
+    const currentMonthEnd = getMonth().currentMonthEnd;
 
-// const uri = 'mongodb+srv://phannghi2002nk:123@cluster0.xlueoxp.mongodb.net/?retryWrites=true&w=majority';
-// const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
+    try {
+        const tickets = await Ticket.find({
+            LandingTime: { $gte: currentDate, $lt: currentMonthEnd },
+        });
 
-// async function getMonthlyTotalMoney() {
-//     try {
-//         await client.connect();
+        res.status(200).json({
+            success: true,
+            message: 'Successfully found search',
+            count: tickets.length,
+            data: tickets,
+        });
+    } catch (error) {
+        res.status(404).json({
+            success: false,
+            message: 'Not found ',
+        });
+    }
+};
 
-//         const database = client.db('test');
-//         const collection = database.collection('infobookeds');
+export const getTicketCompletedMonthNow = async (req, res) => {
+    const LandingTime = new Date(req.query.LandingTime);
 
-//         const currentMonthStart = new Date();
-//         currentMonthStart.setDate(1);
-//         currentMonthStart.setHours(0, 0, 0, 0);
+    const currentDate = new Date();
+    const currentMonthStart = getMonth().currentMonthStart;
 
-//         const currentMonthEnd = new Date();
-//         currentMonthEnd.setMonth(currentMonthEnd.getMonth() + 1, 0);
-//         currentMonthEnd.setHours(23, 59, 59, 999);
-//         console.log(currentMonthEnd);
+    try {
+        const tickets = await Ticket.find({
+            LandingTime: { $gte: currentMonthStart, $lt: currentDate },
+        });
 
-//         const pipeline = [
-//             {
-//                 $match: {
-//                     LandingTime: { $lt: currentMonthEnd },
-//                 },
-//             },
-//             {
-//                 $group: {
-//                     _id: null,
-//                     TotalMoney: { $sum: '$TotalMoney' },
-//                 },
-//             },
-//         ];
-
-//         const result = await collection.aggregate(pipeline).toArray();
-
-//         if (result.length > 0) {
-//             const monthlyTotalMoney = result[0].totalMoney;
-//             console.log('Monthly Total Money:', monthlyTotalMoney);
-//         } else {
-//             console.log('No matching records for the current month.');
-//         }
-//     } finally {
-//         await client.close();
-//     }
-// }
-
-// getMonthlyTotalMoney();
+        res.status(200).json({
+            success: true,
+            message: 'Successfully found search',
+            count: tickets.length,
+            data: tickets,
+        });
+    } catch (error) {
+        res.status(404).json({
+            success: false,
+            message: 'Not found ',
+        });
+    }
+};

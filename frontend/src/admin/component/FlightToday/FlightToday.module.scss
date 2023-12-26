@@ -3,10 +3,13 @@
     height: 50px;
     border-radius: 100px;
     margin-right: 12px;
+    border: 1px solid #ccc;
 }
 .title {
     color: rgb(58, 55, 55);
-    font-weight: 500;
+    font-weight: 530;
+    font-size: 1.7rem;
+    margin-bottom: 20px;
 }
 .field {
     display: flex;
@@ -39,4 +42,15 @@
 .container {
     display: flex;
     flex-direction: row;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+.quantity_people {
+    margin-right: 12px;
+}
+.passenger {
+    margin-right: 50px;
+    // vertical-align: middle;
+    display: flex;
+    align-items: center;
 }

@@ -1,5 +1,11 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import AirPlane from '../../../asset/images/airplane_0.avif';
+// import AirPlane from '../../../asset/images/airplane_0.avif';
+
+import VJ from '../../../asset/images/VietJet_Air.png';
+import VNA from '../../../asset/images/Vietnam_Airlines.jpg';
+import QH from '../../../asset/images/bambo.jpg';
+import BL from '../../../asset/images/Pacific_Airline.png';
+
 import classNames from 'classnames/bind';
 import styles from './FlightToday.module.scss';
 import { useEffect, useState } from 'react';
@@ -101,7 +107,7 @@ function FlightToday() {
             <div className={cx('field')}>
                 <span>Điểm khởi hành</span>
 
-                <span>Số người</span>
+                <span className={cx('quantity_people')}>Số người</span>
             </div>
 
             {data && data.length !== 0 && (
@@ -110,7 +116,19 @@ function FlightToday() {
                         return (
                             <div key={item._id} className={cx('container')}>
                                 <div className={cx('info')}>
-                                    <img src={AirPlane} alt="Máy bay" className={cx('image')} />
+                                    {item.AirlineCode === 'VJ' && (
+                                        <img src={VJ} alt="Máy bay" className={cx('image')} />
+                                    )}
+                                    {item.AirlineCode === 'VNA' && (
+                                        <img src={VNA} alt="Máy bay" className={cx('image')} />
+                                    )}
+                                    {item.AirlineCode === 'QH' && (
+                                        <img src={QH} alt="Máy bay" className={cx('image')} />
+                                    )}
+                                    {item.AirlineCode === 'BL' && (
+                                        <img src={BL} alt="Máy bay" className={cx('image')} />
+                                    )}
+
                                     <div className={cx('time')}>
                                         {convertTime(item.FlightTime)}
 
@@ -131,7 +149,7 @@ function FlightToday() {
                                     </div>
                                 </div>
 
-                                <div> {allPassenger(item)}</div>
+                                <div className={cx('passenger')}> {allPassenger(item)}</div>
                             </div>
                         );
                     })}

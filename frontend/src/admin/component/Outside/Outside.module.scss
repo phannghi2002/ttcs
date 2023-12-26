@@ -8,3 +8,13 @@
     width: 100%;
     border-radius: 10px;
 }
+.calendar {
+    width: 100% !important;
+}
+.title {
+    padding: 16px 20px;
+
+    &.css-1q04gal-MuiDateCalendar-root {
+        width: 100%;
+    }
+}

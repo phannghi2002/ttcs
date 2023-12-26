@@ -21,6 +21,8 @@ import FlightToday from '../../component/FlightToday';
 import { useEffect, useState } from 'react';
 // import NumberFormat from '../component/NumberFormat/NumberFormat';
 
+import { useNavigate } from 'react-router-dom';
+
 import CountUp from 'react-countup';
 
 const cx = classNames.bind(styles);
@@ -28,7 +30,7 @@ const cx = classNames.bind(styles);
 function Home() {
     async function fetchAPI(param) {
         try {
-            let response = await fetch(`http://localhost:4000/tickets/search/getTicket${param}`);
+            let response = await fetch(`http://localhost:4000/tickets/search/getTicket${param}MonthNow`);
 
             if (!response.ok) {
                 throw new Error('Failed to fetch data');
@@ -105,6 +107,18 @@ function Home() {
 
     console.log(moneyOneway, moneyRoundtrip);
 
+    const navigate = useNavigate();
+
+    const handleSwitchFlight = () => {
+        // Navigate to the desired page when the Card is clicked
+        navigate('/admin/flight');
+    };
+
+    const handleSwitchRevenue = () => {
+        // Navigate to the desired page when the Card is clicked
+        navigate('/admin/flight');
+    };
+
     return (
         <>
             <Navbar />
@@ -120,7 +134,11 @@ function Home() {
                                 </Grid>
 
                                 <Grid item xs={4}>
-                                    <Card sx={{ maxWidth: 345 }} className={cx('gradient_imcompleted')}>
+                                    <Card
+                                        sx={{ maxWidth: 345 }}
+                                        className={cx('gradient_imcompleted')}
+                                        onClick={handleSwitchFlight}
+                                    >
                                         <CardContent>
                                             <Typography
                                                 gutterBottom
@@ -141,7 +159,11 @@ function Home() {
                                         </CardContent>
                                     </Card>
 
-                                    <Card sx={{ maxWidth: 345 }} className={cx('gradient_completed')}>
+                                    <Card
+                                        sx={{ maxWidth: 345 }}
+                                        className={cx('gradient_completed')}
+                                        onClick={handleSwitchFlight}
+                                    >
                                         <CardContent>
                                             <Typography
                                                 gutterBottom
@@ -164,7 +186,11 @@ function Home() {
                                         </CardContent>
                                     </Card>
 
-                                    <Card sx={{ maxWidth: 345 }} className={cx('gradient_revenue')}>
+                                    <Card
+                                        sx={{ maxWidth: 345 }}
+                                        className={cx('gradient_revenue')}
+                                        onClick={handleSwitchRevenue}
+                                    >
                                         <CardContent>
                                             <Typography
                                                 gutterBottom

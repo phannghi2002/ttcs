@@ -14,6 +14,7 @@ export const createInfoBooked = async (req, res) => {
             data: saveInfoBooked,
         });
     } catch (error) {
+        console.log('lỗi', error);
         res.status(500).json({
             success: false,
             message: 'Failed to create. Try again ',
@@ -90,15 +91,82 @@ export const getSingleInfoBooked = async (req, res) => {
 
 export const getAllInfoBooked = async (req, res) => {
     //for pagination
-    const page = parseInt(req.query.page);
-    console.log(page);
+    // const page = parseInt(req.query.page);
+    // console.log(page);
 
-    console.log('vai ca cut');
+    console.log('cay vai ca biu');
 
     try {
-        const infoBooked = await InfoBooked.find({})
-            .skip(page * 5)
-            .limit(5);
+        const infoBooked = await InfoBooked.find({});
+        //     .skip(page * 5)
+        //     .limit(5);
+
+        if (infoBooked.length > 0) {
+            console.log('ao that day');
+            res.status(200).json({
+                success: true,
+                count: infoBooked.length,
+                message: 'Successfully',
+                data: infoBooked,
+            });
+        } else {
+            throw new Error('No tickets found'); // Throw an error when tickets.length is <= 0
+        }
+    } catch (error) {
+        res.status(404).json({
+            success: false,
+            message: 'Not found ',
+        });
+    }
+};
+
+//getAll ticket Oneway
+
+export const getAllInfoBookedOneway = async (req, res) => {
+    //for pagination
+    // const TypeFlight = new RegExp(req.query.TypeFlight, 'i');
+
+    try {
+        const infoBooked = await InfoBooked.find({
+            // TypeFlight: 'Oneway',
+        });
+
+        console.log('day nhe con vo', infoBooked);
+
+        if (infoBooked.length > 0) {
+            console.log('ao that day');
+            res.status(200).json({
+                success: true,
+                count: infoBooked.length,
+                message: 'Successfully',
+                data: infoBooked,
+            });
+        } else {
+            throw new Error('No tickets found'); // Throw an error when tickets.length is <= 0
+        }
+    } catch (error) {
+        res.status(404).json({
+            success: false,
+            message: 'Not found ',
+        });
+    }
+};
+
+//getAll ticket Roundtrip
+
+export const getAllInfoBookedRoundtrip = async (req, res) => {
+    //for pagination
+    const TypeFlight = new RegExp(req.query.TypeFlight, 'i');
+    // const TypeFlight = new RegExp(req.query.TypeFlight, 'i');
+    console.log('dit ca lo nha may');
+
+    try {
+        const infoBooked = await InfoBooked.find({
+            // TypeFlight: 'Roundtrip',
+            TypeFlight: { $eq: 'Roundtrip' },
+        });
+        //     .skip(page * 5)
+        //     .limit(5);
 
         if (infoBooked.length > 0) {
             console.log('ao that day');
@@ -155,12 +223,12 @@ export const getInfoBookedBySearch = async (req, res) => {
 const getMonth = () => {
     const currentMonthStart = new Date();
     currentMonthStart.setDate(1);
-    currentMonthStart.setMonth(currentMonthStart.getMonth() + 1, 0);
+    currentMonthStart.setMonth(currentMonthStart.getMonth() + 0, 0);
     currentMonthStart.setHours(0, 0, 0, 0);
     console.log(currentMonthStart);
 
     const currentMonthEnd = new Date();
-    currentMonthEnd.setMonth(currentMonthEnd.getMonth() + 2, 0);
+    currentMonthEnd.setMonth(currentMonthEnd.getMonth() + 1, 0);
     currentMonthEnd.setHours(23, 59, 59, 999);
     console.log(currentMonthEnd);
 
