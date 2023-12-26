@@ -1,9 +1,49 @@
 import classNames from 'classnames/bind';
 import styles from './Content.module.scss';
-
+import axios from 'axios';
+import { useEffect, useState } from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faArrowRight } from '@fortawesome/free-solid-svg-icons';
+import picture1 from '../../../asset/images/img1.jpg';
+import picture2 from '../../../asset/images/img2.jpg';
+import picture3 from '../../../asset/images/img3.jpg';
+import picture4 from '../../../asset/images/img0.jpg';
 const cx = classNames.bind(styles);
 
-function Content() {
+function Content(props) {
+    const [data, setData] = useState([]);
+    const [newData, setNewData] = useState([]);
+
+    useEffect(() => {
+        axios
+            .get(`http://localhost:4000/tickets/`)
+            .then((response) => setData(response.data.data))
+            .catch((error) => console.log(error));
+    }, [setData]);
+
+    useEffect(() => {
+        data.sort((a, b) => a.EconomyClass.PriceAdult - b.EconomyClass.PriceAdult);
+        const newData = data.slice(0, 4);
+        setNewData(newData);
+    }, [data]);
+
+    const handleDate = (date) => {
+        const year = date.split('-');
+        const day = year[2].split('T')[0];
+        const newDate = day + '/' + year[1] + '/' + year[0];
+        return newDate;
+    };
+
+    const handleLocation = (location) => {
+        const transform = {
+            HAN: 'HÀ NỘI',
+            SGN: 'HỒ CHÍ MINH',
+        };
+        return transform[location];
+    };
+
+    const imgData = [picture1, picture2, picture3, picture4];
+
     return (
         <div className={cx('wrapper')}>
             <div className={cx('container')}>
@@ -184,6 +224,48 @@ function Content() {
                         </svg>
                         <h6 className={cx('solgan-title')}>Săn vé máy bay giá rẻ</h6>
                         <p>Khuyến mại quanh năm</p>
+                    </div>
+                </div>
+                <div className={cx('sale-ticket')}>
+                    <div className={cx('sale-title')}>
+                        <h4>VÉ MÁY BAY RẺ NHẤT</h4>
+                        <span>Flynow luôn cập nhật giá vé tốt nhất</span>
+                    </div>
+                    <div className={cx('sale-container')}>
+                        {newData.map((data, index) => {
+                            return (
+                                <div key={index} className={cx('sale-content')}>
+                                    <img src={imgData[index]} alt="img-ticket" />
+                                    <span className={cx('sale-location')}>
+                                        {handleLocation(data.AirportFrom)}{' '}
+                                        <FontAwesomeIcon icon={faArrowRight} className={cx('arrow-icon')} />
+                                        {handleLocation(data.AirportTo)}
+                                    </span>
+                                    <span className={cx('sale-time')}>
+                                        Thời gian khởi hành:{handleDate(data.DateGo)}
+                                    </span>
+                                    <span className={cx('sale-price')}>{data.EconomyClass.PriceAdult} đ/chiều</span>
+                                    <button
+                                        className={cx('sale-btn')}
+                                        onClick={() => {
+                                            const searchDeparture = document.querySelector('#select-search-departure');
+                                            const searchDestination =
+                                                document.querySelector('#select-search-destination');
+                                            const searchDate = document.querySelector('#txtDate');
+                                            searchDate.value = data.DateGo.split('T')[0];
+                                            searchDeparture.value = data.AirportFrom;
+                                            searchDestination.value = data.AirportTo;
+                                            props.airF(data.AirportFrom);
+                                            props.airT(data.AirportTo);
+                                            props.dp(data.DateGo.split('T')[0]);
+                                            window.scrollTo(0, 0);
+                                        }}
+                                    >
+                                        Đặt vé
+                                    </button>
+                                </div>
+                            );
+                        })}
                     </div>
                 </div>
                 <div className={cx('payment')}>

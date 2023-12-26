@@ -1,6 +1,6 @@
 import './InforFlight.scss';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faMinus, faPlus, faArrowRight } from '@fortawesome/free-solid-svg-icons';
+import { faArrowRight } from '@fortawesome/free-solid-svg-icons';
 import Button from 'react-bootstrap/Button';
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
@@ -8,31 +8,20 @@ import { Link } from 'react-router-dom';
 function InforFlight({ item, name, select }) {
     const [moneyAdult, setMoneyAdult] = useState(item.BusinessClass.PriceAdult);
     const [moneyChildren, setMoneyChildren] = useState(item.BusinessClass.PriceChildren);
+    const storedQuantity = JSON.parse(localStorage.getItem('Quantity'));
 
     // const [show, setShow] = useState(true);
-    const [value1, setValue1] = useState(1);
-    const [value2, setValue2] = useState(0);
+    const value1 = Number(storedQuantity.adults);
+    const value2 = Number(storedQuantity.children);
+    const value3 = Number(storedQuantity.baby);
+    const moneyBaby = moneyAdult / 2;
     const [total, setTotal] = useState(moneyAdult);
 
     //change value total when click add or subtract quantity
     useEffect(() => {
-        setTotal(moneyAdult * value1 + moneyChildren * value2);
+        setTotal(moneyAdult * value1 + moneyChildren * value2 + moneyBaby * value3);
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [value1, value2, moneyAdult, moneyChildren]);
-
-    const handleClickAddAdult = (value) => {
-        setValue1(value + 1);
-    };
-    const handleClickSubtractAdult = (value) => {
-        setValue1(value - 1);
-    };
-
-    const handleClickAddChildren = (value) => {
-        setValue2(value + 1);
-    };
-    const handleClickSubtractChildren = (value) => {
-        setValue2(value - 1);
-    };
+    }, [value1, value2, value3, moneyAdult, moneyChildren, moneyBaby]);
 
     const [selectedValue, setSelectedValue] = useState('EconomyClass');
 
@@ -47,7 +36,7 @@ function InforFlight({ item, name, select }) {
     const handleSelect = () => {
         // Store bookedButton in localStorage
         console.log(item);
-        localStorage.setItem('inforFlight', JSON.stringify({ item, selectedValue, value1, value2, total }));
+        localStorage.setItem('inforFlight', JSON.stringify({ item, selectedValue, value1, value2, value3, total }));
     };
 
     const convertTime = (time) => {
@@ -132,30 +121,26 @@ function InforFlight({ item, name, select }) {
                 <span className="me-4 traveller">
                     <span>
                         Người lớn:
-                        <button className="ms-1" disabled={!value1} onClick={() => handleClickSubtractAdult(value1)}>
-                            <FontAwesomeIcon icon={faMinus} />
-                        </button>
                         <input type="number" value={value1} readOnly />
-                        <button onClick={() => handleClickAddAdult(value1)}>
-                            <FontAwesomeIcon icon={faPlus} />
-                        </button>
                     </span>
 
                     {!!value1 && <span className="money"> {moneyAdult * value1}</span>}
                 </span>
-                <span className="traveller">
+                <span className="me-4 traveller">
                     <span>
                         Trẻ em:
-                        <button className="ms-1" disabled={!value2} onClick={() => handleClickSubtractChildren(value2)}>
-                            <FontAwesomeIcon icon={faMinus} />
-                        </button>
                         <input type="number" value={value2} readOnly />
-                        <button onClick={() => handleClickAddChildren(value2)}>
-                            <FontAwesomeIcon icon={faPlus} />
-                        </button>
                     </span>
 
                     {!!value2 && <span className="money"> {moneyChildren * value2}</span>}
+                </span>
+                <span className="traveller">
+                    <span>
+                        Em bé:
+                        <input type="number" value={value3} readOnly />
+                    </span>
+
+                    {!!value3 && <span className="money"> {moneyBaby * value3}</span>}
                 </span>
                 <span className="total ms-3">
                     <h5 className="total_1">Tổng tiền</h5>

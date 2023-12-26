@@ -314,18 +314,23 @@ function Paying() {
             cardNumber.style.outlineColor = 'red';
             error.innerText = 'Số thẻ không hợp lệ';
             error.style.color = 'red';
-
+            setName('');
+            setExpirationDate('');
             setIsNumberCard(false);
         } else {
             cardNumber.style.outlineColor = '#4469b0';
             error.innerText = 'Vui lòng nhập số thẻ';
             error.style.color = 'transparent';
-            fakeApi.forEach((value) => {
-                if (value.cardNumber === e.target.value) {
-                    setName(value.name);
-                    setExpirationDate(value.exp);
+            for (let index = 0; index < fakeApi.length; index++) {
+                if (e.target.value === fakeApi[index].cardNumber) {
+                    setName(fakeApi[index].name);
+                    setExpirationDate(fakeApi[index].exp);
+                    break;
+                } else {
+                    setName('');
+                    setExpirationDate('');
                 }
-            });
+            }
             setIsNumberCard(true);
         }
     };
@@ -377,7 +382,7 @@ function Paying() {
                                     className={cx('input-text')}
                                     autoComplete="off"
                                     maxLength="7"
-                                    value={expirationDate}
+                                    defaultValue={expirationDate}
                                     inputMode="numeric"
                                     type="tel"
                                     placeholder="Ngày hết hạn"
@@ -388,7 +393,7 @@ function Paying() {
                                 <input
                                     id="name"
                                     className={cx('input-text')}
-                                    value={name}
+                                    defaultValue={name}
                                     placeholder="Họ tên chủ thẻ"
                                 />
                                 <span id="ip-3" className={cx('title-input')}>

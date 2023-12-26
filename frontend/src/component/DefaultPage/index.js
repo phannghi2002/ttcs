@@ -116,7 +116,15 @@ export function DefaultPage2({ data, typeTrip, onData, AirportFrom, AirportTo, d
         // console.log("Value sent to parent:", value);
     };
 
-    // console.log("ko co du lieu:", data);
+    // console.log('ko co du lieu:', data);
+    // console.group();
+    // console.log('data', data);
+    // console.log('typeTrip', typeTrip);
+    // console.log('onData', onData);
+    // console.log('AirportFrom', AirportFrom);
+    // console.log('AirportTo', AirportTo);
+    // console.log('depart', depart);
+    // console.groupEnd();
 
     if (data.length === 0) {
         console.log('m ngu lam nghi à');

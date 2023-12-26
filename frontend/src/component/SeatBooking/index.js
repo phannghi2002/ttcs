@@ -28,7 +28,7 @@ function SeatBooking() {
         if (bookedButton1.includes(buttonText)) {
             setBookedButton1(bookedButton1.filter((btn) => btn !== buttonText));
             setNumber1((prevNumber) => prevNumber - 1);
-        } else if (storedInforFlight.value1 + storedInforFlight.value2 < number1 + 1) {
+        } else if (storedInforFlight.value1 + storedInforFlight.value2 + storedInforFlight.value3 < number1 + 1) {
             toast.warning('Bạn đã đặt vượt quá số lượng ghế bạn đã chọn. Vui lòng đổi ghế nếu muốn đặt lại.');
             console.log(number1);
             console.log(storedInforFlight.value1 + storedInforFlight.value2);
@@ -51,7 +51,10 @@ function SeatBooking() {
         if (bookedButton2.includes(buttonText)) {
             setBookedButton2(bookedButton2.filter((btn) => btn !== buttonText));
             setNumber2((prevNumber) => prevNumber - 1);
-        } else if (storedInforFlightReturn.value1 + storedInforFlightReturn.value2 < number2 + 1) {
+        } else if (
+            storedInforFlightReturn.value1 + storedInforFlightReturn.value2 + storedInforFlight.value3 <
+            number2 + 1
+        ) {
             toast.warning('Bạn đã đặt vượt quá số lượng ghế bạn đã chọn. Vui lòng đổi ghế nếu muốn đặt lại.');
             console.log(number2);
             console.log(storedInforFlightReturn.value1 + storedInforFlightReturn.value2);

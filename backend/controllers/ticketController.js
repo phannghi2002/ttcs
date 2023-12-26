@@ -120,8 +120,8 @@ export const getAllTicket = async (req, res) => {
 
     try {
         const tickets = await Ticket.find({})
-            .skip(page * 5)
-            .limit(5);
+            .skip(page * 6)
+            .limit(6);
 
         if (tickets.length > 0) {
             console.log('kho vl');

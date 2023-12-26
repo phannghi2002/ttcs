@@ -63,6 +63,7 @@
     outline: none;
     border: none;
     height: 100%;
+    border-radius: 5px;
 }
 
 .location-icon {
@@ -185,4 +186,31 @@
     font-size: 1.5rem;
     padding-left: 30px;
     font-weight: 600;
+}
+
+.quantity {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.quantity-select {
+    border: none;
+    outline: none;
+    flex: 1;
+    text-align: center;
+    height: 100%;
+    border-radius: 5px;
+}
+
+.quantity-item {
+    display: flex;
+    align-items: center;
+    height: 45px;
+    width: 100%;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-top: 10px;
+    font-size: 16px;
+    background-color: #fff;
 }
