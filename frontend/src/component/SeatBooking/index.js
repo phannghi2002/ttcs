@@ -336,7 +336,7 @@ function SeatBooking() {
 
     if (dataNew) {
         return (
-            <>
+            <div className="wrapper1122">
                 <div className="contain_0">
                     <div className="instruction">
                         <span>Màu ĐỎ là chỗ trống</span>
@@ -384,7 +384,7 @@ function SeatBooking() {
 
                 {showModal && <ModalPaying show={showModal} setShow={setShowModal} />}
                 <ToastCustom />
-            </>
+            </div>
         );
     }
 }

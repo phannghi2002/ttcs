@@ -1,6 +1,6 @@
 import './SeatBook.scss';
 import TypeSeat from './TypeSeat';
-import seatBook from '../../asset/images/seatBook.jpg';
+import seatBook from '../../asset/images/seatBook1.jpg';
 
 function TypeCommon({ storedInforFlight, typeSeat1, handleButtonClick, bookedButton, title, dataNew }) {
     console.log(dataNew);
