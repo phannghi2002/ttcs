@@ -53,6 +53,7 @@ function Paying() {
     const [name, setName] = useState('');
     const [isNumberCard, setIsNumberCard] = useState(false);
     const [user, setUser] = useState([]);
+    const [emailData, setEmailData] = useState([]);
 
     let storedInforFlightReturn, storedInforSeatReturn;
 
@@ -335,6 +336,12 @@ function Paying() {
     // const email = "minh10a1quangtrung@gmail.com";
     // const code = "AJHHF";
     const handleSendEmail = async (e) => {
+        axios
+            .get(`http://localhost:4000/ticketDetail/${data00.CodeTicket}`)
+            .then((response) => {
+                setEmailData(response.data.data);
+            })
+            .catch((err) => console.log(err));
         const res = await fetch('http://localhost:4000/sendEmail', {
             method: 'POST',
             headers: {
@@ -343,6 +350,7 @@ function Paying() {
             body: JSON.stringify({
                 email: data00.Email,
                 code: data00.CodeTicket,
+                data: emailData,
             }),
         });
         console.log(res);
