@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 
-const infoBookedSchema = new mongoose.Schema(
+const ticketDetail = new mongoose.Schema(
     {
         TypeFlight: {
             type: String,
@@ -87,4 +87,4 @@ const infoBookedSchema = new mongoose.Schema(
     // { timestamps: Date.getTime() }
 );
 
-export default mongoose.model('InfoBooked', infoBookedSchema);
+export default mongoose.model('ticketDetail', ticketDetail);

@@ -116,7 +116,7 @@ function Home() {
 
     const handleSwitchRevenue = () => {
         // Navigate to the desired page when the Card is clicked
-        navigate('/admin/flight');
+        navigate('/admin/revenue');
     };
 
     return (

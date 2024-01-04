@@ -387,15 +387,45 @@ function Check() {
         return isName;
     };
     const handleCheckDate = () => {
+        const time = new Date();
+        const curDay = time.getDate();
+        const curMonth = time.getMonth() + 1;
+        const curYear = time.getFullYear();
+
         const errorDay = document.querySelector('#check-2');
         const day = data.DayOfBirth.split('/');
         const validteDay = day[1] + '/' + day[0] + '/' + day[2];
         if (!isDateValid(validteDay)) {
+            errorDay.innerText = 'Ngày không hợp lệ !';
             errorDay.style.color = 'red';
             isDate = false;
         } else {
-            errorDay.style.color = 'transparent';
-            isDate = true;
+            if (curYear - Number(day[2]) < 12) {
+                errorDay.innerText = 'Tuổi không hợp lệ !';
+                errorDay.style.color = 'red';
+                isDate = false;
+            } else if (curYear - Number(day[2]) === 12) {
+                if (curMonth - Number(day[1]) < 0) {
+                    errorDay.innerText = 'Tuổi không hợp lệ !';
+                    errorDay.style.color = 'red';
+                    isDate = false;
+                } else if (curMonth - Number(day[1]) > 0) {
+                    errorDay.style.color = 'transparent';
+                    isDate = true;
+                } else {
+                    if (curDay - Number(day[0]) < 0) {
+                        errorDay.innerText = 'Tuổi không hợp lệ !';
+                        errorDay.style.color = 'red';
+                        isDate = false;
+                    } else {
+                        errorDay.style.color = 'transparent';
+                        isDate = true;
+                    }
+                }
+            } else {
+                errorDay.style.color = 'transparent';
+                isDate = true;
+            }
         }
         return isDate;
     };
@@ -480,6 +510,10 @@ function Check() {
                         isDateBaby = true;
                     }
                 }
+            } else if (curYear - Number(day[2]) < 0) {
+                errorDay.innerText = 'Tuổi không hợp lệ !';
+                errorDay.style.color = 'red';
+                isDateBaby = false;
             } else {
                 errorDay.style.color = 'transparent';
                 isDateBaby = true;

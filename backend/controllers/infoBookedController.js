@@ -196,8 +196,6 @@ export const getInfoBookedBySearch = async (req, res) => {
 
     const codeTicket = new RegExp(`^${req.query.CodeTicket}$`);
 
-    console.log('in codeTicket cho t', codeTicket);
-
     try {
         const InfoBookeds = await InfoBooked.find({
             // CodeTicket: { $eq: CodeTicket },
@@ -210,8 +208,6 @@ export const getInfoBookedBySearch = async (req, res) => {
             count: InfoBookeds.length,
             data: InfoBookeds,
         });
-
-        console.log(InfoBookeds);
     } catch (error) {
         res.status(404).json({
             success: false,
