@@ -45,12 +45,15 @@ function Paying() {
     const storedInforPerson = JSON.parse(localStorage.getItem('inforPerson'));
     const storedInforSeat = JSON.parse(localStorage.getItem('bookedButton'));
     const storedTypeTrip = JSON.parse(localStorage.getItem('TypeTrip'));
+    const storedQuantity = JSON.parse(localStorage.getItem('Quantity'));
 
     const [plant, setPlant] = useState('');
     const [numberCard, setNumberCard] = useState('');
     const [expirationDate, setExpirationDate] = useState('');
     const [name, setName] = useState('');
     const [isNumberCard, setIsNumberCard] = useState(false);
+    const [user, setUser] = useState([]);
+    const [emailData, setEmailData] = useState([]);
 
     let storedInforFlightReturn, storedInforSeatReturn;
 
@@ -158,18 +161,8 @@ function Paying() {
 
     if (numberCard && expirationDate && name && isNumberCard) {
         if (dataNew) {
-            console.log(dataNew);
-            console.log(dataNew[data00.TypeTicket]);
-            console.log(storedInforSeat);
             array1 = dataNew[data00.TypeTicket].CodeSeat;
             array1.push(...storedInforSeat);
-            // if (array1 === storedInforSeat) {
-            //     array1.push(...storedInforSeat);
-            // }
-            console.log(array1);
-
-            console.log(dataNew[data00.TypeTicket].PriceChildren);
-            // console.log(dataNew[data00.FirstClass].PriceChildren);
         } else {
             fetchAPI1(storedInforFlight.item._id);
         }
@@ -178,16 +171,8 @@ function Paying() {
     if (checkTypeTrip()) {
         if (numberCard && expirationDate && name && isNumberCard) {
             if (dataNew2) {
-                console.log(dataNew2);
-                console.log(data00);
-                console.log(dataNew2[data00.TypeTicketReturn]);
                 array2 = dataNew2[data00.TypeTicketReturn].CodeSeat;
                 array2.push(...storedInforSeatReturn);
-                console.log(array2);
-
-                // console.log(dataNew2[data00.TypeTicketReturn].PriceChildren);
-
-                console.log('dcm no');
             } else {
                 console.log(storedInforFlightReturn.item);
                 fetchAPI2(storedInforFlightReturn.item._id);
@@ -252,6 +237,63 @@ function Paying() {
         }
     };
 
+    const totalPeople = Number(storedQuantity.adults) + Number(storedQuantity.children) + Number(storedQuantity.baby);
+
+    useEffect(() => {
+        axios
+            .get('http://localhost:4000/users')
+            .then((res) => setUser(res.data.data.slice(-totalPeople)))
+            .catch((err) => console.error(err));
+    }, []);
+
+    function handlePustTicketDetail() {
+        const totalPeople =
+            Number(storedQuantity.adults) + Number(storedQuantity.children) + Number(storedQuantity.baby);
+
+        console.log(totalPeople);
+        const codeSeatSingle = data00.CodeSeat.split('-');
+
+        let CodeSeatReturnSingle = [];
+
+        const getCodeSeatReturn = () => {
+            const newSeat = data00.CodeSeatReturn.split('-');
+            CodeSeatReturnSingle = newSeat;
+            return CodeSeatReturnSingle;
+        };
+
+        if (data00.TypeFlight === 'Roundtrip') {
+            getCodeSeatReturn();
+        }
+        console.log(codeSeatSingle[0]);
+
+        for (let i = 0; i < totalPeople; i++) {
+            axios
+                .post('http://localhost:4000/ticketDetail', {
+                    TypeFlight: data00.TypeFlight,
+                    TypeTicket: data00.TypeTicket,
+                    AirportFrom: data00.AirportFrom,
+                    AirportTo: data00.AirportTo,
+                    FlightTime: data00.FlightTime,
+                    LandingTime: data00.LandingTime,
+                    DateGo: data00.DateGo,
+                    TotalMoney: data00.TotalMoney,
+                    CodeTicket: data00.CodeTicket,
+                    FlightNumber: data00.FlightNumber,
+                    UserName: user[i].Username,
+                    ID_Card: user[i].ID_Card,
+                    CodeSeat: codeSeatSingle[i],
+                    Email: user[i].Email,
+                    TypeTicketReturn: data00.TypeTicketReturn,
+                    FlightNumberReturn: data00.FlightNumberReturn,
+                    LandingTimeReturn: data00.LandingTimeReturn,
+                    CodeSeatReturn: CodeSeatReturnSingle[i],
+                    DateReturn: data00.DateReturn,
+                })
+                .then((response) => console.log(response))
+                .catch((error) => console.log(error));
+        }
+    }
+
     const handlePay = (e) => {
         if (numberCard !== '' && expirationDate !== '' && name !== '') {
             if (isNumberCard) {
@@ -265,11 +307,9 @@ function Paying() {
                 if (checkTypeTrip()) {
                     pushSeat2(storedInforFlightReturn.item._id);
                 }
+                handlePustTicketDetail(e);
 
                 toast.success('Thanh toán thành công!');
-                setTimeout(() => {
-                    localStorage.clear();
-                });
             }
         } else {
             handleInputNumberCard(e);
@@ -279,6 +319,13 @@ function Paying() {
     // const email = "minh10a1quangtrung@gmail.com";
     // const code = "AJHHF";
     const handleSendEmail = async (e) => {
+        axios
+            .get(`http://localhost:4000/ticketDetail/${data00.CodeTicket}`)
+            .then((response) => {
+                console.log(response);
+                setEmailData(response.data.data);
+            })
+            .catch((err) => console.log(err));
         const res = await fetch('http://localhost:4000/sendEmail', {
             method: 'POST',
             headers: {
@@ -287,6 +334,7 @@ function Paying() {
             body: JSON.stringify({
                 email: data00.Email,
                 code: data00.CodeTicket,
+                data: emailData,
             }),
         });
         console.log(res);
@@ -314,18 +362,23 @@ function Paying() {
             cardNumber.style.outlineColor = 'red';
             error.innerText = 'Số thẻ không hợp lệ';
             error.style.color = 'red';
-
+            setName('');
+            setExpirationDate('');
             setIsNumberCard(false);
         } else {
             cardNumber.style.outlineColor = '#4469b0';
             error.innerText = 'Vui lòng nhập số thẻ';
             error.style.color = 'transparent';
-            fakeApi.forEach((value) => {
-                if (value.cardNumber === e.target.value) {
-                    setName(value.name);
-                    setExpirationDate(value.exp);
+            for (let index = 0; index < fakeApi.length; index++) {
+                if (e.target.value === fakeApi[index].cardNumber) {
+                    setName(fakeApi[index].name);
+                    setExpirationDate(fakeApi[index].exp);
+                    break;
+                } else {
+                    setName('');
+                    setExpirationDate('');
                 }
-            });
+            }
             setIsNumberCard(true);
         }
     };

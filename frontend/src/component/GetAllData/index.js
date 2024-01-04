@@ -8,9 +8,26 @@ import VJ from '../../asset/images/VietJet_Air.png';
 import QH from '../../asset/images/bambo.jpg';
 import BL from '../../asset/images/Pacific_Airline.png';
 import HandlePlace from '../HandlePlace';
+import axios from 'axios';
+import { useEffect, useState } from 'react';
 
 const cx = classNames.bind(styles);
 function GetAllData({ data, className }) {
+    const [user, setUser] = useState([]);
+
+    useEffect(() => {
+        axios
+            .get(`http://localhost:4000/ticketDetail/${data.CodeTicket}`)
+            .then((response) => {
+                setUser(response.data.data);
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+    }, []);
+
+    console.log(user);
+
     const convertDate = (date) => {
         const dateConvert = new Date(date);
 
@@ -82,210 +99,227 @@ function GetAllData({ data, className }) {
         <div className={cx('contain')}>
             <h3 className={cx('title')}>THÔNG TIN CHUYẾN BAY CỦA BẠN</h3>
 
-            <div className={cx('wrapper')}>
-                <div className="mb-1">
-                    CHI TIẾT ĐẶT CHỖ CHO: <span className={cx('name')}>{data.UserName}</span>
-                </div>
-                <div>
-                    MÃ GIỮ CHỖ: <b className={cx('code_ticket')}>{data.CodeTicket}</b>
-                </div>
-            </div>
-
-            {data.TypeFlight === 'Roundtrip' && <div className={cx('trip')}>CHUYẾN ĐI</div>}
-
-            <div className={cx('info')}>
-                <div className={cx('date_wrapper')}>
-                    <div>
-                        <FontAwesomeIcon icon={faPlaneDeparture} className={cx('icon')} /> KHỞI HÀNH:{' '}
-                        <span className={cx('date')}>
-                            {dateFlightGo.weekday} NGÀY {dateFlightGo.day} THÁNG {dateFlightGo.month} NĂM{' '}
-                            {dateFlightGo.year}
-                        </span>
-                    </div>
-
-                    <div>
-                        <FontAwesomeIcon icon={faPlaneArrival} className={cx('icon')} /> HẠ CÁNH:{' '}
-                        <span className={cx('date')}>
-                            {dateLandGo.weekday} NGÀY {dateLandGo.day} THÁNG {dateLandGo.month} NĂM {dateLandGo.year}
-                        </span>
-                    </div>
-                </div>
-                <div className={cx('notify')}>Vui lòng kiểm tra thời gian bay trước khi khởi hành</div>
-
-                <div className={cx('table')}>
-                    <div className={cx('company')}>
-                        <div className={cx('company_wrapper')}>
+            {user.map((user, index) => {
+                return (
+                    <div key={index}>
+                        <div className={cx('wrapper')}>
+                            <div className="mb-1">
+                                CHI TIẾT ĐẶT CHỖ CHO: <span className={cx('name')}>{user.UserName}</span>
+                            </div>
                             <div>
-                                {company.name}
+                                MÃ GIỮ CHỖ: <b className={cx('code_ticket')}>{data.CodeTicket}</b>
+                            </div>
+                        </div>
+
+                        {data.TypeFlight === 'Roundtrip' && <div className={cx('trip')}>CHUYẾN ĐI</div>}
+
+                        <div className={cx('info')}>
+                            <div className={cx('date_wrapper')}>
                                 <div>
-                                    <b>{data.FlightNumber}</b>
+                                    <FontAwesomeIcon icon={faPlaneDeparture} className={cx('icon')} /> KHỞI HÀNH:{' '}
+                                    <span className={cx('date')}>
+                                        {dateFlightGo.weekday} NGÀY {dateFlightGo.day} THÁNG {dateFlightGo.month} NĂM{' '}
+                                        {dateFlightGo.year}
+                                    </span>
+                                </div>
+
+                                <div>
+                                    <FontAwesomeIcon icon={faPlaneArrival} className={cx('icon')} /> HẠ CÁNH:{' '}
+                                    <span className={cx('date')}>
+                                        {dateLandGo.weekday} NGÀY {dateLandGo.day} THÁNG {dateLandGo.month} NĂM{' '}
+                                        {dateLandGo.year}
+                                    </span>
                                 </div>
                             </div>
-                            <div>
-                                {' '}
-                                <img src={company.album} alt="Vietnam Airlines" className={cx('image')} />
-                            </div>
-                        </div>
+                            <div className={cx('notify')}>Vui lòng kiểm tra thời gian bay trước khi khởi hành</div>
 
-                        <div className="mt-2">
-                            Thời gian bay:{' '}
-                            <div>
-                                {time.hour}tiếng {time.minute}phút
-                            </div>
-                        </div>
-                    </div>
-
-                    <div className={cx('info_flight')}>
-                        <div className={cx('info_flight_header')}>
-                            <span className="ps-3">
-                                {data.AirportFrom}
-                                <br />
-                                <HandlePlace place={data.AirportFrom} />
-                            </span>
-                            <FontAwesomeIcon icon={faPlay} className={cx('icon_play')} />
-                            <span className="pe-3">
-                                {data.AirportTo}
-                                <br />
-                                <HandlePlace place={data.AirportTo} />
-                            </span>
-                        </div>
-                        <div className={cx('info_flight_body')}>
-                            <div className={cx('depart')}>
-                                <span>
-                                    Giờ khởi hành:{' '}
-                                    <div className={cx('time')}>
-                                        {' '}
-                                        {dateFlightGo.hour < 10 ? `0${dateFlightGo.hour}` : dateFlightGo.hour}:
-                                        {dateFlightGo.minute < 10 ? `0${dateFlightGo.minute}` : dateFlightGo.minute}
-                                    </div>
-                                </span>
-                            </div>
-
-                            <div className={cx('return')}>
-                                <span>
-                                    Giờ đến:{' '}
-                                    <div className={cx('time')}>
-                                        {dateLandGo.hour < 10 ? `0${dateLandGo.hour}` : dateLandGo.hour}:
-                                        {dateLandGo.minute < 10 ? `0${dateLandGo.minute}` : dateLandGo.minute}
-                                    </div>
-                                </span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <TableInfo UserName={data.UserName} CodeSeat={data.CodeSeat} TypeTicket={data.TypeTicket} />
-            </div>
-
-            {data.TypeFlight === 'Roundtrip' && (
-                <div className={cx('roundtrip')}>
-                    <div className={cx('line')}></div>
-                    <div className={cx('trip')}>CHUYẾN VỀ</div>
-                    <div className={cx('info')}>
-                        <div className={cx('date_wrapper')}>
-                            <div>
-                                <FontAwesomeIcon icon={faPlaneDeparture} className={cx('icon')} /> KHỞI HÀNH:{' '}
-                                <span className={cx('date')}>
-                                    {dateFlightReturn.weekday} NGÀY {dateFlightReturn.day} THÁNG{' '}
-                                    {dateFlightReturn.month} NĂM {dateFlightReturn.year}
-                                </span>
-                            </div>
-
-                            <div>
-                                <FontAwesomeIcon icon={faPlaneArrival} className={cx('icon')} /> HẠ CÁNH:{' '}
-                                <span className={cx('date')}>
-                                    {dateLandReturn.weekday} NGÀY {dateLandReturn.day} THÁNG {dateLandReturn.month} NĂM{' '}
-                                    {dateLandReturn.year}
-                                </span>
-                            </div>
-                        </div>
-                        <div className={cx('notify')}>Vui lòng kiểm tra thời gian bay trước khi khởi hành</div>
-
-                        <div className={cx('table')}>
-                            <div className={cx('company')}>
-                                <div className={cx('company_wrapper')}>
-                                    <div>
-                                        {company_return.name}
+                            <div className={cx('table')}>
+                                <div className={cx('company')}>
+                                    <div className={cx('company_wrapper')}>
                                         <div>
-                                            <b>{data.FlightNumberReturn}</b>
+                                            {company.name}
+                                            <div>
+                                                <b>{data.FlightNumber}</b>
+                                            </div>
+                                        </div>
+                                        <div>
+                                            {' '}
+                                            <img src={company.album} alt="Vietnam Airlines" className={cx('image')} />
                                         </div>
                                     </div>
-                                    <div>
-                                        {' '}
-                                        <img
-                                            src={company_return.album}
-                                            alt="Vietnam Airlines"
-                                            className={cx('image')}
-                                        />
+
+                                    <div className="mt-2">
+                                        Thời gian bay:{' '}
+                                        <div>
+                                            {time.hour}tiếng {time.minute}phút
+                                        </div>
                                     </div>
                                 </div>
 
-                                <div className="mt-2">
-                                    Thời gian bay:{' '}
-                                    <div>
-                                        {time_return.hour}tiếng {time_return.minute}phút
+                                <div className={cx('info_flight')}>
+                                    <div className={cx('info_flight_header')}>
+                                        <span className="ps-3">
+                                            {data.AirportFrom}
+                                            <br />
+                                            <HandlePlace place={data.AirportFrom} />
+                                        </span>
+                                        <FontAwesomeIcon icon={faPlay} className={cx('icon_play')} />
+                                        <span className="pe-3">
+                                            {data.AirportTo}
+                                            <br />
+                                            <HandlePlace place={data.AirportTo} />
+                                        </span>
+                                    </div>
+                                    <div className={cx('info_flight_body')}>
+                                        <div className={cx('depart')}>
+                                            <span>
+                                                Giờ khởi hành:{' '}
+                                                <div className={cx('time')}>
+                                                    {' '}
+                                                    {dateFlightGo.hour < 10
+                                                        ? `0${dateFlightGo.hour}`
+                                                        : dateFlightGo.hour}
+                                                    :
+                                                    {dateFlightGo.minute < 10
+                                                        ? `0${dateFlightGo.minute}`
+                                                        : dateFlightGo.minute}
+                                                </div>
+                                            </span>
+                                        </div>
+
+                                        <div className={cx('return')}>
+                                            <span>
+                                                Giờ đến:{' '}
+                                                <div className={cx('time')}>
+                                                    {dateLandGo.hour < 10 ? `0${dateLandGo.hour}` : dateLandGo.hour}:
+                                                    {dateLandGo.minute < 10
+                                                        ? `0${dateLandGo.minute}`
+                                                        : dateLandGo.minute}
+                                                </div>
+                                            </span>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
 
-                            <div className={cx('info_flight')}>
-                                <div className={cx('info_flight_header')}>
-                                    <span className="ps-3">
-                                        {data.AirportTo}
-                                        <br />
-                                        <HandlePlace place={data.AirportTo} />
-                                    </span>
-                                    <FontAwesomeIcon icon={faPlay} className={cx('icon_play')} />
-                                    <span className="pe-3">
-                                        {data.AirportFrom}
-
-                                        <br />
-                                        <HandlePlace place={data.AirportFrom} />
-                                    </span>
-                                </div>
-                                <div className={cx('info_flight_body')}>
-                                    <div className={cx('depart')}>
-                                        <span>
-                                            Giờ khởi hành:{' '}
-                                            <div className={cx('time')}>
-                                                {' '}
-                                                {dateFlightReturn.hour < 10
-                                                    ? `0${dateFlightReturn.hour}`
-                                                    : dateFlightReturn.hour}
-                                                :
-                                                {dateFlightReturn.minute < 10
-                                                    ? `0${dateFlightReturn.minute}`
-                                                    : dateFlightReturn.minute}
-                                            </div>
-                                        </span>
-                                    </div>
-
-                                    <div className={cx('return')}>
-                                        <span>
-                                            Giờ đến:{' '}
-                                            <div className={cx('time')}>
-                                                {dateLandReturn.hour < 10
-                                                    ? `0${dateLandReturn.hour}`
-                                                    : dateLandReturn.hour}
-                                                :
-                                                {dateLandReturn.minute < 10
-                                                    ? `0${dateLandReturn.minute}`
-                                                    : dateLandReturn.minute}
-                                            </div>
-                                        </span>
-                                    </div>
-                                </div>
-                            </div>
+                            <TableInfo UserName={user.UserName} CodeSeat={user.CodeSeat} TypeTicket={data.TypeTicket} />
                         </div>
 
-                        <TableInfo
-                            UserName={data.UserName}
-                            CodeSeatReturn={data.CodeSeatReturn}
-                            TypeTicketReturn={data.TypeTicketReturn}
-                        />
+                        {data.TypeFlight === 'Roundtrip' && (
+                            <div className={cx('roundtrip')}>
+                                <div className={cx('line')}></div>
+                                <div className={cx('trip')}>CHUYẾN VỀ</div>
+                                <div className={cx('info')}>
+                                    <div className={cx('date_wrapper')}>
+                                        <div>
+                                            <FontAwesomeIcon icon={faPlaneDeparture} className={cx('icon')} /> KHỞI
+                                            HÀNH:{' '}
+                                            <span className={cx('date')}>
+                                                {dateFlightReturn.weekday} NGÀY {dateFlightReturn.day} THÁNG{' '}
+                                                {dateFlightReturn.month} NĂM {dateFlightReturn.year}
+                                            </span>
+                                        </div>
+
+                                        <div>
+                                            <FontAwesomeIcon icon={faPlaneArrival} className={cx('icon')} /> HẠ CÁNH:{' '}
+                                            <span className={cx('date')}>
+                                                {dateLandReturn.weekday} NGÀY {dateLandReturn.day} THÁNG{' '}
+                                                {dateLandReturn.month} NĂM {dateLandReturn.year}
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div className={cx('notify')}>
+                                        Vui lòng kiểm tra thời gian bay trước khi khởi hành
+                                    </div>
+
+                                    <div className={cx('table')}>
+                                        <div className={cx('company')}>
+                                            <div className={cx('company_wrapper')}>
+                                                <div>
+                                                    {company_return.name}
+                                                    <div>
+                                                        <b>{data.FlightNumberReturn}</b>
+                                                    </div>
+                                                </div>
+                                                <div>
+                                                    {' '}
+                                                    <img
+                                                        src={company_return.album}
+                                                        alt="Vietnam Airlines"
+                                                        className={cx('image')}
+                                                    />
+                                                </div>
+                                            </div>
+
+                                            <div className="mt-2">
+                                                Thời gian bay:{' '}
+                                                <div>
+                                                    {time_return.hour}tiếng {time_return.minute}phút
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div className={cx('info_flight')}>
+                                            <div className={cx('info_flight_header')}>
+                                                <span className="ps-3">
+                                                    {data.AirportTo}
+                                                    <br />
+                                                    <HandlePlace place={data.AirportTo} />
+                                                </span>
+                                                <FontAwesomeIcon icon={faPlay} className={cx('icon_play')} />
+                                                <span className="pe-3">
+                                                    {data.AirportFrom}
+
+                                                    <br />
+                                                    <HandlePlace place={data.AirportFrom} />
+                                                </span>
+                                            </div>
+                                            <div className={cx('info_flight_body')}>
+                                                <div className={cx('depart')}>
+                                                    <span>
+                                                        Giờ khởi hành:{' '}
+                                                        <div className={cx('time')}>
+                                                            {' '}
+                                                            {dateFlightReturn.hour < 10
+                                                                ? `0${dateFlightReturn.hour}`
+                                                                : dateFlightReturn.hour}
+                                                            :
+                                                            {dateFlightReturn.minute < 10
+                                                                ? `0${dateFlightReturn.minute}`
+                                                                : dateFlightReturn.minute}
+                                                        </div>
+                                                    </span>
+                                                </div>
+
+                                                <div className={cx('return')}>
+                                                    <span>
+                                                        Giờ đến:{' '}
+                                                        <div className={cx('time')}>
+                                                            {dateLandReturn.hour < 10
+                                                                ? `0${dateLandReturn.hour}`
+                                                                : dateLandReturn.hour}
+                                                            :
+                                                            {dateLandReturn.minute < 10
+                                                                ? `0${dateLandReturn.minute}`
+                                                                : dateLandReturn.minute}
+                                                        </div>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <TableInfo
+                                        UserName={user.UserName}
+                                        CodeSeatReturn={user.CodeSeatReturn}
+                                        TypeTicketReturn={data.TypeTicketReturn}
+                                    />
+                                </div>
+                            </div>
+                        )}
                     </div>
-                </div>
-            )}
+                );
+            })}
 
             {/* <div>Tổng tiền: {data.TotalMoney}</div> */}
         </div>

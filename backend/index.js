@@ -10,6 +10,7 @@ import authRoute from './routes/auth.js';
 import infoRoute from './routes/info.js';
 
 import sendEmailRoute from './routes/sendEmail.js';
+import ticketDetailsRoute from './routes/ticketDetail.js';
 
 import loginRoute from './routes/login.js';
 
@@ -50,6 +51,7 @@ app.use('/info', infoRoute);
 
 app.use('/sendEmail', sendEmailRoute);
 app.use('/login', loginRoute);
+app.use('/ticketDetail', ticketDetailsRoute);
 
 app.listen(port, () => {
     connect();

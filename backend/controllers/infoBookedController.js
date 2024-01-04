@@ -5,7 +5,6 @@ import moment from 'moment';
 
 export const createInfoBooked = async (req, res) => {
     const newInfoBooked = new InfoBooked(req.body);
-    console.log('vai ca chu bin');
     try {
         const saveInfoBooked = await newInfoBooked.save();
         res.status(200).json({
@@ -95,15 +94,12 @@ export const getAllInfoBooked = async (req, res) => {
     // const page = parseInt(req.query.page);
     // console.log(page);
 
-    console.log('cay vai ca biu');
-
     try {
         const infoBooked = await InfoBooked.find({});
         //     .skip(page * 5)
         //     .limit(5);
 
         if (infoBooked.length > 0) {
-            console.log('ao that day');
             res.status(200).json({
                 success: true,
                 count: infoBooked.length,
@@ -131,8 +127,6 @@ export const getAllInfoBookedOneway = async (req, res) => {
         const infoBooked = await InfoBooked.find({
             TypeFlight: { $eq: 'Oneway' },
         });
-
-        console.log('day nhe con vo', infoBooked);
 
         if (infoBooked.length > 0) {
             console.log('ao that day');
