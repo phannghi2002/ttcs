@@ -339,6 +339,7 @@ function Paying() {
         axios
             .get(`http://localhost:4000/ticketDetail/${data00.CodeTicket}`)
             .then((response) => {
+                console.log(response);
                 setEmailData(response.data.data);
             })
             .catch((err) => console.log(err));
