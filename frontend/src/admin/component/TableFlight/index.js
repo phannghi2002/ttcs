@@ -1,148 +1,201 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React from 'react';
-import MaterialTable from 'material-table';
 
-import classNames from 'classnames/bind';
-import styles from './TableFlight.module.scss';
+// import classNames from 'classnames/bind';
+// import styles from './TableFlight.module.scss';
 
 import { useEffect, useState } from 'react';
-// import { width } from '@mui/system';
+import { FormatDate, FormatTime } from '../../../function/FormatDate';
 
-const cx = classNames.bind(styles);
+import Button from '@mui/material/Button';
+// import PersonAddAlt1Icon from '@mui/icons-material/PersonAddAlt1';
+import DeleteIcon from '@mui/icons-material/Delete';
+import EditIcon from '@mui/icons-material/Edit';
 
-const Table = ({ param, title }) => {
+import {
+    DataGrid,
+    GridToolbarContainer,
+    GridToolbarColumnsButton,
+    GridToolbarFilterButton,
+    GridToolbarExport,
+    GridToolbarDensitySelector,
+} from '@mui/x-data-grid';
+
+// import { AddAdmin, EditAdmin } from './ActionAdmin';
+
+// import { toast } from 'react-toastify';
+import ToastCustom from '../../../Toast';
+import 'react-toastify/dist/ReactToastify.css';
+// import axios from 'axios';
+// import ConfirmDelete from '../../component/ConfirmDelete';
+
+// const cx = classNames.bind(styles);
+
+function CustomToolbar() {
+    return (
+        <GridToolbarContainer>
+            <GridToolbarColumnsButton />
+            <GridToolbarFilterButton />
+            <GridToolbarDensitySelector />
+            <GridToolbarExport />
+        </GridToolbarContainer>
+    );
+}
+
+const TableFlight = ({ param, title }) => {
     const [data, setData] = useState([]);
 
-    const commonHeaderStyle = {
-        fontSize: '1.1rem',
-        fontWeight: '600',
-        // textAlign: 'center',
-
-        // Add other common styles here
-    };
-
-    const commonCellStyle = {
-        paddingLeft: '30px',
-        // Add other common styles here
-    };
-    const formatDate = (dateString) => {
-        const date = new Date(dateString);
-        const day = date.getDate() < 10 ? `0${date.getDate()}` : date.getDate();
-        const month = date.getMonth() + 1 < 10 ? `0${date.getMonth() + 1}` : date.getMonth() + 1;
-        const year = date.getFullYear();
-
-        return `${day}-${month}-${year}`;
-    };
-
-    const formatTime = (dateString) => {
-        const date = new Date(dateString);
-        const hours = date.getHours() < 10 ? `0${date.getHours()}` : date.getHours();
-        const minutes = date.getMinutes() < 10 ? `0${date.getMinutes()}` : date.getMinutes();
-        return `${hours}:${minutes}`;
-    };
     const columns = [
         {
-            title: 'STT',
-            headerStyle: { ...commonHeaderStyle, paddingRight: '0', width: '1%', maxWidth: 40 },
-            cellStyle: { width: '1%', paddingLeft: '26px' },
-
-            render: (rowData) => data.indexOf(rowData) + 1,
-            // render: (rowData) => <div style={{ minWidth: '40px' }}> {data.indexOf(rowData) + 1} </div>,
-        },
-        {
-            title: 'Số hiệu máy bay',
             field: 'FlightNumber',
-            headerStyle: commonHeaderStyle,
-            cellStyle: commonCellStyle,
+            headerName: 'Số hiệu máy bay',
+            headerClassName: 'custom-header',
+            cellClassName: 'custom-cell',
+            flex: 0.2,
+        },
+        {
+            field: 'AirportFrom',
+            headerName: 'Sân bay đi',
+            headerClassName: 'custom-header',
+            cellClassName: 'custom-cell',
+            flex: 0.1,
+        },
+        {
+            field: 'AirportTo',
+            headerName: 'Sân bay về',
+            headerClassName: 'custom-header',
+            cellClassName: 'custom-cell',
+            flex: 0.1,
+        },
+        {
+            field: 'DateGo',
+            headerName: 'Ngày đi',
+            renderCell: (params) => FormatDate(params.value),
+            headerClassName: 'custom-header',
+            cellClassName: 'custom-cell',
+            flex: 0.15,
+        },
+        {
+            field: 'FlightTime',
+            headerName: 'Giờ bay',
+            renderCell: (params) => FormatTime(params.value),
+            headerClassName: 'custom-header',
+            cellClassName: 'custom-cell',
+            flex: 0.15,
+        },
+        {
+            field: 'LandingTime',
+            headerName: 'Giờ đến',
+            renderCell: (params) => FormatTime(params.value),
+            headerClassName: 'custom-header',
+            cellClassName: 'custom-cell',
+            flex: 0.15,
         },
 
         {
-            title: 'Sân bay đi',
-            field: 'AirportFrom',
-            headerStyle: commonHeaderStyle,
-            cellStyle: commonCellStyle,
-        },
-        {
-            title: 'Sân bay về',
-            field: 'AirportTo',
-            headerStyle: commonHeaderStyle,
-            cellStyle: commonCellStyle,
-        },
-        {
-            title: 'Ngày đi',
-            field: 'DateGo',
-            render: (rowData) => formatDate(rowData.DateGo),
-            headerStyle: commonHeaderStyle,
-        },
-        {
-            title: 'Giờ bay',
-            field: 'FlightTime',
-            render: (rowData) => formatTime(rowData.FlightTime),
-            headerStyle: commonHeaderStyle,
-            cellStyle: commonCellStyle,
-        },
-        {
-            title: 'Giờ đến',
-            field: 'LandingTime',
-            render: (rowData) => formatTime(rowData.LandingTime),
-            headerStyle: commonHeaderStyle,
-            cellStyle: commonCellStyle,
+            field: 'Action',
+            headerName: 'Hành động',
+            renderCell: (params) => {
+                if (data.length !== 0) {
+                    return (
+                        <div className="action">
+                            <Button
+                                variant="outlined"
+                                sx={{ marginRight: '10px' }}
+                                // onClick={() => {
+                                //     handleEdit();
+                                //     setParamdEdit(params.row);
+                                // }}
+                            >
+                                <EditIcon />{' '}
+                            </Button>
+
+                            <Button
+                                variant="outlined"
+                                width="30px"
+                                // onClick={() => {
+                                //     handleCloseConfirmDelete();
+                                //     setGetID(params.row._id);
+                                // }}
+                            >
+                                <DeleteIcon />
+                            </Button>
+                        </div>
+                    );
+                }
+                return null;
+            },
+            headerClassName: 'custom-header',
+            cellClassName: 'custom-cell',
+            flex: 0.15,
         },
     ];
 
-    // const [page, setPage] = useState(0);
-
     useEffect(() => {
         fetch(`http://localhost:4000/tickets${param}`)
-            // fetch(`http://localhost:4000/tickets/search/getTicket${param}All`)
             .then((res) => res.json())
             .then((res) => {
                 setData(res.data);
-
-                // eslint-disable-next-line react-hooks/exhaustive-deps
-                // if (res.data && res.data.length > 0) {
-                //     setPage(5);
-                //     console.log('hello cu em', page);
-                // } else {
-                //     setPage(0);
-                //     console.log('hong duoc', page);
-                // }
             });
     }, []);
 
-    // const handleOrderChange = (orderBy, orderDirection) => {
-    //     // Update data when sorting changes
-    //     // For example, sort the data based on the current sorting
-    //     // This assumes that your data is an array of objects with unique keys
-    //     setData((prevData) =>
-    //         prevData.slice().sort((a, b) => {
-    //             const order = orderDirection === 'asc' ? 1 : -1;
-    //             return a[orderBy] > b[orderBy] ? order : -order;
-    //         }),
-    //     );
-    // };
-
-    // const options = {
-    //     search: true,
-    //     paging: true,
-    //     pageSize: data.length > 0 ? 5 : 0, // Set pageSize to 5 if data exists, 0 otherwise
-    //     filtering: true,
-    //     exportButton: true,
-    // };
-
     return (
-        <div className={cx('table')}>
-            <MaterialTable
-                title={<div className={cx('column')}>{title}</div>}
-                data={data}
-                columns={columns}
-                // onOrderChange={handleOrderChange}
+        <>
+            <div className="title">
+                <h1 style={{ marginBottom: '30px' }}>{title}</h1>
+                {/* <Button variant="contained" color="success" className="add" onClick={handleClickOpen}>
+                            <PersonAddAlt1Icon sx={{ marginRight: '10px' }} /> Thêm người
+                        </Button> */}
+            </div>
 
-                options={{ search: true, paging: true, filtering: false, exportButton: true }}
-                // options={options}
+            <DataGrid
+                rows={data}
+                getRowId={(row) => row._id || row.id}
+                columns={columns}
+                initialState={{
+                    pagination: {
+                        paginationModel: { page: 0, pageSize: 5 },
+                    },
+                }}
+                pageSizeOptions={[5, 10]}
+                slots={{
+                    toolbar: CustomToolbar,
+                }}
+                sx={{
+                    '.MuiTablePagination-selectLabel, .MuiTablePagination-displayedRows ': {
+                        'margin-top': '1em',
+                        'margin-bottom': '1em',
+                    },
+                    width: '98%',
+                    height: 'auto',
+                    margin: 'auto',
+                }}
             />
-        </div>
+
+            {/* <AddAdmin
+                        open={openAddAdmin}
+                        handleClose={handleCloseAddAdmin}
+                        reRender={reRender}
+                        setReRender={setReRender}
+                    /> */}
+
+            {/* <EditAdmin
+                        row={paramsEdit}
+                        open={openEditAdmin}
+                        setOpen={setOpenEditAdmin}
+                        handleClose={handleCloseEditAdmin}
+                        reRender={reRender}
+                        setReRender={setReRender}
+                    />
+                    <ConfirmDelete
+                        open={openConfirmDelete}
+                        setOpenConfirmDelete={setOpenConfirmDelete}
+                        handleClose={handleCloseConfirmDelete}
+                        handleConfirm={handleCloseConfirmDelete}
+                    /> */}
+            <ToastCustom />
+        </>
     );
 };
 
-export default Table;
+export default TableFlight;

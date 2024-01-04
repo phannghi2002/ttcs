@@ -41,6 +41,7 @@ export const updateInfoBooked = async (req, res) => {
             data: updatedInfoBooked,
         });
     } catch (error) {
+        console.log('Loi o day ne', error);
         res.status(500).json({
             success: false,
             message: 'Failed to update. Try again ',
@@ -128,7 +129,7 @@ export const getAllInfoBookedOneway = async (req, res) => {
 
     try {
         const infoBooked = await InfoBooked.find({
-            // TypeFlight: 'Oneway',
+            TypeFlight: { $eq: 'Oneway' },
         });
 
         console.log('day nhe con vo', infoBooked);
@@ -277,6 +278,35 @@ export const getInfoBookedMonthRoundtripNow = async (req, res) => {
         const InfoBookeds = await InfoBooked.find({
             LandingTime: { $gte: currentMonthStart, $lt: currentMonthEnd },
             TypeFlight: { $eq: 'Roundtrip' },
+        });
+
+        // console.log(InfoBookeds);
+
+        res.status(200).json({
+            success: true,
+            message: 'Successfully found search',
+            count: InfoBookeds.length,
+            data: InfoBookeds,
+        });
+    } catch (error) {
+        res.status(404).json({
+            success: false,
+            message: 'Not found ',
+        });
+    }
+};
+
+export const getInfoBookedCompany = async (req, res) => {
+    const flightNumber = new RegExp(req.query.FlightNumber, 'i');
+    const LandingTime = new Date(req.query.LandingTime);
+
+    const currentMonthStart = getMonth().currentMonthStart;
+    const currentMonthEnd = getMonth().currentMonthEnd;
+
+    try {
+        const InfoBookeds = await InfoBooked.find({
+            LandingTime: { $gte: currentMonthStart, $lt: currentMonthEnd },
+            FlightNumber: flightNumber,
         });
 
         // console.log(InfoBookeds);

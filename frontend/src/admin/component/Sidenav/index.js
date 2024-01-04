@@ -215,7 +215,7 @@ export default function Sidenav() {
                             >
                                 <MonetizationOnIcon />
                             </ListItemIcon>
-                            <ListItemText primary="Lợi nhuận" sx={{ opacity: open ? 1 : 0 }} />
+                            <ListItemText primary="Doanh thu" sx={{ opacity: open ? 1 : 0 }} />
                         </ListItemButton>
                     </ListItem>
                 </List>

@@ -116,7 +116,7 @@ function Home() {
 
     const handleSwitchRevenue = () => {
         // Navigate to the desired page when the Card is clicked
-        navigate('/admin/flight');
+        navigate('/admin/revenue');
     };
 
     return (
@@ -198,7 +198,7 @@ function Home() {
                                                 component="div"
                                                 className={cx('title')}
                                             >
-                                                <span> Lợi nhuận</span>
+                                                <span> Doanh thu</span>
                                                 <MonetizationOnIcon className={cx('icon')} />
                                             </Typography>
                                             <Typography

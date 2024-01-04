@@ -1,97 +1,187 @@
-import Sidenav from '../../component/Sidenav';
-import Navbar from '../../component/Navbar';
-
-import Box from '@mui/material/Box';
+import * as React from 'react';
 
 import { useState, useEffect } from 'react';
 
-import MaterialTable from 'material-table';
+import Sidenav from '../../component/Sidenav';
+import Navbar from '../../component/Navbar';
+import { FormatDate } from '../../../function/FormatDate';
 
-import classNames from 'classnames/bind';
-import styles from '../../component/TableFlight/TableFlight.module.scss';
+import Box from '@mui/material/Box';
+import './AdminUsers.scss';
+import Button from '@mui/material/Button';
+import PersonAddAlt1Icon from '@mui/icons-material/PersonAddAlt1';
+import DeleteIcon from '@mui/icons-material/Delete';
+import EditIcon from '@mui/icons-material/Edit';
 
-// import { width } from '@mui/system';
+import {
+    DataGrid,
+    GridToolbarContainer,
+    GridToolbarColumnsButton,
+    GridToolbarFilterButton,
+    GridToolbarExport,
+    GridToolbarDensitySelector,
+} from '@mui/x-data-grid';
 
-const cx = classNames.bind(styles);
+import { AddAdmin, EditAdmin } from './ActionAdmin';
 
-function AdminUsers() {
+import { toast } from 'react-toastify';
+import ToastCustom from '../../../Toast';
+import 'react-toastify/dist/ReactToastify.css';
+import axios from 'axios';
+import ConfirmDelete from '../../component/ConfirmDelete';
+import AvatarPeople from '../../component/AvatarPeople';
+
+function CustomToolbar() {
+    return (
+        <GridToolbarContainer>
+            <GridToolbarColumnsButton />
+            <GridToolbarFilterButton />
+            <GridToolbarDensitySelector />
+            <GridToolbarExport />
+        </GridToolbarContainer>
+    );
+}
+export default function AdminUsers() {
     const [data, setData] = useState([]);
-
-    const commonHeaderStyle = {
-        fontSize: '1.1rem',
-        fontWeight: '600',
-        // textAlign: 'center',
-
-        // Add other common styles here
-    };
-
-    const formatDate = (dateString) => {
-        const date = new Date(dateString);
-        const day = date.getDate() < 10 ? `0${date.getDate()}` : date.getDate();
-        const month = date.getMonth() + 1 < 10 ? `0${date.getMonth() + 1}` : date.getMonth() + 1;
-        const year = date.getFullYear();
-
-        console.log('DAy', date, day, month, year);
-
-        return `${day}-${month}-${year}`;
-    };
 
     const columns = [
         {
-            title: 'STT',
-            // field: 'tableData',
-            headerStyle: { ...commonHeaderStyle, paddingRight: '0', width: '1%', maxWidth: 40 },
-            cellStyle: { width: '1%', paddingLeft: '26px' },
-
-            render: (rowData) => data.indexOf(rowData) + 1,
-
-            // render: (rowData) => <div style={{ minWidth: '40px' }}> {data.indexOf(rowData) + 1} </div>,
+            field: 'Avatar',
+            headerName: 'Avartar',
+            headerClassName: 'custom-header',
+            cellClassName: 'custom-cell',
+            renderCell: (params) => <AvatarPeople string={params.row.Name} />,
+            flex: 0.1,
         },
         {
-            title: 'Tên tài khoản',
             field: 'AccountName',
-            headerStyle: commonHeaderStyle,
+            headerName: 'Tên tài khoản',
+            headerClassName: 'custom-header',
+            cellClassName: 'custom-cell',
+            flex: 0.3,
         },
-
         {
-            title: 'Mật khẩu',
             field: 'Password',
-            headerStyle: commonHeaderStyle,
+            headerName: 'Mật khẩu',
+            headerClassName: 'custom-header',
+            cellClassName: 'custom-cell',
+            flex: 0.15,
         },
         {
-            title: 'Họ và tên',
             field: 'Name',
-            headerStyle: commonHeaderStyle,
+            headerName: 'Họ và tên',
+            headerClassName: 'custom-header',
+            cellClassName: 'custom-cell',
+            flex: 0.25,
         },
         {
-            title: 'Ngày sinh',
             field: 'DayOfBirth',
-            render: (rowData) => formatDate(rowData.DayOfBirth),
-            headerStyle: commonHeaderStyle,
+            headerName: 'Ngày sinh',
+            renderCell: (params) => FormatDate(params.value),
+            headerClassName: 'custom-header',
+            cellClassName: 'custom-cell',
+            flex: 0.15,
+        },
+        {
+            field: 'Action',
+            headerName: 'Hành động',
+            renderCell: (params) => (
+                <div className="action">
+                    <Button
+                        variant="outlined"
+                        sx={{ marginRight: '10px' }}
+                        onClick={() => {
+                            handleEdit();
+                            setParamdEdit(params.row);
+                        }}
+                    >
+                        <EditIcon />{' '}
+                    </Button>
+                    {/* <Button variant="outlined" width="30px" onClick={() => handleDelete(params.row._id)}> */}
+
+                    {/* <Button variant="outlined" width="30px" onClick={() => handleCloseConfirmDelete(params.row._id)}> */}
+                    <Button
+                        variant="outlined"
+                        width="30px"
+                        onClick={() => {
+                            handleCloseConfirmDelete();
+                            setGetID(params.row._id);
+                        }}
+                    >
+                        <DeleteIcon />
+                    </Button>
+                </div>
+            ),
+            headerClassName: 'custom-header',
+            cellClassName: 'custom-cell',
+            flex: 0.15,
         },
     ];
 
-    // const [page, setPage] = useState(0);
+    //Handle Edit
+    const [paramsEdit, setParamdEdit] = useState({});
+    const [openEditAdmin, setOpenEditAdmin] = useState(false);
 
-    useEffect(() => {
+    const handleEdit = () => {
+        setOpenEditAdmin(true);
+    };
+
+    const handleCloseEditAdmin = () => {
+        setOpenEditAdmin(false);
+    };
+
+    //Handle Delete
+    const [getID, setGetID] = useState('');
+    const [openConfirmDelete, setOpenConfirmDelete] = useState(false);
+    const handleCloseConfirmDelete = (value) => {
+        setOpenConfirmDelete(true);
+        //  console.log(value); // value will be either true or false
+        if (value) {
+            axios
+                .delete(`http://localhost:4000/login/${getID}`)
+                .then((res) => {
+                    setReRender(true);
+                    toast.success('Xóa Admin thành công');
+                })
+                .catch((err) => {
+                    console.log(err);
+                });
+        }
+    };
+
+    //Handle Add
+    const [openAddAdmin, setOpenAddAdmin] = useState(false);
+
+    const handleClickOpen = () => {
+        setOpenAddAdmin(true);
+    };
+
+    const handleCloseAddAdmin = () => {
+        setOpenAddAdmin(false);
+    };
+
+    //Fetch Data
+    const fetchUserData = () => {
         fetch('http://localhost:4000/login')
-            // fetch(`http://localhost:4000/tickets/search/getTicket${param}All`)
             .then((res) => res.json())
             .then((res) => {
                 setData(res.data);
-                console.log('user', data);
-
-                // eslint-disable-next-line react-hooks/exhaustive-deps
-                // if (res.data && res.data.length > 0) {
-                //     setPage(5);
-                //     console.log('hello cu em', page);
-                // } else {
-                //     setPage(0);
-                //     console.log('hong duoc', page);
-                // }
             });
+    };
+
+    // Re-render
+    const [reRender, setReRender] = useState(false);
+    if (reRender) {
+        fetchUserData();
+        setReRender(false);
+    }
+
+    //Fetch Data First
+    useEffect(() => {
+        fetchUserData();
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
+
     return (
         <>
             <Navbar />
@@ -99,21 +189,61 @@ function AdminUsers() {
             <Box sx={{ display: 'flex' }}>
                 <Sidenav />
                 <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
-                    <div className={cx('table')}>
-                        <MaterialTable
-                            title={<div className={cx('column')}>Thông tin nhân viên Admin</div>}
-                            data={data}
-                            columns={columns}
-                            // onOrderChange={handleOrderChange}
-
-                            options={{ search: true, paging: true, filtering: false, exportButton: true }}
-                            // options={options}
-                        />
+                    <div className="title">
+                        <h1 style={{ marginBottom: '30px' }}>Thông tin Admin</h1>
+                        <Button variant="contained" color="success" className="add" onClick={handleClickOpen}>
+                            <PersonAddAlt1Icon sx={{ marginRight: '10px' }} /> Thêm người
+                        </Button>
                     </div>
+
+                    <DataGrid
+                        rows={data}
+                        getRowId={(row) => row._id}
+                        columns={columns}
+                        initialState={{
+                            pagination: {
+                                paginationModel: { page: 0, pageSize: 5 },
+                            },
+                        }}
+                        pageSizeOptions={[5, 10]}
+                        slots={{
+                            toolbar: CustomToolbar,
+                        }}
+                        sx={{
+                            '.MuiTablePagination-selectLabel, .MuiTablePagination-displayedRows ': {
+                                'margin-top': '1em',
+                                'margin-bottom': '1em',
+                            },
+                            width: '99%',
+                            height: 'auto',
+                            margin: 'auto',
+                        }}
+                    />
+
+                    <AddAdmin
+                        open={openAddAdmin}
+                        handleClose={handleCloseAddAdmin}
+                        reRender={reRender}
+                        setReRender={setReRender}
+                    />
+
+                    <EditAdmin
+                        row={paramsEdit}
+                        open={openEditAdmin}
+                        setOpen={setOpenEditAdmin}
+                        handleClose={handleCloseEditAdmin}
+                        reRender={reRender}
+                        setReRender={setReRender}
+                    />
+                    <ConfirmDelete
+                        open={openConfirmDelete}
+                        setOpenConfirmDelete={setOpenConfirmDelete}
+                        handleClose={handleCloseConfirmDelete}
+                        handleConfirm={handleCloseConfirmDelete}
+                    />
+                    <ToastCustom />
                 </Box>
             </Box>
         </>
     );
 }
-
-export default AdminUsers;

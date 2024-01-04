@@ -1,4 +1,4 @@
-function NumberFormat({ number }) {
+function NumberFormat(number) {
     // Format the number with dots as the thousands separator
     const formattedNumber = number.toLocaleString('de-DE', { useGrouping: true });
     //Result return above 48.000.000

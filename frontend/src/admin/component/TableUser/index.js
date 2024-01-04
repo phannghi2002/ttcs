@@ -1,351 +1,557 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-import React from 'react';
-import MaterialTable from 'material-table';
-
-import classNames from 'classnames/bind';
-import styles from '../TableFlight/TableFlight.module.scss';
-
-import { useEffect, useState } from 'react';
-import SyncAltIcon from '@mui/icons-material/SyncAlt';
 import EastIcon from '@mui/icons-material/East';
-// import { width } from '@mui/system';
+import SyncAltIcon from '@mui/icons-material/SyncAlt';
 
-const cx = classNames.bind(styles);
+import * as React from 'react';
+import { useState, useEffect } from 'react';
 
-export const TableUserOneway = () => {
-    const [data, setData] = useState([]);
+import {
+    DataGrid,
+    GridToolbarContainer,
+    GridToolbarColumnsButton,
+    GridToolbarFilterButton,
+    GridToolbarExport,
+    GridToolbarDensitySelector,
+    // GridOverlay,
+} from '@mui/x-data-grid';
 
-    const commonHeaderStyle = {
-        fontSize: '1.1rem',
-        fontWeight: '600',
-        // textAlign: 'center',
+import { FormatDate, FormatTime } from '../../../function/FormatDate';
 
-        // Add other common styles here
-    };
+import Button from '@mui/material/Button';
+// import PersonAddAlt1Icon from '@mui/icons-material/PersonAddAlt1';
+import DeleteIcon from '@mui/icons-material/Delete';
+import EditIcon from '@mui/icons-material/Edit';
 
-    const formatDate = (dateString) => {
-        const date = new Date(dateString);
-        const day = date.getDate() < 10 ? `0${date.getDate()}` : date.getDate();
-        const month = date.getMonth() + 1 < 10 ? `0${date.getMonth() + 1}` : date.getMonth() + 1;
-        const year = date.getFullYear();
+import PersonAddAlt1Icon from '@mui/icons-material/PersonAddAlt1';
+import { AddUser, AddUserRoundtrip, EditUser, EditUserRoundtrip } from './ActionUser.js';
+import ConfirmDelete from '../../component/ConfirmDelete';
+import axios from 'axios';
+import { toast } from 'react-toastify';
+import ToastCustom from '../../../Toast';
+import 'react-toastify/dist/ReactToastify.css';
+// import NoRowData from '../NoRowData';
 
-        return `${day}-${month}-${year}`;
-    };
-
-    const formatTime = (dateString) => {
-        const date = new Date(dateString);
-        const hours = date.getHours() < 10 ? `0${date.getHours()}` : date.getHours();
-        const minutes = date.getMinutes() < 10 ? `0${date.getMinutes()}` : date.getMinutes();
-        return `${hours}:${minutes}`;
-    };
-    const columns = [
-        {
-            title: 'STT',
-            headerStyle: { ...commonHeaderStyle, paddingRight: '0', width: '1%', maxWidth: 40 },
-            cellStyle: { width: '1%', paddingLeft: '26px' },
-
-            render: (rowData) => data.indexOf(rowData) + 1,
-            // render: (rowData) => <div style={{ minWidth: '40px' }}> {data.indexOf(rowData) + 1} </div>,
-        },
-        {
-            title: 'Mã vé',
-            field: 'CodeTicket',
-            headerStyle: commonHeaderStyle,
-            cellStyle: { width: '9%' },
-        },
-
-        {
-            title: 'Tên',
-            field: 'UserName',
-            headerStyle: commonHeaderStyle,
-        },
-        // {
-        //     title: 'Email',
-        //     field: 'Email',
-        //     headerStyle: commonHeaderStyle,
-        //
-        // },
-
-        {
-            title: 'Sân bay',
-            // field: 'Airport',
-            headerStyle: commonHeaderStyle,
-            render: (rowData) => (
-                <>
-                    {rowData.AirportFrom} <EastIcon /> {rowData.AirportTo}
-                </>
-            ),
-        },
-        {
-            title: 'Ngày đi',
-            field: 'DateGo',
-            render: (rowData) => formatDate(rowData.DateGo),
-            headerStyle: commonHeaderStyle,
-        },
-        // {
-        //     title: 'Giờ bay',
-        //     field: 'FlightTime',
-        //     render: (rowData) => formatTime(rowData.FlightTime),
-        //     headerStyle: commonHeaderStyle,
-        //     cellStyle: { width: '10%' },
-        // },
-        // {
-        //     title: 'Giờ đến',
-        //     field: 'LandingTime',
-        //     render: (rowData) => formatTime(rowData.LandingTime),
-        //     headerStyle: commonHeaderStyle,
-        //     cellStyle: { width: '10%' },
-        // },
-        {
-            // title: (
-            //     <>
-            //         Giờ bay <EastIcon /> Giờ đến
-            //     </>
-            // ),
-
-            title: 'Giờ',
-            headerStyle: commonHeaderStyle,
-            render: (rowData) => (
-                <>
-                    {formatTime(rowData.FlightTime)} <EastIcon /> {formatTime(rowData.LandingTime)}
-                </>
-            ),
-        },
-
-        {
-            title: 'Hạng vé',
-            field: 'TypeTicket',
-            headerStyle: commonHeaderStyle,
-        },
-        {
-            title: 'Chỗ ngồi',
-            field: 'CodeSeat',
-            headerStyle: commonHeaderStyle,
-        },
-    ];
-
-    // const [page, setPage] = useState(0);
-
-    useEffect(() => {
-        fetch(`http://localhost:4000/info/search/getAllInfoBookedOneway`)
-            // fetch(`http://localhost:4000/tickets/search/getTicket${param}All`)
-            .then((res) => res.json())
-            .then((res) => {
-                setData(res.data);
-
-                // eslint-disable-next-line react-hooks/exhaustive-deps
-                // if (res.data && res.data.length > 0) {
-                //     setPage(5);
-                //     console.log('hello cu em', page);
-                // } else {
-                //     setPage(0);
-                //     console.log('hong duoc', page);
-                // }
-            });
-    }, []);
-
-    // const handleOrderChange = (orderBy, orderDirection) => {
-    //     // Update data when sorting changes
-    //     // For example, sort the data based on the current sorting
-    //     // This assumes that your data is an array of objects with unique keys
-    //     setData((prevData) =>
-    //         prevData.slice().sort((a, b) => {
-    //             const order = orderDirection === 'asc' ? 1 : -1;
-    //             return a[orderBy] > b[orderBy] ? order : -order;
-    //         }),
-    //     );
-    // };
-
-    // const options = {
-    //     search: true,
-    //     paging: true,
-    //     pageSize: data.length > 0 ? 5 : 0, // Set pageSize to 5 if data exists, 0 otherwise
-    //     filtering: true,
-    //     exportButton: true,
-    // };
-
+function CustomToolbar() {
     return (
-        <div className={cx('table')}>
-            <MaterialTable
-                title={<div className={cx('column')}>Thông tin hành khách đi một chiều</div>}
-                data={data}
-                columns={columns}
-                // onOrderChange={handleOrderChange}
+        <GridToolbarContainer>
+            <GridToolbarColumnsButton />
+            <GridToolbarFilterButton />
+            <GridToolbarDensitySelector />
+            {/* <GridToolbarDensitySelector defaultDensity="comfortable" /> */}
+            <GridToolbarExport />
+        </GridToolbarContainer>
+    );
+}
 
-                options={{ search: true, paging: true, filtering: false, exportButton: true }}
-                // options={options}
-            />
-        </div>
+const convertCamelCaseToWords = (camelCaseString) => {
+    // Use a regular expression to insert a space before all caps
+    return (
+        camelCaseString
+            .replace(/([A-Z])/g, ' $1')
+            // Convert the first character to uppercase
+            .replace(/^./, (str) => str.toUpperCase())
     );
 };
 
-export const TableUserRoundtrip = () => {
+export function TableUserOneway() {
     const [data, setData] = useState([]);
 
-    const commonHeaderStyle = {
-        fontSize: '1.1rem',
-        fontWeight: '600',
-        // textAlign: 'center',
-
-        // Add other common styles here
-    };
-
-    const formatDate = (dateString) => {
-        const date = new Date(dateString);
-        const day = date.getDate() < 10 ? `0${date.getDate()}` : date.getDate();
-        const month = date.getMonth() + 1 < 10 ? `0${date.getMonth() + 1}` : date.getMonth() + 1;
-        const year = date.getFullYear();
-
-        return `${day}-${month}-${year}`;
-    };
-
-    const formatTime = (dateString) => {
-        const date = new Date(dateString);
-        const hours = date.getHours() < 10 ? `0${date.getHours()}` : date.getHours();
-        const minutes = date.getMinutes() < 10 ? `0${date.getMinutes()}` : date.getMinutes();
-        return `${hours}:${minutes}`;
-    };
     const columns = [
         {
-            title: 'STT',
-            headerStyle: { ...commonHeaderStyle, paddingRight: '0', width: '1%', maxWidth: 40 },
-            cellStyle: { width: '1%', paddingLeft: '26px' },
-
-            render: (rowData) => data.indexOf(rowData) + 1,
-            // render: (rowData) => <div style={{ minWidth: '40px' }}> {data.indexOf(rowData) + 1} </div>,
-        },
-        {
-            title: 'Mã vé',
             field: 'CodeTicket',
-            headerStyle: commonHeaderStyle,
-            cellStyle: { width: '9%' },
+            headerName: 'Mã vé',
+            headerClassName: 'custom-header',
+            cellClassName: 'custom-cell',
+            flex: 0.1,
         },
-
         {
-            title: 'Tên',
             field: 'UserName',
-            headerStyle: commonHeaderStyle,
+            headerName: 'Tên',
+            headerClassName: 'custom-header',
+            cellClassName: 'custom-cell',
+            flex: 0.15,
         },
-        // {
-        //     title: 'Email',
-        //     field: 'Email',
-        //     headerStyle: commonHeaderStyle,
-        //
-        // },
+        {
+            field: 'Email',
+            headerName: 'Email',
+            renderCell: (params) => params.value,
+            headerClassName: 'custom-header',
+            cellClassName: 'custom-cell',
+            flex: 0.2,
+        },
+        {
+            // field: 'Airport', if not add field then it return column other nothing field
+            headerName: 'Sân bay',
+            renderCell: (params) => (
+                <div>
+                    {' '}
+                    {params.row.AirportFrom} <EastIcon /> {params.row.AirportTo}
+                </div>
+            ),
+            headerClassName: 'custom-header',
+            cellClassName: 'custom-cell',
+            flex: 0.13,
+        },
 
         {
-            title: 'Sân bay',
-            field: 'Airport',
-            headerStyle: commonHeaderStyle,
-            render: (rowData) => (
-                <>
-                    {rowData.AirportFrom} <SyncAltIcon /> {rowData.AirportTo}
-                </>
-            ),
-        },
-        {
-            title: 'Ngày đi',
             field: 'DateGo',
-            render: (rowData) => formatDate(rowData.DateGo),
-            headerStyle: commonHeaderStyle,
+            headerName: 'Ngày đi',
+            renderCell: (params) => FormatDate(params.value),
+            headerClassName: 'custom-header',
+            cellClassName: 'custom-cell',
+            flex: 0.12,
         },
         {
-            title: 'Ngày về',
-            field: 'DateReturn',
-            render: (rowData) => formatDate(rowData.DateReturn),
-            headerStyle: commonHeaderStyle,
-        },
-        {
-            title: 'Giờ đi',
-            headerStyle: commonHeaderStyle,
-            render: (rowData) => (
-                <>
-                    {formatTime(rowData.FlightTime)} <EastIcon /> {formatTime(rowData.LandingTime)}
-                </>
+            field: 'Time',
+            headerName: 'Giờ',
+            renderCell: (params) => (
+                <div>
+                    {' '}
+                    {FormatTime(params.row.FlightTime)} <EastIcon /> {FormatTime(params.row.LandingTime)}
+                </div>
             ),
+            headerClassName: 'custom-header',
+            cellClassName: 'custom-cell',
+            flex: 0.1,
         },
+
         {
-            title: 'Giờ về',
-            headerStyle: commonHeaderStyle,
-            render: (rowData) => (
-                <>
-                    {formatTime(rowData.FlightTimeReturn)} <EastIcon /> {formatTime(rowData.LandingTimeReturn)}
-                </>
-            ),
-        },
-        {
-            title: 'Hạng vé đi',
             field: 'TypeTicket',
-            headerStyle: commonHeaderStyle,
+            headerName: 'Hạng vé',
+            renderCell: (params) => convertCamelCaseToWords(params.row.TypeTicket),
+            headerClassName: 'custom-header',
+            cellClassName: 'custom-cell',
+            flex: 0.1,
         },
         {
-            title: 'Hạng vé về',
+            field: 'CodeSeat',
+            headerName: 'Chỗ ngồi',
+            headerClassName: 'custom-header',
+            cellClassName: 'custom-cell',
+            flex: 0.1,
+        },
+        {
+            field: 'Action',
+            headerName: 'Hành động',
+            renderCell: (params) => {
+                if (data && data.length !== 0) {
+                    return (
+                        <div className="action">
+                            <Button
+                                variant="outlined"
+                                sx={{ marginRight: '10px' }}
+                                onClick={() => {
+                                    handleEdit();
+                                    setParamdEdit(params.row);
+                                }}
+                            >
+                                <EditIcon />{' '}
+                            </Button>
+
+                            <Button
+                                variant="outlined"
+                                width="30px"
+                                onClick={() => {
+                                    handleCloseConfirmDelete();
+                                    setGetID(params.row._id);
+                                }}
+                            >
+                                <DeleteIcon />
+                            </Button>
+                        </div>
+                    );
+                }
+                return null;
+            },
+            headerClassName: 'custom-header',
+            cellClassName: 'custom-cell',
+            flex: 0.15,
+        },
+    ];
+
+    //Handle Add
+    const [openAddUser, setOpenAddUser] = useState(false);
+
+    const handleClickOpen = () => {
+        setOpenAddUser(true);
+    };
+
+    const handleCloseAddUser = () => {
+        setOpenAddUser(false);
+    };
+
+    //Handle Delete
+    const [getID, setGetID] = useState('');
+    const [openConfirmDelete, setOpenConfirmDelete] = useState(false);
+    const handleCloseConfirmDelete = (value) => {
+        setOpenConfirmDelete(true);
+        //  console.log(value); // value will be either true or false
+        if (value) {
+            // console.log(getID);
+            axios
+                .delete(`http://localhost:4000/info/${getID}`)
+                .then((res) => {
+                    setReRender(true);
+                    toast.success('Xóa thông tin hành khách một chiều thành công');
+                })
+                .catch((err) => {
+                    console.log(err);
+                });
+        }
+    };
+
+    //Handle Edit
+    const [paramsEdit, setParamdEdit] = useState({});
+    const [openEditUser, setOpenEditUser] = useState(false);
+
+    const handleEdit = () => {
+        setOpenEditUser(true);
+    };
+
+    const handleCloseEditUser = () => {
+        setOpenEditUser(false);
+    };
+
+    //Fetch Data
+    const fetchUserData = () => {
+        fetch('http://localhost:4000/info/search/getAllInfoBookedOneway')
+            .then((res) => res.json())
+            .then((res) => {
+                setData(res.data);
+            });
+    };
+    useEffect(() => {
+        fetchUserData();
+    }, []);
+
+    // Re-render
+    const [reRender, setReRender] = useState(false);
+    if (reRender) {
+        fetchUserData();
+        setReRender(false);
+    }
+
+    return (
+        <>
+            <div className="title">
+                <h1 style={{ marginBottom: '30px' }}>Thông tin người dùng đi một chiều</h1>
+                <Button variant="contained" color="success" className="add" onClick={handleClickOpen}>
+                    <PersonAddAlt1Icon sx={{ marginRight: '10px' }} /> Thêm người
+                </Button>
+            </div>
+
+            <DataGrid
+                rows={data}
+                getRowId={(row) => row._id}
+                columns={columns}
+                initialState={{
+                    pagination: {
+                        paginationModel: { page: 0, pageSize: 5 },
+                    },
+                }}
+                pageSizeOptions={[5, 10, 20]}
+                density="comfortable"
+                slots={{
+                    toolbar: CustomToolbar,
+                }}
+                sx={{
+                    '.MuiTablePagination-selectLabel, .MuiTablePagination-displayedRows ': {
+                        'margin-top': '1em',
+                        'margin-bottom': '1em',
+                    },
+                    width: '99%',
+                    margin: 'auto',
+                    height: 'auto',
+                }}
+            />
+
+            <AddUser open={openAddUser} handleClose={handleCloseAddUser} setReRender={setReRender} />
+
+            <EditUser
+                row={paramsEdit}
+                open={openEditUser}
+                setOpen={setOpenEditUser}
+                handleClose={handleCloseEditUser}
+                reRender={reRender}
+                setReRender={setReRender}
+            />
+
+            <ConfirmDelete
+                open={openConfirmDelete}
+                setOpenConfirmDelete={setOpenConfirmDelete}
+                handleClose={handleCloseConfirmDelete}
+                handleConfirm={handleCloseConfirmDelete}
+            />
+            <ToastCustom />
+        </>
+    );
+}
+
+// const CustomNoRowsOverlay = () => (
+//     <GridOverlay>
+//         <div style={{ textAlign: 'center' }}>
+//             <NoRowData />
+//         </div>
+//     </GridOverlay>
+// );
+
+export function TableUserRoundtrip() {
+    const [data, setData] = useState([]);
+
+    const columns = [
+        {
+            field: 'CodeTicket',
+            headerName: 'Mã vé',
+            headerClassName: 'custom-header',
+            cellClassName: 'custom-cell',
+            flex: 0.1,
+        },
+        {
+            field: 'UserName',
+            headerName: 'Tên',
+            headerClassName: 'custom-header',
+            cellClassName: 'custom-cell',
+            flex: 0.1,
+        },
+        {
+            field: 'Email',
+            headerName: 'Email',
+            headerClassName: 'custom-header',
+            cellClassName: 'custom-cell',
+            flex: 0.1,
+        },
+        {
+            field: 'Airport', // if not add field then it return column other nothing field
+            headerName: 'Sân bay',
+            renderCell: (params) => (
+                <div>
+                    {' '}
+                    {params.row.AirportFrom} <SyncAltIcon /> {params.row.AirportTo}
+                </div>
+            ),
+            headerClassName: 'custom-header',
+            cellClassName: 'custom-cell',
+            flex: 0.13,
+        },
+        {
+            field: 'Date',
+            headerName: 'Ngày',
+            renderCell: (params) => (
+                <div>
+                    {' '}
+                    {FormatDate(params.row.DateGo)} <br />
+                    <EastIcon /> {FormatDate(params.row.DateReturn)}
+                </div>
+            ),
+            headerClassName: 'custom-header',
+            cellClassName: 'custom-cell',
+            flex: 0.12,
+        },
+        {
+            field: 'TimeGo',
+            headerName: 'Giờ đi',
+            valueGetter: (params) => `${FormatTime(params.row.FlightTime)} - ${FormatTime(params.row.LandingTime)}`,
+            headerClassName: 'custom-header',
+            cellClassName: 'custom-cell',
+            flex: 0.08,
+        },
+
+        {
+            field: 'TypeTicket',
+            headerName: 'Hạng vé đi',
+            renderCell: (params) => convertCamelCaseToWords(params.row.TypeTicket),
+            headerClassName: 'custom-header',
+            cellClassName: 'custom-cell',
+            flex: 0.1,
+        },
+        {
+            field: 'CodeSeat',
+            headerName: 'Chỗ ngồi đi',
+            headerClassName: 'custom-header',
+            cellClassName: 'custom-cell',
+            flex: 0.08,
+        },
+        {
+            field: 'TimeReturn',
+            headerName: 'Giờ về',
+            valueGetter: (params) =>
+                `${FormatTime(params.row.FlightTimeReturn)} - ${FormatTime(params.row.LandingTimeReturn)}`,
+            headerClassName: 'custom-header',
+            cellClassName: 'custom-cell',
+            flex: 0.08,
+        },
+        {
             field: 'TypeTicketReturn',
-            headerStyle: commonHeaderStyle,
+            headerName: 'Hạng vé về',
+            renderCell: (params) => convertCamelCaseToWords(params.row.TypeTicketReturn),
+            headerClassName: 'custom-header',
+            cellClassName: 'custom-cell',
+            flex: 0.1,
         },
         {
-            title: 'Chỗ ngồi đi',
-            field: 'CodeSeat',
-            headerStyle: commonHeaderStyle,
-        },
-        {
-            title: 'Chỗ ngồi về',
             field: 'CodeSeatReturn',
-            headerStyle: commonHeaderStyle,
+            headerName: 'Chỗ ngồi về',
+
+            headerClassName: 'custom-header',
+            cellClassName: 'custom-cell',
+            flex: 0.08,
+        },
+        {
+            field: 'Action',
+            headerName: 'Hành động',
+            renderCell: (params) => {
+                if (data && data.length !== 0) {
+                    return (
+                        <div className="action">
+                            <Button
+                                variant="outlined"
+                                sx={{ marginRight: '10px' }}
+                                onClick={() => {
+                                    handleEdit();
+                                    setParamdEdit(params.row);
+                                }}
+                            >
+                                <EditIcon />{' '}
+                            </Button>
+
+                            <Button
+                                variant="outlined"
+                                width="30px"
+                                onClick={() => {
+                                    handleCloseConfirmDelete();
+                                    setGetID(params.row._id);
+                                }}
+                            >
+                                <DeleteIcon />
+                            </Button>
+                        </div>
+                    );
+                }
+                return null;
+            },
+            headerClassName: 'custom-header',
+            cellClassName: 'custom-cell',
+            flex: 0.16,
         },
     ];
 
-    // const [page, setPage] = useState(0);
+    //Handle Add
+    const [openAddUserRoundtrip, setOpenAddUserRoundtrip] = useState(false);
 
-    useEffect(() => {
-        fetch(`http://localhost:4000/info/search/getAllInfoBookedRoundtrip`)
-            // fetch(`http://localhost:4000/tickets/search/getTicket${param}All`)
+    const handleClickOpen = () => {
+        setOpenAddUserRoundtrip(true);
+    };
+
+    const handleCloseAddUserRoundtrip = () => {
+        setOpenAddUserRoundtrip(false);
+    };
+
+    //Handle Delete
+    const [getID, setGetID] = useState('');
+    const [openConfirmDelete, setOpenConfirmDelete] = useState(false);
+    const handleCloseConfirmDelete = (value) => {
+        setOpenConfirmDelete(true);
+        //  console.log(value); // value will be either true or false
+        if (value) {
+            axios
+                .delete(`http://localhost:4000/info/${getID}`)
+                .then((res) => {
+                    setReRender(true);
+                    toast.success('Xóa thông tin khách hàng khứ hồi thành công');
+                })
+                .catch((err) => {
+                    console.log(err);
+                });
+        }
+    };
+
+    //Handle Edit
+    const [paramsEdit, setParamdEdit] = useState({});
+    const [openEditUserRoundtrip, setOpenEditUserRoundtrip] = useState(false);
+
+    const handleEdit = () => {
+        setOpenEditUserRoundtrip(true);
+    };
+
+    const handleCloseEditUser = () => {
+        setOpenEditUserRoundtrip(false);
+    };
+
+    //Fetch Data
+    const fetchUserData = () => {
+        fetch('http://localhost:4000/info/search/getAllInfoBookedRoundtrip')
             .then((res) => res.json())
             .then((res) => {
                 setData(res.data);
-
-                // eslint-disable-next-line react-hooks/exhaustive-deps
-                // if (res.data && res.data.length > 0) {
-                //     setPage(5);
-                //     console.log('hello cu em', page);
-                // } else {
-                //     setPage(0);
-                //     console.log('hong duoc', page);
-                // }
             });
+    };
+    useEffect(() => {
+        fetchUserData();
     }, []);
 
-    // const handleOrderChange = (orderBy, orderDirection) => {
-    //     // Update data when sorting changes
-    //     // For example, sort the data based on the current sorting
-    //     // This assumes that your data is an array of objects with unique keys
-    //     setData((prevData) =>
-    //         prevData.slice().sort((a, b) => {
-    //             const order = orderDirection === 'asc' ? 1 : -1;
-    //             return a[orderBy] > b[orderBy] ? order : -order;
-    //         }),
-    //     );
-    // };
-
-    // const options = {
-    //     search: true,
-    //     paging: true,
-    //     pageSize: data.length > 0 ? 5 : 0, // Set pageSize to 5 if data exists, 0 otherwise
-    //     filtering: true,
-    //     exportButton: true,
-    // };
+    // Re-render
+    const [reRender, setReRender] = useState(false);
+    if (reRender) {
+        fetchUserData();
+        setReRender(false);
+    }
 
     return (
-        <div className={cx('table')}>
-            <MaterialTable
-                title={<div className={cx('column')}>Thông tin hành khách đi khứ hồi</div>}
-                data={data}
-                columns={columns}
-                // onOrderChange={handleOrderChange}
+        <>
+            <div className="title" style={{ paddingTop: '50px' }}>
+                <h1 style={{ marginBottom: '30px' }}>Thông tin người dùng đi khứ hồi</h1>
+                <Button variant="contained" color="success" className="add" onClick={handleClickOpen}>
+                    <PersonAddAlt1Icon sx={{ marginRight: '10px' }} /> Thêm người
+                </Button>
+            </div>
 
-                options={{ search: true, paging: true, filtering: false, exportButton: true }}
-                // options={options}
+            <DataGrid
+                rows={data}
+                getRowId={(row) => row._id}
+                columns={columns}
+                initialState={{
+                    pagination: {
+                        paginationModel: { page: 0, pageSize: 5 },
+                    },
+                }}
+                pageSizeOptions={[5, 10, 20]}
+                density="comfortable"
+                slots={{
+                    toolbar: CustomToolbar,
+                    // noRowsOverlay: CustomNoRowsOverlay,
+                }}
+                sx={{
+                    '.MuiTablePagination-selectLabel, .MuiTablePagination-displayedRows ': {
+                        'margin-top': '1em',
+                        'margin-bottom': '1em',
+                    },
+                    width: '99%',
+                    margin: 'auto',
+                    height: 'auto',
+                }}
             />
-        </div>
+
+            <AddUserRoundtrip
+                open={openAddUserRoundtrip}
+                handleClose={handleCloseAddUserRoundtrip}
+                setReRender={setReRender}
+            />
+
+            <EditUserRoundtrip
+                row={paramsEdit}
+                open={openEditUserRoundtrip}
+                setOpen={setOpenEditUserRoundtrip}
+                handleClose={handleCloseEditUser}
+                reRender={reRender}
+                setReRender={setReRender}
+            />
+
+            <ConfirmDelete
+                open={openConfirmDelete}
+                setOpenConfirmDelete={setOpenConfirmDelete}
+                handleClose={handleCloseConfirmDelete}
+                handleConfirm={handleCloseConfirmDelete}
+            />
+            <ToastCustom />
+        </>
     );
-};
+}

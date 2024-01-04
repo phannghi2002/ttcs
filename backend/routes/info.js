@@ -10,6 +10,7 @@ import {
     getInfoBookedMonthRoundtripNow,
     getAllInfoBookedOneway,
     getAllInfoBookedRoundtrip,
+    getInfoBookedCompany,
 } from './../controllers/infoBookedController.js';
 
 const router = express.Router();
@@ -44,4 +45,6 @@ router.get('/search/getInfoBookedOnewayMonthNow', getInfoBookedMonthOnewayNow);
 //get all ticket roundtrip month now
 router.get('/search/getInfoBookedRoundtripMonthNow', getInfoBookedMonthRoundtripNow);
 
+//get all ticket company this month now
+router.get('/search/getInfoBookedCompany', getInfoBookedCompany);
 export default router;
