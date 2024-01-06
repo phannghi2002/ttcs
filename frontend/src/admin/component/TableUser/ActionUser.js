@@ -221,8 +221,8 @@ export const AddUser = ({ open, handleClose, setReRender }) => {
                     setReRender(true);
                     toast.success('Thêm thông tin hành khách một chiều thành công');
                 })
-                .catch((err) => {
-                    console.log(err);
+                .catch((res) => {
+                    console.log(res);
                 });
         }
     };

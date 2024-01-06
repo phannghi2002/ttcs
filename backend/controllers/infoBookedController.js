@@ -13,10 +13,9 @@ export const createInfoBooked = async (req, res) => {
             data: saveInfoBooked,
         });
     } catch (error) {
-        console.log('lỗi', error);
         res.status(500).json({
             success: false,
-            message: 'Failed to create. Try again ',
+            message: error,
         });
     }
 };
