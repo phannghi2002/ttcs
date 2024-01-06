@@ -241,8 +241,8 @@ export const AddFlight = ({ open, handleClose, onUpdate, setReRender }) => {
                     toast.success('Thêm chuyến bay thành công');
                     onUpdate();
                 })
-                .catch((err) => {
-                    console.log(err);
+                .catch((response) => {
+                    console.log(response);
                 });
         }
     };

@@ -17,7 +17,7 @@ export const createTicket = async (req, res) => {
         console.log('tim ra loi', error);
         res.status(500).json({
             success: false,
-            message: 'Failed to create. Try again ',
+            message: error,
         });
     }
 };
