@@ -6,7 +6,9 @@ import { PieChartCompareTypeFlight, PieChartCompany } from '../../component/Char
 import TotalMoney from './TotalMoney';
 
 function Revenue() {
-    console.log(TotalMoney().MoneyOneway);
+    // console.log('vcl', TotalMoney().MoneyOneway);
+    const StorageMoney = TotalMoney();
+    console.log(StorageMoney);
     return (
         <>
             <Navbar />
@@ -15,9 +17,9 @@ function Revenue() {
                 <Sidenav />
                 <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
                     <div style={{ display: 'flex' }}>
-                        <PieChartCompareTypeFlight />
+                        <PieChartCompareTypeFlight StorageMoney={StorageMoney} />
                     </div>
-                    <PieChartCompany />
+                    <PieChartCompany StorageMoney={StorageMoney} />
                 </Box>
             </Box>
         </>

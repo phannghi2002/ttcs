@@ -28,10 +28,10 @@ const ticketSchema = new mongoose.Schema({
             type: Number,
             required: true,
         },
-        PriceChildren: {
-            type: Number,
-            required: true,
-        },
+        // PriceChildren: {
+        //     type: Number,
+        //     required: true,
+        // },
         CodeSeat: {
             type: [String],
             default: [],
@@ -42,10 +42,10 @@ const ticketSchema = new mongoose.Schema({
             type: Number,
             required: true,
         },
-        PriceChildren: {
-            type: Number,
-            required: true,
-        },
+        // PriceChildren: {
+        //     type: Number,
+        //     required: true,
+        // },
         CodeSeat: {
             type: [String],
             default: [],
@@ -56,10 +56,10 @@ const ticketSchema = new mongoose.Schema({
             type: Number,
             required: true,
         },
-        PriceChildren: {
-            type: Number,
-            required: true,
-        },
+        // PriceChildren: {
+        //     type: Number,
+        //     required: true,
+        // },
         CodeSeat: {
             type: [String],
             default: [],
@@ -70,10 +70,10 @@ const ticketSchema = new mongoose.Schema({
             type: Number,
             required: true,
         },
-        PriceChildren: {
-            type: Number,
-            required: true,
-        },
+        // PriceChildren: {
+        //     type: Number,
+        //     required: true,
+        // },
         CodeSeat: {
             type: [String],
             default: [],

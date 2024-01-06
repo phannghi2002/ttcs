@@ -68,7 +68,7 @@ function TotalMoney() {
                 let VNA = await fetchAPICompany('VNA');
                 let QH = await fetchAPICompany('QH');
                 let BL = await fetchAPICompany('BL');
-
+                console.log('gọi nhiều vãi cả bìu');
                 setMoneyOneway(getTotalMoney(Oneway));
                 setMoneyRoundtrip(getTotalMoney(Roundtrip));
 
@@ -86,14 +86,23 @@ function TotalMoney() {
 
         fetchData();
     }, []);
-    return { MoneyOneway: moneyOneway, MoneyRoundtrip: moneyRoundtrip, moneyVJ, moneyVNA, moneyBL, moneyQH };
+
+    let StorageMoney = {
+        MoneyOneway: moneyOneway,
+        MoneyRoundtrip: moneyRoundtrip,
+        moneyVJ,
+        moneyVNA,
+        moneyBL,
+        moneyQH,
+    };
+    return StorageMoney;
 }
 
 export default TotalMoney;
 
-export const TableRevenueTypeFlight = () => {
-    const moneyOneway = TotalMoney().MoneyOneway;
-    const moneyRoundtrip = TotalMoney().MoneyRoundtrip;
+export const TableRevenueTypeFlight = (StorageMoney) => {
+    const moneyOneway = StorageMoney.MoneyOneway;
+    const moneyRoundtrip = StorageMoney.MoneyRoundtrip;
 
     const ratingOneway = (moneyOneway / (moneyOneway + moneyRoundtrip)).toFixed(4);
 
@@ -130,12 +139,12 @@ export const TableRevenueTypeFlight = () => {
         ratingOneway,
     };
 };
-
-export const TableRevenueCompany = () => {
-    const moneyVJ = TotalMoney().moneyVJ;
-    const moneyVNA = TotalMoney().moneyVNA;
-    const moneyBL = TotalMoney().moneyBL;
-    const moneyQH = TotalMoney().moneyQH;
+export const TableRevenueCompany = (StorageMoney) => {
+    // const StorageMoney = TotalMoney();
+    const moneyVJ = StorageMoney.moneyVJ;
+    const moneyVNA = StorageMoney.moneyVNA;
+    const moneyBL = StorageMoney.moneyBL;
+    const moneyQH = StorageMoney.moneyQH;
     const total = moneyVJ + moneyVNA + moneyBL + moneyQH;
 
     const ratingVJ = (moneyVJ / total).toFixed(4);
@@ -185,3 +194,58 @@ export const TableRevenueCompany = () => {
         ratingBL,
     };
 };
+// export const TableRevenueCompany = () => {
+
+//     const moneyVJ = TotalMoney().moneyVJ;
+//     const moneyVNA = TotalMoney().moneyVNA;
+//     const moneyBL = TotalMoney().moneyBL;
+//     const moneyQH = TotalMoney().moneyQH;
+//     const total = moneyVJ + moneyVNA + moneyBL + moneyQH;
+
+//     const ratingVJ = (moneyVJ / total).toFixed(4);
+//     const ratingVNA = (moneyVNA / total).toFixed(4);
+//     const ratingBL = (moneyBL / total).toFixed(4);
+
+//     const renderTable = () => {
+//         return (
+//             <div>
+//                 <Table striped bordered hover size="sm">
+//                     <thead>
+//                         <tr>
+//                             <th>Hãng hàng không</th>
+//                             <th>Doanh thu (VNĐ)</th>
+//                         </tr>
+//                     </thead>
+//                     <tbody>
+//                         <tr>
+//                             <td>Vietnam Airlines</td>
+//                             <td>{NumberFormat(moneyVNA)}</td>
+//                         </tr>
+//                         <tr>
+//                             <td>VietJet Air</td>
+//                             <td>{NumberFormat(moneyVJ)}</td>
+//                         </tr>
+//                         <tr>
+//                             <td>BamBo Airways</td>
+//                             <td>{NumberFormat(moneyQH)}</td>
+//                         </tr>
+//                         <tr>
+//                             <td>Jetstar Pacific Airlines</td>
+//                             <td>{NumberFormat(moneyBL)}</td>
+//                         </tr>
+//                         <tr>
+//                             <td>Tổng tiền</td>
+//                             <td>{NumberFormat(total)}</td>
+//                         </tr>
+//                     </tbody>
+//                 </Table>
+//             </div>
+//         );
+//     };
+//     return {
+//         render: renderTable(),
+//         ratingVJ,
+//         ratingVNA,
+//         ratingBL,
+//     };
+// };

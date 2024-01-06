@@ -14,6 +14,7 @@ export const createTicket = async (req, res) => {
             data: saveTicket,
         });
     } catch (error) {
+        console.log('tim ra loi', error);
         res.status(500).json({
             success: false,
             message: 'Failed to create. Try again ',

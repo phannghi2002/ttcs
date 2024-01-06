@@ -21,7 +21,7 @@ import MenuItem from '@mui/material/MenuItem';
 import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
 import { renderTimeViewClock } from '@mui/x-date-pickers/timeViewRenderers';
 
-import { FormatDate, FormatDateYMD } from '../../../function/FormatDate';
+import { FormatDateYMD } from '../../../function/FormatDate';
 import dayjs from 'dayjs';
 
 //use add all
@@ -178,6 +178,7 @@ export const AddUser = ({ open, handleClose, setReRender }) => {
     };
 
     const handleAdd = () => {
+        console.log(data);
         if (data) {
             axios
                 .post('http://localhost:4000/info/', {
@@ -195,7 +196,8 @@ export const AddUser = ({ open, handleClose, setReRender }) => {
 
                     FlightTime: data.FlightTime,
                     LandingTime: data.LandingTime,
-                    DateGo: data.FlightTime.toISOString(),
+                    // DateGo: data.FlightTime.toISOString(),
+                    DateGo: FormatDateYMD(data.FlightTime),
                 })
                 .then((res) => {
                     console.log(res);
@@ -1072,7 +1074,7 @@ export const EditUserRoundtrip = ({ row, open, setOpen, handleClose, reRender, s
 
                     FlightTime: data.FlightTime,
                     LandingTime: data.LandingTime,
-                    DateGo: FormatDate(data.FlightTime),
+                    DateGo: FormatDateYMD(data.FlightTime),
                     // DayOfBirth: FormatDate(data.DayOfBirth),
                     // DayOfBirth: FormatDate(data.DayOfBirth),
                     TypeTicketReturn: data.TypeTicketReturn, //
@@ -1080,7 +1082,7 @@ export const EditUserRoundtrip = ({ row, open, setOpen, handleClose, reRender, s
                     CodeSeatReturn: data.CodeSeatReturn, //
                     FlightTimeReturn: data.FlightTimeReturn, //
                     LandingTimeReturn: data.LandingTimeReturn, //
-                    DateReturn: FormatDate(data.FlightTimeReturn),
+                    DateReturn: FormatDateYMD(data.FlightTimeReturn),
                 })
                 .then((res) => {
                     console.log(res);
