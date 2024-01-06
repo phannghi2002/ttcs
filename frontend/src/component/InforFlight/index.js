@@ -189,7 +189,6 @@ import { Link } from 'react-router-dom';
 
 function InforFlight({ item, name, select }) {
     const [moneyAdult, setMoneyAdult] = useState(item.BusinessClass.PriceAdult);
-    const [moneyChildren, setMoneyChildren] = useState(item.BusinessClass.PriceChildren);
     const storedQuantity = JSON.parse(localStorage.getItem('Quantity'));
 
     // const [show, setShow] = useState(true);
@@ -197,6 +196,8 @@ function InforFlight({ item, name, select }) {
     const value2 = Number(storedQuantity.children);
     const value3 = Number(storedQuantity.baby);
     const moneyBaby = moneyAdult / 2;
+    const moneyChildren = moneyAdult * 0.75;
+    console.log(moneyChildren);
     const [total, setTotal] = useState(moneyAdult);
 
     //change value total when click add or subtract quantity
@@ -258,18 +259,14 @@ function InforFlight({ item, name, select }) {
     useEffect(() => {
         if (selectedValue === 'EconomyClass') {
             setMoneyAdult(item.EconomyClass.PriceAdult);
-            setMoneyChildren(item.EconomyClass.PriceChildren);
         } else if (selectedValue === 'BusinessClass') {
             setMoneyAdult(item.BusinessClass.PriceAdult);
-            setMoneyChildren(item.BusinessClass.PriceChildren);
             // console.log(convertTime(item.FlightTime));
         } else if (selectedValue === 'FirstClass') {
             setMoneyAdult(item.FirstClass.PriceAdult);
-            setMoneyChildren(item.FirstClass.PriceChildren);
             // console.log(convertTime(item.FlightTime));
         } else {
             setMoneyAdult(item.PremiumClass.PriceAdult);
-            setMoneyChildren(item.PremiumClass.PriceChildren);
             // console.log(convertTime(item.FlightTime));
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps

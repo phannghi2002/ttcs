@@ -30,6 +30,7 @@ const randomCharacters = () => {
             codeTicket += letters[randomIndex];
         }
     }
+    console.log('chay di ma lam on');
     return codeTicket;
 };
 codeTicket = randomCharacters();

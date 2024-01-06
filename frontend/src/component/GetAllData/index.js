@@ -26,8 +26,6 @@ function GetAllData({ data, className }) {
             });
     }, []);
 
-    console.log(user);
-
     const convertDate = (date) => {
         const dateConvert = new Date(date);
 

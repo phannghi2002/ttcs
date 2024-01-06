@@ -1,6 +1,6 @@
 import React from 'react';
 import { Chart } from 'react-google-charts';
-import { TableRevenueTypeFlight, TableRevenueCompany } from '../../pages/Revenue/TotalMoney';
+import TotalMoney, { TableRevenueTypeFlight, TableRevenueCompany } from '../../pages/Revenue/TotalMoney';
 
 const getCurrentMonthAndYear = (date) => {
     const currentDate = new Date();
@@ -9,8 +9,10 @@ const getCurrentMonthAndYear = (date) => {
     return `${month}/${year}`;
 };
 
-export const PieChartCompareTypeFlight = () => {
-    let ratingOneway = TableRevenueTypeFlight().ratingOneway * 100;
+// const StorageMoney = TotalMoney();
+
+export const PieChartCompareTypeFlight = ({ StorageMoney }) => {
+    let ratingOneway = TableRevenueTypeFlight(StorageMoney).ratingOneway * 100;
     let ratingroundtrip = 100 - ratingOneway;
 
     const dataTypeFlight = [
@@ -50,16 +52,16 @@ export const PieChartCompareTypeFlight = () => {
             </div>
             <div style={{ width: '30%', paddingRight: '5%', paddingTop: '8%' }}>
                 <h5 className="mb-3">Bảng doanh thu theo loại vé</h5>
-                {TableRevenueTypeFlight().render}
+                {TableRevenueTypeFlight(StorageMoney).render}
             </div>
         </div>
     );
 };
 
-export const PieChartCompany = () => {
-    let ratingVJ = TableRevenueCompany().ratingVJ * 100;
-    let ratingVNA = TableRevenueCompany().ratingVNA * 100;
-    let ratingBL = TableRevenueCompany().ratingBL * 100;
+export const PieChartCompany = ({ StorageMoney }) => {
+    let ratingVJ = TableRevenueCompany(StorageMoney).ratingVJ * 100;
+    let ratingVNA = TableRevenueCompany(StorageMoney).ratingVNA * 100;
+    let ratingBL = TableRevenueCompany(StorageMoney).ratingBL * 100;
 
     let ratingQH = 100 - ratingBL - ratingVJ - ratingVNA;
     console.log(ratingVJ, ratingQH, ratingBL, ratingVNA);
@@ -101,7 +103,7 @@ export const PieChartCompany = () => {
             </div>
             <div style={{ width: '30%', paddingRight: '5%', paddingTop: '5%' }}>
                 <h5 className="mb-3">Bảng doanh thu theo hãng hàng không</h5>
-                {TableRevenueCompany().render}
+                {TableRevenueCompany(StorageMoney).render}
             </div>
         </div>
     );

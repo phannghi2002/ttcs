@@ -8,9 +8,10 @@ import { useEffect, useState } from 'react';
 import { FormatDate, FormatTime } from '../../../function/FormatDate';
 
 import Button from '@mui/material/Button';
-// import PersonAddAlt1Icon from '@mui/icons-material/PersonAddAlt1';
+import PersonAddAlt1Icon from '@mui/icons-material/PersonAddAlt1';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
+import ConfirmDelete from '../../component/ConfirmDelete';
 
 import {
     DataGrid,
@@ -21,11 +22,15 @@ import {
     GridToolbarDensitySelector,
 } from '@mui/x-data-grid';
 
-// import { AddAdmin, EditAdmin } from './ActionAdmin';
-
-// import { toast } from 'react-toastify';
+import axios from 'axios';
+import { toast } from 'react-toastify';
 import ToastCustom from '../../../Toast';
 import 'react-toastify/dist/ReactToastify.css';
+
+import { AddFlight, EditFlight } from './ActionFlight';
+
+// import { toast } from 'react-toastify';
+
 // import axios from 'axios';
 // import ConfirmDelete from '../../component/ConfirmDelete';
 
@@ -42,7 +47,7 @@ function CustomToolbar() {
     );
 }
 
-const TableFlight = ({ param, title }) => {
+const TableFlight = ({ param, title, onUpdate }) => {
     const [data, setData] = useState([]);
 
     const columns = [
@@ -51,7 +56,7 @@ const TableFlight = ({ param, title }) => {
             headerName: 'Số hiệu máy bay',
             headerClassName: 'custom-header',
             cellClassName: 'custom-cell',
-            flex: 0.2,
+            flex: 0.15,
         },
         {
             field: 'AirportFrom',
@@ -81,7 +86,7 @@ const TableFlight = ({ param, title }) => {
             renderCell: (params) => FormatTime(params.value),
             headerClassName: 'custom-header',
             cellClassName: 'custom-cell',
-            flex: 0.15,
+            flex: 0.12,
         },
         {
             field: 'LandingTime',
@@ -89,23 +94,32 @@ const TableFlight = ({ param, title }) => {
             renderCell: (params) => FormatTime(params.value),
             headerClassName: 'custom-header',
             cellClassName: 'custom-cell',
+            flex: 0.12,
+        },
+        {
+            field: 'DateReturn',
+            headerName: 'Ngày đến',
+            renderCell: (params) => `${FormatDate(params.row.LandingTime)}`,
+            headerClassName: 'custom-header',
+            cellClassName: 'custom-cell',
             flex: 0.15,
         },
-
-        {
+    ];
+    if (param === '/') {
+        columns.push({
             field: 'Action',
             headerName: 'Hành động',
             renderCell: (params) => {
-                if (data.length !== 0) {
+                if (data && data.length !== 0) {
                     return (
                         <div className="action">
                             <Button
                                 variant="outlined"
                                 sx={{ marginRight: '10px' }}
-                                // onClick={() => {
-                                //     handleEdit();
-                                //     setParamdEdit(params.row);
-                                // }}
+                                onClick={() => {
+                                    handleEdit();
+                                    setParamdEdit(params.row);
+                                }}
                             >
                                 <EditIcon />{' '}
                             </Button>
@@ -113,10 +127,10 @@ const TableFlight = ({ param, title }) => {
                             <Button
                                 variant="outlined"
                                 width="30px"
-                                // onClick={() => {
-                                //     handleCloseConfirmDelete();
-                                //     setGetID(params.row._id);
-                                // }}
+                                onClick={() => {
+                                    handleCloseConfirmDelete();
+                                    setGetID(params.row._id);
+                                }}
                             >
                                 <DeleteIcon />
                             </Button>
@@ -128,24 +142,81 @@ const TableFlight = ({ param, title }) => {
             headerClassName: 'custom-header',
             cellClassName: 'custom-cell',
             flex: 0.15,
-        },
-    ];
+        });
+    }
 
-    useEffect(() => {
+    //Handle Delete
+    const [getID, setGetID] = useState('');
+    const [openConfirmDelete, setOpenConfirmDelete] = useState(false);
+    const handleCloseConfirmDelete = (value) => {
+        setOpenConfirmDelete(true);
+        //  console.log(value); // value will be either true or false
+        if (value) {
+            axios
+                .delete(`http://localhost:4000/tickets/${getID}`)
+                .then((res) => {
+                    // setReRender(true);
+                    toast.success('Xóa chuyến bay thành công');
+                    onUpdate();
+                    // window.location.reload();
+                })
+                .catch((err) => {
+                    console.log(err);
+                });
+        }
+    };
+
+    //Handle Add
+    const [openAddFlight, setOpenAddFlight] = useState(false);
+
+    const handleClickOpen = () => {
+        setOpenAddFlight(true);
+    };
+
+    const handleCloseAddFlight = () => {
+        setOpenAddFlight(false);
+    };
+
+    //Handle Edit
+    const [paramsEdit, setParamdEdit] = useState({});
+    const [openEditFlight, setOpenEditFlight] = useState(false);
+
+    const handleEdit = () => {
+        setOpenEditFlight(true);
+    };
+
+    const handleCloseEditFlight = () => {
+        setOpenEditFlight(false);
+    };
+
+    //Fetch Data
+    const fetchUserData = () => {
         fetch(`http://localhost:4000/tickets${param}`)
             .then((res) => res.json())
             .then((res) => {
                 setData(res.data);
             });
-    }, []);
+    };
+    useEffect(() => {
+        fetchUserData();
+    }, [onUpdate, param]);
+
+    // Re-render
+    // const [reRender, setReRender] = useState(false);
+    // if (reRender) {
+    //     fetchUserData();
+    //     setReRender(false);
+    // }
 
     return (
         <>
             <div className="title">
                 <h1 style={{ marginBottom: '30px' }}>{title}</h1>
-                {/* <Button variant="contained" color="success" className="add" onClick={handleClickOpen}>
-                            <PersonAddAlt1Icon sx={{ marginRight: '10px' }} /> Thêm người
-                        </Button> */}
+                {param === '/' && (
+                    <Button variant="contained" color="success" className="add" onClick={handleClickOpen}>
+                        <PersonAddAlt1Icon sx={{ marginRight: '10px' }} /> Thêm chuyến bay
+                    </Button>
+                )}
             </div>
 
             <DataGrid
@@ -172,27 +243,29 @@ const TableFlight = ({ param, title }) => {
                 }}
             />
 
-            {/* <AddAdmin
-                        open={openAddAdmin}
-                        handleClose={handleCloseAddAdmin}
-                        reRender={reRender}
-                        setReRender={setReRender}
-                    /> */}
+            <AddFlight
+                open={openAddFlight}
+                handleClose={handleCloseAddFlight}
+                // reRender={reRender}
+                // setReRender={setReRender}
+                onUpdate={onUpdate}
+            />
 
-            {/* <EditAdmin
-                        row={paramsEdit}
-                        open={openEditAdmin}
-                        setOpen={setOpenEditAdmin}
-                        handleClose={handleCloseEditAdmin}
-                        reRender={reRender}
-                        setReRender={setReRender}
-                    />
-                    <ConfirmDelete
-                        open={openConfirmDelete}
-                        setOpenConfirmDelete={setOpenConfirmDelete}
-                        handleClose={handleCloseConfirmDelete}
-                        handleConfirm={handleCloseConfirmDelete}
-                    /> */}
+            <EditFlight
+                row={paramsEdit}
+                open={openEditFlight}
+                setOpen={setOpenEditFlight}
+                handleClose={handleCloseEditFlight}
+                // reRender={reRender}
+                // setReRender={setReRender}
+                onUpdate={onUpdate}
+            />
+            <ConfirmDelete
+                open={openConfirmDelete}
+                setOpenConfirmDelete={setOpenConfirmDelete}
+                handleClose={handleCloseConfirmDelete}
+                handleConfirm={handleCloseConfirmDelete}
+            />
             <ToastCustom />
         </>
     );
