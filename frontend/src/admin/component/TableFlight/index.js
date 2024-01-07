@@ -29,13 +29,6 @@ import 'react-toastify/dist/ReactToastify.css';
 
 import { AddFlight, EditFlight } from './ActionFlight';
 
-// import { toast } from 'react-toastify';
-
-// import axios from 'axios';
-// import ConfirmDelete from '../../component/ConfirmDelete';
-
-// const cx = classNames.bind(styles);
-
 function CustomToolbar() {
     return (
         <GridToolbarContainer>
@@ -201,15 +194,8 @@ const TableFlight = ({ param, title, onUpdate }) => {
         fetchUserData();
     }, [onUpdate, param]);
 
-    // Re-render
-    // const [reRender, setReRender] = useState(false);
-    // if (reRender) {
-    //     fetchUserData();
-    //     setReRender(false);
-    // }
-
     return (
-        <>
+        <div style={{ marginBottom: '50px' }}>
             <div className="title">
                 <h1 style={{ marginBottom: '30px' }}>{title}</h1>
                 {param === '/' && (
@@ -267,7 +253,7 @@ const TableFlight = ({ param, title, onUpdate }) => {
                 handleConfirm={handleCloseConfirmDelete}
             />
             <ToastCustom />
-        </>
+        </div>
     );
 };
 

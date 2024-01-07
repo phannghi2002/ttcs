@@ -27,6 +27,7 @@ import ToastCustom from '../../../Toast';
 import 'react-toastify/dist/ReactToastify.css';
 import { useEffect } from 'react';
 import dayjs from 'dayjs';
+import FormHelperText from '@mui/material/FormHelperText';
 
 export const AddAdmin = ({ open, handleClose, reRender, setReRender }) => {
     const [data, setData] = useState({
@@ -43,17 +44,62 @@ export const AddAdmin = ({ open, handleClose, reRender, setReRender }) => {
         event.preventDefault();
     };
 
+    const [errors, setErrors] = useState({});
+    const newErrors = { ...errors };
+
     const handleChange = (e) => {
         const value = e.target.value;
         const name = e.target.name;
 
         setData({ ...data, [name]: value });
+
+        if (value.trim() === '') {
+            newErrors[name] = 'Trường này không được bỏ trống';
+        } else {
+            delete newErrors[name];
+        }
+        setErrors(newErrors);
     };
-    const handleChangeDate = (date) => {
-        setData({ ...data, DayOfBirth: date });
+
+    console.log(errors);
+    const handleChangeDate = (name, newValue) => {
+        console.log(newValue);
+        if (newValue === '' || newValue === null) {
+            newErrors[name] = 'Trường này không được bỏ trống';
+        } else {
+            delete newErrors[name];
+        }
+        setErrors(newErrors);
+        return newErrors;
     };
+
+    const validate = () => {
+        if (data.AccountName.trim() === '') {
+            newErrors['AccountName'] = 'Trường này không được bỏ trống';
+        }
+
+        if (data.Name.trim() === '') {
+            newErrors['Name'] = 'Trường này không được bỏ trống';
+        }
+        if (data.Password.trim() === '') {
+            newErrors['Password'] = 'Trường này không được bỏ trống';
+        }
+        if (data.DayOfBirth === null) {
+            newErrors['DayOfBirth'] = 'Trường này không được bỏ trống';
+        }
+
+        setErrors(newErrors);
+    };
+
     const handleAdd = () => {
         console.log(data);
+
+        validate();
+
+        if (Object.keys(newErrors).length > 0) {
+            setErrors(newErrors);
+            return;
+        }
         if (data) {
             axios
                 .post('http://localhost:4000/login/addAmin', {
@@ -75,8 +121,11 @@ export const AddAdmin = ({ open, handleClose, reRender, setReRender }) => {
                     setReRender(true);
                     toast.success('Thêm Admin thành công');
                 })
-                .catch((err) => {
-                    console.log(err);
+                .catch((res) => {
+                    console.log(res);
+                    console.log(res.response.data.message);
+
+                    toast.error(`${Object.keys(res.response.data.message.keyPattern)[0]} đã tồn tại`);
                 });
         }
     };
@@ -100,6 +149,12 @@ export const AddAdmin = ({ open, handleClose, reRender, setReRender }) => {
                             fullWidth
                             value={data.AccountName}
                             onChange={handleChange}
+                            helperText={errors['AccountName'] || ''}
+                            sx={{
+                                '& .MuiFormHelperText-root': {
+                                    color: errors['AccountName'] ? 'red' : 'inherit',
+                                },
+                            }}
                         />
                         <FormControl variant="outlined" margin="normal" fullWidth>
                             <InputLabel htmlFor="outlined-adornment-password">Password</InputLabel>
@@ -121,7 +176,14 @@ export const AddAdmin = ({ open, handleClose, reRender, setReRender }) => {
                                     </InputAdornment>
                                 }
                                 label="Password"
+                                // helperText={errors['Password'] || ''}
+                                // sx={{
+                                //     '& .MuiFormHelperText-root': {
+                                //         color: 'red',
+                                //     },
+                                // }}
                             />
+                            <FormHelperText sx={{ color: 'red' }}>{errors['Password'] || ''}</FormHelperText>
                         </FormControl>
                         <TextField
                             name="Name"
@@ -131,6 +193,12 @@ export const AddAdmin = ({ open, handleClose, reRender, setReRender }) => {
                             fullWidth
                             value={data.Name}
                             onChange={handleChange}
+                            helperText={errors['Name'] || ''}
+                            sx={{
+                                '& .MuiFormHelperText-root': {
+                                    color: errors['Name'] ? 'red' : 'inherit',
+                                },
+                            }}
                         />
                         <div className="date">
                             <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -140,7 +208,22 @@ export const AddAdmin = ({ open, handleClose, reRender, setReRender }) => {
                                         format="DD/MM/YYYY"
                                         name="DayOfBirth"
                                         value={data.DayOfBirth}
-                                        onChange={(date) => handleChangeDate(date)}
+                                        maxDate={dayjs()}
+                                        // onChange={(date) => handleChangeDate(date)}
+                                        onChange={(newValue) => {
+                                            setData({ ...data, DayOfBirth: newValue });
+                                            handleChangeDate('DayOfBirth', newValue);
+                                        }}
+                                        slotProps={{
+                                            textField: {
+                                                helperText: errors['DayOfBirth'] || '',
+                                            },
+                                        }}
+                                        sx={{
+                                            '& .MuiFormHelperText-root': {
+                                                color: errors['DayOfBirth'] ? 'red' : 'inherit',
+                                            },
+                                        }}
                                     />
                                 </DemoContainer>
                             </LocalizationProvider>
@@ -170,20 +253,46 @@ export const EditAdmin = ({ row, open, setOpen, handleClose, reRender, setReRend
         event.preventDefault();
     };
 
+    const [errors, setErrors] = useState({});
+    const newErrors = { ...errors };
+
     const handleChange = (e) => {
         const value = e.target.value;
         const name = e.target.name;
 
         setData({ ...data, [name]: value });
+        if (value.trim() === '') {
+            newErrors[name] = 'Trường này không được bỏ trống';
+        } else {
+            delete newErrors[name];
+        }
+        setErrors(newErrors);
     };
     const handleChangeDate = (date) => {
-        // setData({ ...data, DayOfBirth: date.DayOfBirth });
-        // setData({ ...data, DayOfBirth: date.toISOString() });
         const formattedDate = dayjs(date).format('YYYY-MM-DDTHH:mm:ss.SSSZ');
         console.log(formattedDate);
         setData({ ...data, DayOfBirth: formattedDate });
     };
+    const validate = () => {
+        if (data.AccountName.trim() === '') {
+            newErrors['AccountName'] = 'Trường này không được bỏ trống';
+        }
+        if (data.Name.trim() === '') {
+            newErrors['Name'] = 'Trường này không được bỏ trống';
+        }
+        if (data.Password.trim() === '') {
+            newErrors['Password'] = 'Trường này không được bỏ trống';
+        }
+
+        setErrors(newErrors);
+    };
     const handleEdit = () => {
+        validate();
+
+        if (Object.keys(newErrors).length > 0) {
+            setErrors(newErrors);
+            return;
+        }
         if (data) {
             axios
                 .put(`http://localhost:4000/login/${row._id}`, {
@@ -199,8 +308,9 @@ export const EditAdmin = ({ row, open, setOpen, handleClose, reRender, setReRend
                     toast.success('Cập nhật Admin thành công');
                     setOpen(false);
                 })
-                .catch((err) => {
-                    console.log(err);
+                .catch((res) => {
+                    console.log(res);
+                    toast.error(`${Object.keys(res.response.data.message.keyPattern)[0]} đã tồn tại`);
                 });
         }
         console.log('hello babay');
@@ -238,6 +348,12 @@ export const EditAdmin = ({ row, open, setOpen, handleClose, reRender, setReRend
                             fullWidth
                             value={data.AccountName}
                             onChange={handleChange}
+                            helperText={errors['AccountName'] || ''}
+                            sx={{
+                                '& .MuiFormHelperText-root': {
+                                    color: errors['AccountName'] ? 'red' : 'inherit',
+                                },
+                            }}
                         />
                         <FormControl variant="outlined" margin="normal" fullWidth>
                             <InputLabel htmlFor="outlined-adornment-password">Password</InputLabel>
@@ -260,6 +376,7 @@ export const EditAdmin = ({ row, open, setOpen, handleClose, reRender, setReRend
                                 }
                                 label="Password"
                             />
+                            <FormHelperText sx={{ color: 'red' }}>{errors['Password'] || ''}</FormHelperText>
                         </FormControl>
                         <TextField
                             name="Name"
@@ -269,6 +386,12 @@ export const EditAdmin = ({ row, open, setOpen, handleClose, reRender, setReRend
                             fullWidth
                             value={data.Name}
                             onChange={handleChange}
+                            helperText={errors['Name'] || ''}
+                            sx={{
+                                '& .MuiFormHelperText-root': {
+                                    color: errors['Name'] ? 'red' : 'inherit',
+                                },
+                            }}
                         />
                         <div className="date">
                             <LocalizationProvider dateAdapter={AdapterDayjs}>
