@@ -14,7 +14,6 @@ export const createTicket = async (req, res) => {
             data: saveTicket,
         });
     } catch (error) {
-        console.log('tim ra loi', error);
         res.status(500).json({
             success: false,
             message: error,
@@ -43,7 +42,7 @@ export const updateTicket = async (req, res) => {
     } catch (error) {
         res.status(500).json({
             success: false,
-            message: 'Failed to update. Try again ',
+            message: error,
         });
     }
 };

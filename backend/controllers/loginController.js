@@ -33,7 +33,10 @@ export const addAdmin = async (req, res) => {
         await newAdmin.save();
         res.status(200).json({ success: true, message: 'Success created' });
     } catch (error) {
-        res.status(500).json({ success: false, message: 'Failed to create. Try again' + error });
+        res.status(500).json({
+            success: false,
+            message: error,
+        });
     }
 };
 
@@ -73,7 +76,7 @@ export const updateAdmin = async (req, res) => {
     } catch (error) {
         res.status(500).json({
             success: false,
-            message: 'Failed to update. Try again ',
+            message: error,
         });
     }
 };
