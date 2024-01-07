@@ -55,7 +55,6 @@ function Paying() {
     const [name, setName] = useState('');
     const [isNumberCard, setIsNumberCard] = useState(false);
     const [user, setUser] = useState([]);
-    const [emailData, setEmailData] = useState([]);
 
     let storedInforFlightReturn, storedInforSeatReturn;
 
@@ -321,25 +320,22 @@ function Paying() {
     // const email = "minh10a1quangtrung@gmail.com";
     // const code = "AJHHF";
     const handleSendEmail = async (e) => {
-        axios
+        await axios
             .get(`http://localhost:4000/ticketDetail/${data00.CodeTicket}`)
             .then((response) => {
-                console.log(response);
-                setEmailData(response.data.data);
+                fetch('http://localhost:4000/sendEmail/all', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        email: data00.Email,
+                        code: data00.CodeTicket,
+                        data: response.data.data,
+                    }),
+                });
             })
             .catch((err) => console.log(err));
-        const res = await fetch('http://localhost:4000/sendEmail', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                email: data00.Email,
-                code: data00.CodeTicket,
-                data: emailData,
-            }),
-        });
-        console.log(res);
     };
     const planeCode = storedInforFlight.item.AirlineCode;
 

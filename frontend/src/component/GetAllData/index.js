@@ -17,14 +17,14 @@ function GetAllData({ data, className }) {
     const [user, setUser] = useState([]);
 
     useEffect(() => {
-        axios
-            .get(`http://localhost:4000/ticketDetail/${data.CodeTicket}`)
-            .then((response) => {
+        const fetchData = async () => {
+            await axios.get(`http://localhost:4000/ticketDetail/${data.CodeTicket}`).then((response) => {
                 setUser(response.data.data);
-            })
-            .catch((error) => {
-                console.log(error);
             });
+        };
+        fetchData().catch((error) => {
+            console.log(error);
+        });
     }, []);
 
     const convertDate = (date) => {
