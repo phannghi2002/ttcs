@@ -11,6 +11,7 @@ import {
     getAllInfoBookedOneway,
     getAllInfoBookedRoundtrip,
     getInfoBookedCompany,
+    getInfoBookedMonthNow,
 } from './../controllers/infoBookedController.js';
 
 const router = express.Router();
@@ -38,6 +39,9 @@ router.get('/search/getAllInfoBookedRoundtrip', getAllInfoBookedRoundtrip);
 
 //get all ticket by search
 router.get('/search/getInfoBookedBySearch', getInfoBookedBySearch);
+
+//get all ticket month now
+router.get('/search/getInfoBookedMonthNow', getInfoBookedMonthNow);
 
 //get all ticket oneway month now
 router.get('/search/getInfoBookedOnewayMonthNow', getInfoBookedMonthOnewayNow);

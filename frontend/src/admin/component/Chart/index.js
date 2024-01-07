@@ -1,6 +1,8 @@
 import React from 'react';
 import { Chart } from 'react-google-charts';
-import TotalMoney, { TableRevenueTypeFlight, TableRevenueCompany } from '../../pages/Revenue/TotalMoney';
+
+import { TableRevenueTypeFlight, TableRevenueCompany } from '../../pages/Revenue/TotalMoney';
+import TotalMoneyPerDay from '../TotalMoneyPerDay';
 
 const getCurrentMonthAndYear = (date) => {
     const currentDate = new Date();
@@ -64,7 +66,7 @@ export const PieChartCompany = ({ StorageMoney }) => {
     let ratingBL = TableRevenueCompany(StorageMoney).ratingBL * 100;
 
     let ratingQH = 100 - ratingBL - ratingVJ - ratingVNA;
-    console.log(ratingVJ, ratingQH, ratingBL, ratingVNA);
+    // console.log(ratingVJ, ratingQH, ratingBL, ratingVNA);
     const dataCompany = [
         ['Company', 'Percent'],
         ['Vietnam Airlines', ratingVNA],
@@ -107,4 +109,35 @@ export const PieChartCompany = ({ StorageMoney }) => {
             </div>
         </div>
     );
+};
+
+export const LineChart = () => {
+    const moneyPerDay = TotalMoneyPerDay();
+
+    const length = Object.keys(moneyPerDay).length;
+
+    const data = [['Ngày', 'Doanh thu']];
+    for (let day = 1; day <= length; day++) {
+        const ngay = `${day}/1`;
+        const doanhThu = moneyPerDay[ngay] || 0;
+        data.push([ngay, doanhThu]);
+    }
+
+    const options = {
+        chart: {
+            title: 'Biểu đồ so sánh lợi nhuận mỗi ngày trong tháng 01/2024',
+            subtitle: 'Được tính theo triệu đồng (VNĐ)',
+            titleTextStyle: {
+                color: 'yellow', // Set custom title color (e.g., red)
+                fontSize: '1rem', // Set custom title font size (e.g., 20px)
+            },
+            subtitleTextStyle: {
+                color: 'green', // Set custom subtitle color (e.g., green)
+                fontSize: 16, // Set custom subtitle font size (e.g., 16px)
+            },
+        },
+        // colors: ['blue'], // Set custom color (e.g., blue)
+    };
+
+    return <Chart chartType="Line" width="100%" height="400px" data={data} options={options} />;
 };

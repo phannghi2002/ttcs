@@ -231,6 +231,33 @@ const getMonth = () => {
         currentMonthEnd: currentMonthEnd,
     };
 };
+
+export const getInfoBookedMonthNow = async (req, res) => {
+    const LandingTime = new Date(req.query.LandingTime);
+
+    const currentMonthStart = getMonth().currentMonthStart;
+    const currentMonthEnd = getMonth().currentMonthEnd;
+
+    try {
+        const InfoBookeds = await InfoBooked.find({
+            LandingTime: { $gte: currentMonthStart, $lt: currentMonthEnd },
+        });
+
+        // console.log(InfoBookeds);
+
+        res.status(200).json({
+            success: true,
+            message: 'Successfully found search',
+            count: InfoBookeds.length,
+            data: InfoBookeds,
+        });
+    } catch (error) {
+        res.status(404).json({
+            success: false,
+            message: 'Not found ',
+        });
+    }
+};
 export const getInfoBookedMonthOnewayNow = async (req, res) => {
     const LandingTime = new Date(req.query.LandingTime);
     const TypeFlight = new RegExp(req.query.TypeFlight, 'i');
