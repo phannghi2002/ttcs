@@ -10,21 +10,28 @@ import QH from '../../asset/images/bambo.jpg';
 import BL from '../../asset/images/Pacific_Airline.png';
 import HandlePlace from '../HandlePlace';
 import axios from 'axios';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 const cx = classNames.bind(styles);
 function GetAllData({ data, className }) {
     const [user, setUser] = useState([]);
 
     useEffect(() => {
-        const fetchData = async () => {
-            await axios.get(`http://localhost:4000/ticketDetail/${data.CodeTicket}`).then((response) => {
-                setUser(response.data.data);
+        const timePaying = setTimeout(() => {
+            console.log('ban api');
+            const fetchData = async () => {
+                await axios.get(`http://localhost:4000/ticketDetail/${data.CodeTicket}`).then((response) => {
+                    setUser(response.data.data);
+                });
+            };
+            fetchData().catch((error) => {
+                console.log(error);
             });
-        };
-        fetchData().catch((error) => {
-            console.log(error);
-        });
+        }, 2000);
+
+        setTimeout(() => {
+            clearTimeout(timePaying);
+        }, 6000);
     }, []);
 
     const convertDate = (date) => {

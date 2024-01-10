@@ -286,6 +286,7 @@ function Paying() {
                     Email: user[i].Email,
                     TypeTicketReturn: data00.TypeTicketReturn,
                     FlightNumberReturn: data00.FlightNumberReturn,
+                    FlightTimeReturn: data00.FlightTimeReturn,
                     LandingTimeReturn: data00.LandingTimeReturn,
                     CodeSeatReturn: CodeSeatReturnSingle[i],
                     DateReturn: data00.DateReturn,
@@ -301,7 +302,6 @@ function Paying() {
                 setShow(true);
 
                 sendInfoData();
-                handleSendEmail();
 
                 pushSeat(storedInforFlight.item._id);
 
@@ -311,6 +311,9 @@ function Paying() {
                 handlePustTicketDetail(e);
 
                 toast.success('Thanh toán thành công!');
+                setTimeout(() => {
+                    handleSendEmail();
+                }, 2000);
             }
         } else {
             handleInputNumberCard(e);
@@ -332,6 +335,7 @@ function Paying() {
                         email: data00.Email,
                         code: data00.CodeTicket,
                         data: response.data.data,
+                        type: data00.TypeFlight,
                     }),
                 });
             })
@@ -386,77 +390,79 @@ function Paying() {
             <Header />
 
             <div className={cx('contain_pay')}>
-                <div className={cx('wrapper')}>
-                    <div className={cx('container')}>
-                        <div className={cx('header')}>
-                            <img className={cx('logo-img')} alt="logo" src="https://res.flynow.vn/logoflynow.png" />
-                        </div>
-                        <div className={cx('content')}>
-                            <div className={cx('information')}>
-                                <div className={cx('supplier')}>
-                                    <div className={cx('title')}>
-                                        <FontAwesomeIcon className={cx('title-icon')} icon={faHouse} />
-                                        <span>Nhà cung cấp </span>
-                                    </div>
-                                    <span id="plant" className={cx('information-line')}>
-                                        {plant}
-                                    </span>
-                                </div>
-                                <div className={cx('supplier')}>
-                                    <div className={cx('title')}>
-                                        <FontAwesomeIcon className={cx('title-icon')} icon={faMoneyBill} />
-                                        <span> Số tiền </span>
-                                    </div>
-                                    <span className={cx('information-line')}>{data00.TotalMoney} VND</span>
-                                </div>
+                {!show && (
+                    <div className={cx('wrapper')}>
+                        <div className={cx('container')}>
+                            <div className={cx('header')}>
+                                <img className={cx('logo-img')} alt="logo" src="https://res.flynow.vn/logoflynow.png" />
                             </div>
-                            <div className={cx('bank-card')}>
-                                <span className={cx('card-title')}>Chi tiết thẻ</span>
-                                <input
-                                    id="card-number"
-                                    className={cx('input-text')}
-                                    value={numberCard}
-                                    type="text"
-                                    placeholder="Số thẻ"
-                                    onChange={handleInputNumberCard}
-                                />
-                                <span id="ip-1" className={cx('title-input')}>
-                                    Không được bỏ trống trường này
-                                </span>
-                                <input
-                                    id="date"
-                                    className={cx('input-text')}
-                                    autoComplete="off"
-                                    maxLength="7"
-                                    value={expirationDate}
-                                    inputMode="numeric"
-                                    type="tel"
-                                    placeholder="Ngày hết hạn"
-                                />
-                                <span id="ip-2" className={cx('title-input')}>
-                                    Phải nhập ngày tháng (VD: 01/01)
-                                </span>
-                                <input
-                                    id="name"
-                                    className={cx('input-text')}
-                                    value={name}
-                                    placeholder="Họ tên chủ thẻ"
-                                />
-                                <span id="ip-3" className={cx('title-input')}>
-                                    Không được bỏ trống
-                                </span>
-                                <div className={cx('submit-btn')}>
-                                    <Link to="/seatBook" className={cx('btn', 'return-btn')}>
-                                        <span>Trở lại</span>
-                                    </Link>
-                                    <button className={cx('btn', 'next-btn')} onClick={handlePay}>
-                                        Thanh toán
-                                    </button>
+                            <div className={cx('content')}>
+                                <div className={cx('information')}>
+                                    <div className={cx('supplier')}>
+                                        <div className={cx('title')}>
+                                            <FontAwesomeIcon className={cx('title-icon')} icon={faHouse} />
+                                            <span>Nhà cung cấp </span>
+                                        </div>
+                                        <span id="plant" className={cx('information-line')}>
+                                            {plant}
+                                        </span>
+                                    </div>
+                                    <div className={cx('supplier')}>
+                                        <div className={cx('title')}>
+                                            <FontAwesomeIcon className={cx('title-icon')} icon={faMoneyBill} />
+                                            <span> Số tiền </span>
+                                        </div>
+                                        <span className={cx('information-line')}>{data00.TotalMoney} VND</span>
+                                    </div>
+                                </div>
+                                <div className={cx('bank-card')}>
+                                    <span className={cx('card-title')}>Chi tiết thẻ</span>
+                                    <input
+                                        id="card-number"
+                                        className={cx('input-text')}
+                                        value={numberCard}
+                                        type="text"
+                                        placeholder="Số thẻ"
+                                        onChange={handleInputNumberCard}
+                                    />
+                                    <span id="ip-1" className={cx('title-input')}>
+                                        Không được bỏ trống trường này
+                                    </span>
+                                    <input
+                                        id="date"
+                                        className={cx('input-text')}
+                                        autoComplete="off"
+                                        maxLength="7"
+                                        value={expirationDate}
+                                        inputMode="numeric"
+                                        type="tel"
+                                        placeholder="Ngày hết hạn"
+                                    />
+                                    <span id="ip-2" className={cx('title-input')}>
+                                        Phải nhập ngày tháng (VD: 01/01)
+                                    </span>
+                                    <input
+                                        id="name"
+                                        className={cx('input-text')}
+                                        value={name}
+                                        placeholder="Họ tên chủ thẻ"
+                                    />
+                                    <span id="ip-3" className={cx('title-input')}>
+                                        Không được bỏ trống
+                                    </span>
+                                    <div className={cx('submit-btn')}>
+                                        <Link to="/seatBook" className={cx('btn', 'return-btn')}>
+                                            <span>Trở lại</span>
+                                        </Link>
+                                        <button className={cx('btn', 'next-btn')} onClick={handlePay}>
+                                            Thanh toán
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
+                )}
 
                 {show && (
                     // <div className={cx('animation')}>

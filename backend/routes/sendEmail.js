@@ -42,7 +42,7 @@ router.post('/', (req, res) => {
 });
 
 router.post('/all', (req, res) => {
-    const { email, code, data } = req.body;
+    const { email, code, data, type } = req.body;
     try {
         const transporter = NodeMailer.createTransport({
             service: 'gmail',
@@ -105,20 +105,25 @@ router.post('/all', (req, res) => {
             return timeNew;
         };
 
+        const handleGetEmail = () => {
+            let emailSend = '';
+            for (let i = 0; i < data.length; i++) {
+                if (data[i].Email !== '') {
+                    emailSend = data[i].Email;
+                    break;
+                }
+            }
+            return emailSend;
+        };
+
         const handleSendmail = () => {
             let html = '';
-            console.log(data.length);
-            for (let index = 0; index < data.length; index++) {
-                html =
-                    html +
-                    `<div style="width: 600px">
-            <div
-              style="
-                display: flex;
-                align-items: center;
-                justify-content: space-between;
-              "
-            >
+            if (type === 'Oneway') {
+                for (let index = 0; index < data.length; index++) {
+                    html =
+                        html +
+                        `<div style="width: 600px">
+            <div>
               <h3 style="margin: 0; padding: 5px 0px">
               NGÀY ${getDay(data[index].DateGo)} đến NGÀY ${getDay(data[index].DateGo)} </h3>
               <h3 style="margin: 0; padding: 5px 0px">
@@ -200,6 +205,205 @@ router.post('/all', (req, res) => {
           </table>
           <div style="width: 100%; height: 2px; background-color: #000; margin: 10px 0px;"></div>
       </div>`;
+                }
+            } else {
+                for (let index = 0; index < data.length; index++) {
+                    html =
+                        html +
+                        `<div style="width: 600px">
+                        <div>
+                          <h3 style="margin: 0; padding: 5px 0px">
+                            Chuyến đi khứ hồi giữa ${handleLocation(data[index].AirportFrom)} và
+                            ${handleLocation(data[index].AirportTo)}
+                          </h3>
+                        </div>
+                  
+                        <div style="width: 100%; height: 2px; background-color: #000"></div>
+                        <div style="margin-top: 5px">
+                          <span style="font-size: 14px">ĐÃ CHUẨN BỊ CHO</span>
+                          <h3 style="margin: 0; padding: 5px 0px">
+                            Ông (Bà) ${data[index].UserName}
+                            <span style="text-transform: uppercase"></span>
+                          </h3>
+                        </div>
+                        <div style="font-size: 14px; margin-top: 10px">
+                          MÃ ĐẶT CHỖ: <span>${code}</span>
+                        </div>
+                        <div style="width: 100%; height: 2px; background-color: #000"></div>
+                        <div style="margin-top: 5px; font-weight: bold">Chuyến đi</div>
+                        <div
+                          style="
+                            margin: 0;
+                            padding: 5px 0px;
+                            text-transform: uppercase;
+                            font-weight: bold;
+                          "
+                        >
+                          NGÀY ${getDay(data[index].DateGo)}
+                        </div>
+                        <table
+                          border="1"
+                          style="
+                            border-collapse: collapse;
+                            margin-top: 10px;
+                            border: 1px solid #000;
+                            width: 100%;
+                          "
+                        >
+                          <tr>
+                            <td rowspan="2" style="background-color: #ccc; padding: 5px">
+                              <div>${handleAirline(data[index].FlightNumber)}</div>
+                              <div>${data[index].FlightNumber}</div>
+                            </td>
+                            <td colspan="2" style="padding: 5px">
+                              <div style="text-align: center">
+                                ${data[index].AirportFrom}(${handleLocation(data[index].AirportFrom)})
+                                <i
+                                  style="
+                                    margin: auto;
+                                    text-align: center;
+                                    -webkit-transform: rotate(-45deg);
+                                    border: solid black;
+                                    border-width: 0 3px 3px 0;
+                                    display: inline-block;
+                                    padding: 3px;
+                                    transform: rotate(-45deg);
+                                  "
+                                ></i>
+                                ${data[index].AirportTo}
+                                (${handleLocation(data[index].AirportTo)})
+                              </div>
+                            </td>
+                          </tr>
+                          <tr style="padding: 5px">
+                            <td style="width: 50%; text-align: center">
+                              <span style="display: block; font-size: 14px"> Giờ khởi hành </span>
+                              <span>${getTime(data[index].FlightTime)}</span>
+                            </td>
+                            <td style="width: 50%; text-align: center">
+                              <span style="display: block; font-size: 14px"> Giờ đến </span>
+                              <span>${getTime(data[index].LandingTime)}</span>
+                            </td>
+                          </tr>
+                        </table>
+                        <table
+                          border="1"
+                          style="
+                            border-collapse: collapse;
+                            border: 1px solid #000;
+                            margin-top: 10px;
+                            width: 100%;
+                          "
+                        >
+                          <tr style="text-align: left">
+                            <th>Tên khách hàng</th>
+                            <th>Ghế</th>
+                            <th>Hạng</th>
+                            <th>Tình trạng chỗ</th>
+                          </tr>
+                          <tr style="text-align: left">
+                            <td>${data[index].UserName}</td>
+                            <td>${data[index].CodeSeat}</td>
+                            <td>${data[index].TypeTicket}</td>
+                            <td>Đã xác nhận</td>
+                          </tr>
+                        </table>
+                        <div
+                          style="
+                            width: 100%;
+                            height: 2px;
+                            background-color: #000;
+                            margin: 10px 0px;
+                          "
+                        ></div>
+                        <div style="font-weight: bold">Chuyến về</div>
+                        <div
+                          style="
+                            margin: 0;
+                            padding: 5px 0px;
+                            text-transform: uppercase;
+                            font-weight: bold;
+                          "
+                        >
+                          NGÀY ${getDay(data[index].DateReturn)}
+                        </div>
+                        <table
+                          border="1"
+                          style="
+                            border-collapse: collapse;
+                            margin-top: 10px;
+                            border: 1px solid #000;
+                            width: 100%;
+                          "
+                        >
+                          <tr>
+                            <td rowspan="2" style="background-color: #ccc; padding: 5px">
+                              <div>${handleAirline(data[index].FlightNumberReturn)}</div>
+                              <div>${data[index].FlightNumberReturn}</div>
+                            </td>
+                            <td colspan="2" style="padding: 5px">
+                              <div style="text-align: center">
+                                ${data[index].AirportTo}(${handleLocation(data[index].AirportTo)})
+                                <i
+                                  style="
+                                    margin: auto;
+                                    text-align: center;
+                                    -webkit-transform: rotate(-45deg);
+                                    border: solid black;
+                                    border-width: 0 3px 3px 0;
+                                    display: inline-block;
+                                    padding: 3px;
+                                    transform: rotate(-45deg);
+                                  "
+                                ></i>
+                                ${data[index].AirportFrom}
+                                (${handleLocation(data[index].AirportFrom)})
+                              </div>
+                            </td>
+                          </tr>
+                          <tr style="padding: 5px">
+                            <td style="width: 50%; text-align: center">
+                              <span style="display: block; font-size: 14px"> Giờ khởi hành </span>
+                              <span>${getTime(data[index].FlightTimeReturn)}</span>
+                            </td>
+                            <td style="width: 50%; text-align: center">
+                              <span style="display: block; font-size: 14px"> Giờ đến </span>
+                              <span>${getTime(data[index].LandingTimeReturn)}</span>
+                            </td>
+                          </tr>
+                        </table>
+                        <table
+                          border="1"
+                          style="
+                            border-collapse: collapse;
+                            border: 1px solid #000;
+                            margin-top: 10px;
+                            width: 100%;
+                          "
+                        >
+                          <tr style="text-align: left">
+                            <th>Tên khách hàng</th>
+                            <th>Ghế</th>
+                            <th>Hạng</th>
+                            <th>Tình trạng chỗ</th>
+                          </tr>
+                          <tr style="text-align: left">
+                            <td>${data[index].UserName}</td>
+                            <td>${data[index].CodeSeatReturn}</td>
+                            <td>${data[index].TypeTicketReturn}</td>
+                            <td>Đã xác nhận</td>
+                          </tr>
+                        </table>
+                        <div
+                          style="
+                            width: 100%;
+                            height: 2px;
+                            background-color: #000;
+                            margin: 10px 0px;
+                          "
+                        ></div>
+                      </div>`;
+                }
             }
             return html;
         };
@@ -208,7 +412,7 @@ router.post('/all', (req, res) => {
 
         const mailOptions = {
             from: process.env.EMAIL,
-            to: email,
+            to: handleGetEmail(),
             subject: 'Sending Email With ReactJS and NodeJS',
             html: handleSendmail(),
         };
