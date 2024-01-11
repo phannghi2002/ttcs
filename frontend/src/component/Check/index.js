@@ -1,5 +1,5 @@
 /* eslint-disable no-useless-escape */
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import axios from 'axios';
 import styles from './Check.module.scss';
 import classNames from 'classnames/bind';
@@ -22,10 +22,14 @@ function Check() {
     let isDateBaby = false;
 
     const storedQuantity = JSON.parse(localStorage.getItem('Quantity'));
+    const storedInforFlight = JSON.parse(localStorage.getItem('inforFlight'));
+    const storedInforFlightReturn = JSON.parse(localStorage.getItem('inforFlightReturn'));
+    const storedTypeTrip = JSON.parse(localStorage.getItem('TypeTrip'));
 
     const [adults, setAdults] = useState(Number(storedQuantity.adults));
     const [children, setChildren] = useState(Number(storedQuantity.children));
     const [baby, setBaby] = useState(Number(storedQuantity.baby));
+    const [dataCCCD, setDataCCCD] = useState([]);
     let total = adults + children + baby;
 
     const [data, setData] = useState({
@@ -67,6 +71,23 @@ function Check() {
         handleCheckAdress();
         handleCheckPhone();
     };
+
+    useEffect(() => {
+        if (storedTypeTrip === 'Roundtrip') {
+            axios
+                .get(
+                    `http://localhost:4000/ticketDetail/flightNumberRoundTrip/${storedInforFlight.item.FlightNumber}?return=${storedInforFlightReturn.item.FlightNumber}`,
+                )
+                .then((res) => setDataCCCD(res.data.data))
+                .catch((err) => console.log(err));
+        } else {
+            axios
+                .get(`http://localhost:4000/ticketDetail/flightNumber/${storedInforFlight.item.FlightNumber}`)
+                .then((res) => setDataCCCD(res.data.data))
+                .catch((err) => console.log(err));
+        }
+    }, []);
+
     const handleCheckName = () => {
         const errorUsename = document.querySelector('#check-1');
         if (data.Username.trim() === '') {
@@ -211,8 +232,19 @@ function Check() {
             errorCMND.style.color = 'red';
             isCCCD = false;
         } else if (data.ID_Card.trim().length === 12 && !isNumberCCCD) {
-            errorCMND.style.color = 'transparent';
-            isCCCD = true;
+            for (let i = 0; i < dataCCCD.length; i++) {
+                console.log('check1');
+                if (dataCCCD[i].ID_Card === data.ID_Card) {
+                    console.log('Checking');
+                    errorCMND.innerText = 'Số CCCD đã tồn tại trên chuyến bay';
+                    errorCMND.style.color = 'red';
+                    isCCCD = false;
+                    break;
+                } else {
+                    errorCMND.style.color = 'transparent';
+                    isCCCD = true;
+                }
+            }
         } else {
             errorCMND.innerText = 'Số CCCD không hơp lệ';
             errorCMND.style.color = 'red';

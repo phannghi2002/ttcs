@@ -197,8 +197,13 @@ function InforFlight({ item, name, select }) {
     const value3 = Number(storedQuantity.baby);
     const moneyBaby = moneyAdult / 2;
     const moneyChildren = moneyAdult * 0.75;
-    console.log(moneyChildren);
     const [total, setTotal] = useState(moneyAdult);
+    const [emptySeat, setEmptySeat] = useState();
+    const totalPeople = value1 + value2 + value3;
+
+    useEffect(() => {
+        setEmptySeat(12 - item.EconomyClass.CodeSeat.length);
+    }, []);
 
     //change value total when click add or subtract quantity
     useEffect(() => {
@@ -259,14 +264,18 @@ function InforFlight({ item, name, select }) {
     useEffect(() => {
         if (selectedValue === 'EconomyClass') {
             setMoneyAdult(item.EconomyClass.PriceAdult);
+            setEmptySeat(12 - item.EconomyClass.CodeSeat.length);
         } else if (selectedValue === 'BusinessClass') {
             setMoneyAdult(item.BusinessClass.PriceAdult);
+            setEmptySeat(12 - item.BusinessClass.CodeSeat.length);
             // console.log(convertTime(item.FlightTime));
         } else if (selectedValue === 'FirstClass') {
             setMoneyAdult(item.FirstClass.PriceAdult);
+            setEmptySeat(12 - item.FirstClass.CodeSeat.length);
             // console.log(convertTime(item.FlightTime));
         } else {
             setMoneyAdult(item.PremiumClass.PriceAdult);
+            setEmptySeat(12 - item.PremiumClass.CodeSeat.length);
             // console.log(convertTime(item.FlightTime));
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -327,14 +336,17 @@ function InforFlight({ item, name, select }) {
                 </span>
 
                 {!select && (
-                    <span className="ms-3">
+                    <span className="ms-3, btn-select">
                         {/* {navigate("/searchFlightRoundtrip")} */}
                         {/* if not use Link then can use ("/searchFlightRoundtrip/check") */}
-                        <Link to="check">
-                            <Button className="select" onClick={handleSelect}>
-                                Chọn <FontAwesomeIcon icon={faArrowRight} />
-                            </Button>
-                        </Link>
+                        <span className="title-seat">Ghế trống: {emptySeat} </span>
+                        {totalPeople <= emptySeat && (
+                            <Link to="check">
+                                <Button className="select" onClick={handleSelect}>
+                                    Chọn <FontAwesomeIcon icon={faArrowRight} />
+                                </Button>
+                            </Link>
+                        )}
                     </span>
                 )}
             </div>

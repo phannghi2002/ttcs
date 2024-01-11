@@ -85,6 +85,56 @@ export const getTicketDetailByCodeTicket = async (req, res) => {
     }
 };
 
+export const getTicketDetailByFlightNumber = async (req, res) => {
+    const id = req.params.id;
+    try {
+        const ticketDetailSearch = await ticketDetail.find({ FlightNumber: id }, { ID_Card: 1 });
+
+        res.status(200).json({
+            success: true,
+            message: 'Successfully',
+            data: ticketDetailSearch,
+        });
+    } catch (error) {
+        console.log(error);
+        res.status(404).json({
+            success: false,
+            message: 'Not found ',
+        });
+    }
+};
+
+export const getTicketDetailByFlightNumberRoundTrip = async (req, res) => {
+    const id = req.params.id;
+    const returnFlight = req.query.roundTrip;
+    try {
+        const ticketDetailSearch = await ticketDetail.find(
+            {
+                $or: [
+                    { FlightNumber: id },
+                    { FlightNumber: returnFlight },
+                    { FlightNumberReturn: id, TypeFlight: 'Roundtrip' },
+                    { FlightNumberReturn: returnFlight, TypeFlight: 'Roundtrip' },
+                ],
+            },
+            { ID_Card: 1 },
+        );
+
+        console.log(req.query);
+        res.status(200).json({
+            success: true,
+            message: 'Successfully',
+            data: ticketDetailSearch,
+        });
+    } catch (error) {
+        console.log(error);
+        res.status(404).json({
+            success: false,
+            message: 'Not found ',
+        });
+    }
+};
+
 //getAll ticket
 
 export const getAllticketDetail = async (req, res) => {

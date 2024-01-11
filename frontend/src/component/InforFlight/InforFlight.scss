@@ -84,3 +84,16 @@ input[type='number'] {
 .select {
     background-color: #05203c;
 }
+
+.btn-select {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    margin-left: 15px;
+}
+
+.title-seat {
+    font-size: 16px;
+    font-weight: bold;
+}

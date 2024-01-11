@@ -223,12 +223,20 @@ function InforFlightRoundTrip({ item, name, handleConvert, handleSwitchPage, swi
     const moneyBaby = moneyAdult / 2;
     const moneyChildren = moneyAdult * 0.75;
     const [total, setTotal] = useState(moneyAdult);
+    const [emptySeat, setEmptySeat] = useState();
+    const totalPeople = value1 + value2 + value3;
+
+    console.log(item);
 
     //change value total when click add or subtract quantity
     useEffect(() => {
         setTotal(moneyAdult * value1 + moneyChildren * value2 + moneyBaby * value3);
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [value1, value2, value3, moneyAdult, moneyChildren, moneyBaby]);
+
+    useEffect(() => {
+        setEmptySeat(12 - item.EconomyClass.CodeSeat.length);
+    }, []);
 
     const [selectedValue, setSelectedValue] = useState('EconomyClass');
 
@@ -293,14 +301,18 @@ function InforFlightRoundTrip({ item, name, handleConvert, handleSwitchPage, swi
     useEffect(() => {
         if (selectedValue === 'EconomyClass') {
             setMoneyAdult(item.EconomyClass.PriceAdult);
+            setEmptySeat(12 - item.EconomyClass.CodeSeat.length);
         } else if (selectedValue === 'BusinessClass') {
             setMoneyAdult(item.BusinessClass.PriceAdult);
+            setEmptySeat(12 - item.BusinessClass.CodeSeat.length);
             // console.log(convertTime(item.FlightTime));
         } else if (selectedValue === 'FirstClass') {
             setMoneyAdult(item.FirstClass.PriceAdult);
+            setEmptySeat(12 - item.FirstClass.CodeSeat.length);
             // console.log(convertTime(item.FlightTime));
         } else {
             setMoneyAdult(item.PremiumClass.PriceAdult);
+            setEmptySeat(12 - item.PremiumClass.CodeSeat.length);
             // console.log(convertTime(item.FlightTime));
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -377,15 +389,25 @@ function InforFlightRoundTrip({ item, name, handleConvert, handleSwitchPage, swi
               </Link>
             )} */}
                         {!switchPage ? (
-                            <Button className="select" onClick={handleSelect}>
-                                Chọn <FontAwesomeIcon icon={faArrowRight} />
-                            </Button>
+                            <div className="wrapper-btn-roundTrip">
+                                <span className="title-roundTrip-seat">Ghế trống: {emptySeat} </span>
+                                {totalPeople <= emptySeat && (
+                                    <Button className="select" onClick={handleSelect}>
+                                        Chọn <FontAwesomeIcon icon={faArrowRight} />
+                                    </Button>
+                                )}
+                            </div>
                         ) : (
-                            <Link to="check">
-                                <Button className="select" onClick={handleSelect}>
-                                    Chọn <FontAwesomeIcon icon={faArrowRight} />
-                                </Button>
-                            </Link>
+                            <div className="wrapper-btn-roundTrip">
+                                <span className="title-roundTrip-seat">Ghế trống: {emptySeat} </span>
+                                {totalPeople <= emptySeat && (
+                                    <Link to="check">
+                                        <Button className="select" onClick={handleSelect}>
+                                            Chọn <FontAwesomeIcon icon={faArrowRight} />
+                                        </Button>
+                                    </Link>
+                                )}
+                            </div>
                         )}
                     </span>
                 }
