@@ -106,7 +106,6 @@
 
 //     // const time = 160;
 
-//     // if (time > duration(FlightTime, LandingTime))
 //     return (
 //         <div className="wrapper ms-3">
 //             <div className="container_1 me-3">
