@@ -222,7 +222,6 @@ function InforFlightRoundTrip({ item, name, handleConvert, handleSwitchPage, swi
     const value3 = Number(storedQuantity.baby);
     const moneyChildren = moneyAdult * 0.75;
     const moneyBaby = moneyAdult / 2;
-    const moneyChildren = moneyAdult * 0.75;
     const [total, setTotal] = useState(moneyAdult);
     const [emptySeat, setEmptySeat] = useState();
     const totalPeople = value1 + value2 + value3;
