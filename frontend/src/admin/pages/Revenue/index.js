@@ -4,14 +4,11 @@ import Navbar from '../../component/Navbar';
 import Box from '@mui/material/Box';
 import { PieChartCompareTypeFlight, PieChartCompany, LineChart } from '../../component/Chart';
 import TotalMoney from './TotalMoney';
-import TotalMoneyPerDay from '../../component/TotalMoneyPerDay';
+
+import CheckRevenue from './CheckRevenue';
 
 function Revenue() {
-    // console.log('vcl', TotalMoney().MoneyOneway);
     const StorageMoney = TotalMoney();
-    // console.log(StorageMoney);
-
-    TotalMoneyPerDay();
     return (
         <>
             <Navbar />
@@ -24,6 +21,8 @@ function Revenue() {
                     </div>
                     <PieChartCompany StorageMoney={StorageMoney} />
                     <LineChart />
+
+                    <CheckRevenue />
                 </Box>
             </Box>
         </>

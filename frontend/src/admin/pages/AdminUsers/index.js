@@ -47,7 +47,7 @@ export default function AdminUsers() {
     const columns = [
         {
             field: 'Avatar',
-            headerName: 'Avartar',
+            headerName: 'Avatar',
             headerClassName: 'custom-header',
             cellClassName: 'custom-cell',
             renderCell: (params) => <AvatarPeople string={params.row.Name} />,

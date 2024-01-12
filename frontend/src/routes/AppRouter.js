@@ -12,31 +12,62 @@ import Home from '../admin/pages/Home';
 import Flight from '../admin/pages/Flight';
 import Users from '../admin/pages/Users';
 import AdminUsers from '../admin/pages/AdminUsers';
-
 import Revenue from '../admin/pages/Revenue';
 
 import SignIn from '../component/SignIn';
+import PrivateRoute from './PrivateRoute';
 
 function AppRouter() {
     return (
         <Routes>
-            {/* <Route path="/searchFlightRoundtrip" element={<Check />} /> */}
-            <Route path="/check" element={<Check />} />
-
             <Route path="*" element={<NotFound />} />
+            <Route path="/check" element={<Check />} />
             <Route path="/seatBook" element={<SeatBooking />} />
             <Route path="/pay" element={<Paying />} />
             <Route path="/" element={<Search />} />
             <Route path="/myFlight" element={<MyFlight />} />
             <Route path="/contact" element={<Contact />} />
-
             <Route path="/signin" element={<SignIn />} />
-
-            <Route path="/admin" element={<Home />} />
-            <Route path="/admin/flight" element={<Flight />} />
-            <Route path="/admin/users" element={<Users />} />
-            <Route path="/admin/adminUsers" element={<AdminUsers />} />
-            <Route path="/admin/revenue" element={<Revenue />} />
+            <Route
+                path="/admin"
+                element={
+                    <PrivateRoute>
+                        <Home />
+                    </PrivateRoute>
+                }
+            />
+            <Route
+                path="/admin/flight"
+                element={
+                    <PrivateRoute>
+                        <Flight />
+                    </PrivateRoute>
+                }
+            />
+            <Route
+                path="/admin/users"
+                element={
+                    <PrivateRoute>
+                        <Users />
+                    </PrivateRoute>
+                }
+            />
+            <Route
+                path="/admin/adminUsers"
+                element={
+                    <PrivateRoute>
+                        <AdminUsers />
+                    </PrivateRoute>
+                }
+            />
+            <Route
+                path="/admin/revenue"
+                element={
+                    <PrivateRoute>
+                        <Revenue />
+                    </PrivateRoute>
+                }
+            />
         </Routes>
     );
 }

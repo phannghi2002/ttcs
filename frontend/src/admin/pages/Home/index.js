@@ -22,6 +22,7 @@ import { useEffect, useState } from 'react';
 // import NumberFormat from '../component/NumberFormat/NumberFormat';
 
 import { useNavigate } from 'react-router-dom';
+import { LineChart } from '../../component/Chart/index';
 
 import CountUp from 'react-countup';
 
@@ -131,6 +132,10 @@ function Home() {
                             <Grid container spacing={2}>
                                 <Grid item xs={8} className={cx('one')}>
                                     <FlightToday />
+
+                                    <div style={{ paddingTop: '50px' }}>
+                                        <LineChart />
+                                    </div>
                                 </Grid>
 
                                 <Grid item xs={4}>
