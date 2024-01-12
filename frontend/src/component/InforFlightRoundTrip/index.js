@@ -220,6 +220,7 @@ function InforFlightRoundTrip({ item, name, handleConvert, handleSwitchPage, swi
     const value1 = Number(storedQuantity.adults);
     const value2 = Number(storedQuantity.children);
     const value3 = Number(storedQuantity.baby);
+    const moneyChildren = moneyAdult * 0.75;
     const moneyBaby = moneyAdult / 2;
     const moneyChildren = moneyAdult * 0.75;
     const [total, setTotal] = useState(moneyAdult);
@@ -254,11 +255,34 @@ function InforFlightRoundTrip({ item, name, handleConvert, handleSwitchPage, swi
         if (switchPage) {
             localStorage.setItem(
                 'inforFlightReturn',
-                JSON.stringify({ item, selectedValue, value1, value2, value3, total }),
+                JSON.stringify({
+                    item,
+                    selectedValue,
+                    value1,
+                    moneyAdult,
+                    value2,
+                    moneyChildren,
+                    value3,
+                    moneyBaby,
+                    total,
+                }),
             );
             handleSwitchPage();
         } else {
-            localStorage.setItem('inforFlight', JSON.stringify({ item, selectedValue, value1, value2, value3, total }));
+            localStorage.setItem(
+                'inforFlight',
+                JSON.stringify({
+                    item,
+                    selectedValue,
+                    value1,
+                    moneyAdult,
+                    value2,
+                    moneyChildren,
+                    value3,
+                    moneyBaby,
+                    total,
+                }),
+            );
 
             handleConvert();
         }
@@ -313,6 +337,7 @@ function InforFlightRoundTrip({ item, name, handleConvert, handleSwitchPage, swi
         } else {
             setMoneyAdult(item.PremiumClass.PriceAdult);
             setEmptySeat(12 - item.PremiumClass.CodeSeat.length);
+
             // console.log(convertTime(item.FlightTime));
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps

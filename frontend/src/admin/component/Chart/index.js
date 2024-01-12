@@ -1,6 +1,8 @@
 import React from 'react';
 import { Chart } from 'react-google-charts';
-import TotalMoney, { TableRevenueTypeFlight, TableRevenueCompany } from '../../pages/Revenue/TotalMoney';
+
+import { TableRevenueTypeFlight, TableRevenueCompany } from '../../pages/Revenue/TotalMoney';
+import TotalMoneyPerDay from '../TotalMoneyPerDay';
 
 const getCurrentMonthAndYear = (date) => {
     const currentDate = new Date();
@@ -63,7 +65,8 @@ export const PieChartCompany = ({ StorageMoney }) => {
     let ratingVNA = TableRevenueCompany(StorageMoney).ratingVNA * 100;
     let ratingBL = TableRevenueCompany(StorageMoney).ratingBL * 100;
 
-    let ratingQH = 100 - ratingBL - ratingVJ - ratingVNA;
+    // let ratingQH = 100 - ratingBL - ratingVJ - ratingVNA;
+    let ratingQH = TableRevenueCompany(StorageMoney).ratingQH * 100;
     console.log(ratingVJ, ratingQH, ratingBL, ratingVNA);
     const dataCompany = [
         ['Company', 'Percent'],
@@ -78,7 +81,15 @@ export const PieChartCompany = ({ StorageMoney }) => {
         is3D: true,
     };
     return (
-        <div style={{ width: '100%', margin: '0 auto', display: 'flex', justifyContent: 'space-between' }}>
+        <div
+            style={{
+                width: '100%',
+                margin: '0 auto',
+                display: 'flex',
+                justifyContent: 'space-between',
+                paddingBottom: '30px',
+            }}
+        >
             <div style={{ width: '70%', marginLeft: '-10%', marginTop: '-2%' }}>
                 <Chart
                     chartType="PieChart"
@@ -107,4 +118,74 @@ export const PieChartCompany = ({ StorageMoney }) => {
             </div>
         </div>
     );
+};
+
+export const LineChart = () => {
+    const moneyPerDay = TotalMoneyPerDay();
+
+    const length = Object.keys(moneyPerDay).length;
+
+    const data = [['Ngày', 'Doanh thu']];
+    for (let day = 1; day <= length; day++) {
+        const ngay = `${day}/1`;
+        const doanhThu = moneyPerDay[ngay] || 0;
+        data.push([ngay, doanhThu]);
+    }
+
+    const options = {
+        chart: {
+            title: 'Biểu đồ so sánh lợi nhuận mỗi ngày trong tháng 01/2024',
+            subtitle: 'Được tính theo triệu đồng (VNĐ)',
+        },
+        // colors: ['blue'], // Set custom color (e.g., blue)
+    };
+
+    return <Chart chartType="Line" width="100%" height="400px" data={data} options={options} />;
+};
+
+export const LineChartOption = ({ data, company, date, month }) => {
+    const moneyPerDay = data;
+
+    const Company = ['Vietnam Airlines', 'VietJet Air', 'Jetstar Pacific Airlines', 'BamBo Airways'];
+
+    switch (company) {
+        case 'VNA':
+            company = Company[0];
+            break;
+        case 'VJ':
+            company = Company[1];
+            break;
+        case 'BL':
+            company = Company[2];
+            break;
+        default:
+            company = Company[3];
+            break;
+    }
+
+    const length = Object.keys(moneyPerDay).length;
+
+    const chartData = [['Ngày', 'Doanh thu']];
+    for (let day = 1; day <= length; day++) {
+        const ngay = `${day}/${month}`;
+        const doanhThu = moneyPerDay[ngay] || 0;
+
+        chartData.push([ngay, doanhThu]);
+    }
+
+    const options = {
+        chart: {
+            title: `Biểu đồ so sánh lợi nhuận mỗi ngày trong tháng ${date} của hãng hàng không ${company}`,
+            subtitle: 'Được tính theo triệu đồng (VNĐ)',
+        },
+        // colors: ['blue'], // Set custom color (e.g., blue)
+        vAxis: {
+            viewWindow: {
+                min: 0,
+                max: 1,
+            },
+        },
+    };
+
+    return <Chart chartType="Line" width="100%" height="400px" data={chartData} options={options} />;
 };

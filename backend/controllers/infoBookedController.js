@@ -231,6 +231,33 @@ const getMonth = () => {
         currentMonthEnd: currentMonthEnd,
     };
 };
+
+export const getInfoBookedMonthNow = async (req, res) => {
+    const LandingTime = new Date(req.query.LandingTime);
+
+    const currentMonthStart = getMonth().currentMonthStart;
+    const currentMonthEnd = getMonth().currentMonthEnd;
+
+    try {
+        const InfoBookeds = await InfoBooked.find({
+            LandingTime: { $gte: currentMonthStart, $lt: currentMonthEnd },
+        });
+
+        // console.log(InfoBookeds);
+
+        res.status(200).json({
+            success: true,
+            message: 'Successfully found search',
+            count: InfoBookeds.length,
+            data: InfoBookeds,
+        });
+    } catch (error) {
+        res.status(404).json({
+            success: false,
+            message: 'Not found ',
+        });
+    }
+};
 export const getInfoBookedMonthOnewayNow = async (req, res) => {
     const LandingTime = new Date(req.query.LandingTime);
     const TypeFlight = new RegExp(req.query.TypeFlight, 'i');
@@ -303,6 +330,138 @@ export const getInfoBookedCompany = async (req, res) => {
         });
 
         // console.log(InfoBookeds);
+
+        res.status(200).json({
+            success: true,
+            message: 'Successfully found search',
+            count: InfoBookeds.length,
+            data: InfoBookeds,
+        });
+    } catch (error) {
+        res.status(404).json({
+            success: false,
+            message: 'Not found ',
+        });
+    }
+};
+
+const getMonth_11_2023 = (start) => {
+    const currentMonthStart = new Date();
+    currentMonthStart.setDate(1);
+    currentMonthStart.setMonth(currentMonthStart.getMonth() + 0, 0);
+    currentMonthStart.setHours(0, 0, 0, 0);
+    console.log(currentMonthStart);
+
+    const currentMonthEnd = new Date();
+    currentMonthEnd.setMonth(currentMonthEnd.getMonth() + 1, 0);
+    currentMonthEnd.setHours(23, 59, 59, 999);
+    console.log(currentMonthEnd);
+
+    return {
+        currentMonthStart: currentMonthStart,
+        currentMonthEnd: currentMonthEnd,
+    };
+};
+
+// export const getInfoBookedMonthOnewayAndCompanyNow = async (req, res) => {
+
+//     const flightNumber = new RegExp(req.query.FlightNumber, 'i');
+
+//     const currentMonthStart = getMonth().currentMonthStart;
+//     const currentMonthEnd = getMonth().currentMonthEnd;
+
+//     try {
+//         const InfoBookeds = await InfoBooked.find({
+//             LandingTime: { $gte: currentMonthStart, $lt: currentMonthEnd },
+//             FlightNumber: flightNumber,
+//             TypeFlight: { $eq: 'Oneway' },
+//         });
+
+//         // console.log(InfoBookeds);
+
+//         res.status(200).json({
+//             success: true,
+//             message: 'Successfully found search',
+//             count: InfoBookeds.length,
+//             data: InfoBookeds,
+//         });
+//     } catch (error) {
+//         res.status(404).json({
+//             success: false,
+//             message: 'Not found ',
+//         });
+//     }
+// };
+
+export const getInfoBookedMonthOnewayAndCompanyNow = async (req, res) => {
+    const flightNumber = new RegExp(req.query.FlightNumber, 'i');
+    const { month, year } = req.query;
+
+    const startOfMonth = new Date(year, month - 1, 1);
+    const endOfMonth = new Date(year, month, 0);
+
+    try {
+        const InfoBookeds = await InfoBooked.find({
+            LandingTime: { $gte: startOfMonth, $lt: endOfMonth },
+            FlightNumber: flightNumber,
+            TypeFlight: 'Oneway',
+        });
+
+        res.status(200).json({
+            success: true,
+            message: 'Successfully found search',
+            count: InfoBookeds.length,
+            data: InfoBookeds,
+        });
+    } catch (error) {
+        res.status(404).json({
+            success: false,
+            message: 'Not found',
+        });
+    }
+};
+
+export const fetchAPIRoundtripAndCompanyAndDateGoThisMonth = async (req, res) => {
+    const flightNumber = new RegExp(req.query.FlightNumber, 'i');
+    const { month, year } = req.query;
+
+    const startOfMonth = new Date(year, month - 1, 1);
+    const endOfMonth = new Date(year, month, 0);
+
+    try {
+        const InfoBookeds = await InfoBooked.find({
+            LandingTime: { $gte: startOfMonth, $lt: endOfMonth },
+            FlightNumber: flightNumber,
+            TypeFlight: { $eq: 'Roundtrip' },
+        });
+
+        res.status(200).json({
+            success: true,
+            message: 'Successfully found search',
+            count: InfoBookeds.length,
+            data: InfoBookeds,
+        });
+    } catch (error) {
+        res.status(404).json({
+            success: false,
+            message: 'Not found ',
+        });
+    }
+};
+
+export const fetchAPIRoundtripAndCompanyAndDateReturnThisMonth = async (req, res) => {
+    const flightNumber = new RegExp(req.query.FlightNumber, 'i');
+    const { month, year } = req.query;
+
+    const startOfMonth = new Date(year, month - 1, 1);
+    const endOfMonth = new Date(year, month, 0);
+
+    try {
+        const InfoBookeds = await InfoBooked.find({
+            LandingTimeReturn: { $gte: startOfMonth, $lt: endOfMonth },
+            FlightNumberReturn: flightNumber,
+            TypeFlight: { $eq: 'Roundtrip' },
+        });
 
         res.status(200).json({
             success: true,

@@ -34,6 +34,7 @@ function SignIn() {
             if (data[i].AccountName === userName && data[i].Password === password) {
                 setIsSuccess(true);
                 window.location = 'http://localhost:3000/admin';
+                localStorage.setItem('Login', data[i].Name);
                 break;
             } else {
                 setIsSuccess(false);

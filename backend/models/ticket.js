@@ -28,10 +28,7 @@ const ticketSchema = new mongoose.Schema({
             type: Number,
             required: true,
         },
-        // PriceChildren: {
-        //     type: Number,
-        //     required: true,
-        // },
+
         CodeSeat: {
             type: [String],
             default: [],
@@ -42,10 +39,7 @@ const ticketSchema = new mongoose.Schema({
             type: Number,
             required: true,
         },
-        // PriceChildren: {
-        //     type: Number,
-        //     required: true,
-        // },
+
         CodeSeat: {
             type: [String],
             default: [],
@@ -56,10 +50,7 @@ const ticketSchema = new mongoose.Schema({
             type: Number,
             required: true,
         },
-        // PriceChildren: {
-        //     type: Number,
-        //     required: true,
-        // },
+
         CodeSeat: {
             type: [String],
             default: [],
@@ -70,10 +61,7 @@ const ticketSchema = new mongoose.Schema({
             type: Number,
             required: true,
         },
-        // PriceChildren: {
-        //     type: Number,
-        //     required: true,
-        // },
+
         CodeSeat: {
             type: [String],
             default: [],
@@ -109,6 +97,7 @@ const ticketSchema = new mongoose.Schema({
 ticketSchema.pre('save', function (next) {
     const flightTime = this.FlightTime.getTime();
     const landingTime = this.LandingTime.getTime();
+    console.log('in ra cho bo xem nao', flightTime, landingTime);
     const durationInMinutes = Math.floor((landingTime - flightTime) / 60000);
     this.Duration = durationInMinutes;
     next();

@@ -223,7 +223,20 @@ function InforFlight({ item, name, select }) {
     const handleSelect = () => {
         // Store bookedButton in localStorage
         console.log(item);
-        localStorage.setItem('inforFlight', JSON.stringify({ item, selectedValue, value1, value2, value3, total }));
+        localStorage.setItem(
+            'inforFlight',
+            JSON.stringify({
+                item,
+                selectedValue,
+                value1,
+                moneyAdult,
+                value2,
+                moneyChildren,
+                value3,
+                moneyBaby,
+                total,
+            }),
+        );
     };
 
     const convertTime = (time) => {

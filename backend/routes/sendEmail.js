@@ -42,7 +42,8 @@ router.post('/', (req, res) => {
 });
 
 router.post('/all', (req, res) => {
-    const { email, code, data, type } = req.body;
+    const { email, code, data } = req.body;
+
     try {
         const transporter = NodeMailer.createTransport({
             service: 'gmail',
@@ -124,6 +125,7 @@ router.post('/all', (req, res) => {
                         html +
                         `<div style="width: 600px">
             <div>
+
               <h3 style="margin: 0; padding: 5px 0px">
               NGÀY ${getDay(data[index].DateGo)} đến NGÀY ${getDay(data[index].DateGo)} </h3>
               <h3 style="margin: 0; padding: 5px 0px">
@@ -413,6 +415,7 @@ router.post('/all', (req, res) => {
         const mailOptions = {
             from: process.env.EMAIL,
             to: handleGetEmail(),
+
             subject: 'Sending Email With ReactJS and NodeJS',
             html: handleSendmail(),
         };

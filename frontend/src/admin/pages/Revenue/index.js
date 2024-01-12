@@ -2,13 +2,13 @@ import Sidenav from '../../component/Sidenav';
 import Navbar from '../../component/Navbar';
 
 import Box from '@mui/material/Box';
-import { PieChartCompareTypeFlight, PieChartCompany } from '../../component/Chart';
+import { PieChartCompareTypeFlight, PieChartCompany, LineChart } from '../../component/Chart';
 import TotalMoney from './TotalMoney';
 
+import CheckRevenue from './CheckRevenue';
+
 function Revenue() {
-    // console.log('vcl', TotalMoney().MoneyOneway);
     const StorageMoney = TotalMoney();
-    console.log(StorageMoney);
     return (
         <>
             <Navbar />
@@ -20,6 +20,9 @@ function Revenue() {
                         <PieChartCompareTypeFlight StorageMoney={StorageMoney} />
                     </div>
                     <PieChartCompany StorageMoney={StorageMoney} />
+                    <LineChart />
+
+                    <CheckRevenue />
                 </Box>
             </Box>
         </>

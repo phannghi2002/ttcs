@@ -33,6 +33,14 @@ const infoBookedSchema = new mongoose.Schema(
             default: Date('<YYYY-mm-dd>'),
             required: true,
         },
+        TotalMoneyGo: {
+            type: Number,
+            required: true,
+        },
+        TotalMoneyReturn: {
+            type: Number,
+            // required: true,
+        },
 
         TotalMoney: {
             type: Number,
@@ -41,7 +49,7 @@ const infoBookedSchema = new mongoose.Schema(
         CodeTicket: {
             type: String,
             required: true,
-            unique: true,
+            // unique: true,
         },
         FlightNumber: {
             type: String,

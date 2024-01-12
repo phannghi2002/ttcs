@@ -30,7 +30,7 @@ function FlightToday() {
     async function fetchAPI() {
         try {
             // let response = await fetch(`http://localhost:4000/tickets/search/getTicketByToday?DateGo=${DateGo}`);
-            let response = await fetch(`http://localhost:4000/tickets/search/getTicketByToday?DateGo=2024-01-01`);
+            let response = await fetch(`http://localhost:4000/tickets/search/getTicketByToday?DateGo=${DateGo}`);
 
             console.log(DateGo);
             if (!response.ok) {
@@ -64,23 +64,23 @@ function FlightToday() {
     // const FlightTime = convertTime(item.FlightTime);
     // const LandingTime = convertTime(item.LandingTime);
 
-    const duration = (FlightTime, LandingTime) => {
-        const [startHour, startMinute] = FlightTime.split(':');
-        const [endHour, endMinute] = LandingTime.split(':');
+    // const duration = (FlightTime, LandingTime) => {
+    //     const [startHour, startMinute] = FlightTime.split(':');
+    //     const [endHour, endMinute] = LandingTime.split(':');
 
-        // Convert the hours and minutes to numbers
-        const startHourNum = parseInt(startHour, 10);
-        const startMinuteNum = parseInt(startMinute, 10);
-        const endHourNum = parseInt(endHour, 10);
-        const endMinuteNum = parseInt(endMinute, 10);
+    //     // Convert the hours and minutes to numbers
+    //     const startHourNum = parseInt(startHour, 10);
+    //     const startMinuteNum = parseInt(startMinute, 10);
+    //     const endHourNum = parseInt(endHour, 10);
+    //     const endMinuteNum = parseInt(endMinute, 10);
 
-        // Calculate the difference in minutes
-        const hourDifference = endHourNum - startHourNum;
-        const minuteDifference = endMinuteNum - startMinuteNum;
-        const totalMinutes = hourDifference * 60 + minuteDifference;
+    //     // Calculate the difference in minutes
+    //     const hourDifference = endHourNum - startHourNum;
+    //     const minuteDifference = endMinuteNum - startMinuteNum;
+    //     const totalMinutes = hourDifference * 60 + minuteDifference;
 
-        return totalMinutes;
-    };
+    //     return totalMinutes;
+    // };
     const convertMinutesToHourMinute = (minutes) => {
         const hours = Math.floor(minutes / 60);
         const remainingMinutes = minutes % 60;
@@ -138,7 +138,8 @@ function FlightToday() {
                                     <div className={cx('line')}>
                                         <div className={cx('duration')}>
                                             {convertMinutesToHourMinute(
-                                                duration(convertTime(item.FlightTime), convertTime(item.LandingTime)),
+                                                // duration(convertTime(item.FlightTime), convertTime(item.LandingTime)),
+                                                item.Duration,
                                             )}
                                         </div>
                                     </div>

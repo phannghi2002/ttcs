@@ -76,7 +76,8 @@ function Paying() {
             ID_Card: storedInforPerson.ID_Card,
             CodeSeat: storedInforSeat.join(' - '),
             Email: storedInforPerson.Email,
-
+            TotalMoneyGo: storedInforFlight.moneyAdult,
+            TotalMoneyReturn: storedInforFlightReturn.moneyAdult,
             TypeTicketReturn: storedInforFlightReturn.selectedValue,
             FlightNumberReturn: storedInforFlightReturn.item.FlightNumber,
             FlightTimeReturn: storedInforFlightReturn.item.FlightTime,
@@ -104,6 +105,7 @@ function Paying() {
             ID_Card: storedInforPerson.ID_Card,
             CodeSeat: storedInforSeat.join(' - '),
             Email: storedInforPerson.Email,
+            TotalMoneyGo: storedInforFlight.total,
 
             TotalMoney: storedInforFlight.total,
         };
@@ -116,27 +118,27 @@ function Paying() {
         data00 = valueDepart();
     } else data00 = valueReturn();
 
-    const sendInfoData = () => {
-        fetch('http://localhost:4000/info', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
+    // const sendInfoData = () => {
+    //     fetch('http://localhost:4000/info', {
+    //         method: 'POST',
+    //         headers: {
+    //             'Content-Type': 'application/json',
+    //         },
 
-            body: JSON.stringify(data00),
-        })
-            .then((response) => {
-                if (response.ok) {
-                    console.log('Data sent successfully');
-                } else {
-                    console.error('Error sending data:', response.statusText);
-                    console.log('thoi s gio loi roi');
-                }
-            })
-            .catch((error) => {
-                console.error('Error sending data:', error);
-            });
-    };
+    //         body: JSON.stringify(data00),
+    //     })
+    //         .then((response) => {
+    //             if (response.ok) {
+    //                 console.log('Data sent successfully');
+    //             } else {
+    //                 console.error('Error sending data:', response.statusText);
+    //                 console.log('thoi s gio loi roi');
+    //             }
+    //         })
+    //         .catch((error) => {
+    //             console.error('Error sending data:', error);
+    //         });
+    // };
 
     console.log(data00.TypeTicket);
     console.log(data00);
@@ -294,6 +296,140 @@ function Paying() {
                 .then((response) => console.log(response))
                 .catch((error) => console.log(error));
         }
+
+        for (let i = 0; i < Number(storedQuantity.adults); i++) {
+            axios
+                .post('http://localhost:4000/info', {
+                    TypeFlight: data00.TypeFlight,
+                    TypeTicket: data00.TypeTicket,
+                    AirportFrom: data00.AirportFrom,
+                    AirportTo: data00.AirportTo,
+                    FlightTime: data00.FlightTime,
+                    LandingTime: data00.LandingTime,
+                    DateGo: data00.DateGo,
+                    TotalMoneyGo: storedInforFlight.moneyAdult,
+                    TotalMoneyReturn: data00.TotalMoneyReturn,
+                    TotalMoney: data00.TotalMoney,
+                    CodeTicket: data00.CodeTicket,
+                    FlightNumber: data00.FlightNumber,
+                    UserName: user[i].Username,
+                    ID_Card: user[i].ID_Card,
+                    CodeSeat: codeSeatSingle[i],
+                    Email: user[i].Email,
+                    TypeTicketReturn: data00.TypeTicketReturn,
+                    FlightNumberReturn: data00.FlightNumberReturn,
+                    FlightTimeReturn: data00.FlightTimeReturn,
+                    LandingTimeReturn: data00.LandingTimeReturn,
+                    CodeSeatReturn: CodeSeatReturnSingle[i],
+                    DateReturn: data00.DateReturn,
+                })
+                .then((response) => console.log(response))
+                .catch((error) => console.log(error));
+        }
+
+        for (
+            let i = Number(storedQuantity.adults);
+            i < Number(storedQuantity.adults) + Number(storedQuantity.children);
+            i++
+        ) {
+            const postData = {
+                TypeFlight: data00.TypeFlight,
+                TypeTicket: data00.TypeTicket,
+                AirportFrom: data00.AirportFrom,
+                AirportTo: data00.AirportTo,
+                FlightTime: data00.FlightTime,
+                LandingTime: data00.LandingTime,
+                DateGo: data00.DateGo,
+                TotalMoneyGo: storedInforFlight.moneyChildren,
+                TotalMoney: data00.TotalMoney,
+                CodeTicket: data00.CodeTicket,
+                FlightNumber: data00.FlightNumber,
+                UserName: user[i].Username,
+                ID_Card: user[i].ID_Card,
+                CodeSeat: codeSeatSingle[i],
+                Email: user[i].Email,
+                TypeTicketReturn: data00.TypeTicketReturn,
+                FlightNumberReturn: data00.FlightNumberReturn,
+                FlightTimeReturn: data00.FlightTimeReturn,
+                LandingTimeReturn: data00.LandingTimeReturn,
+                CodeSeatReturn: CodeSeatReturnSingle[i],
+                DateReturn: data00.DateReturn,
+            };
+
+            if (data00.TotalMoneyReturn) {
+                postData.TotalMoneyReturn = data00.TotalMoneyReturn * 0.75;
+            }
+
+            axios
+                .post('http://localhost:4000/info', postData)
+                .then((response) => console.log(response))
+                .catch((error) => console.log(error));
+        }
+
+        for (let i = totalPeople - Number(storedQuantity.baby); i < totalPeople; i++) {
+            const postData = {
+                TypeFlight: data00.TypeFlight,
+                TypeTicket: data00.TypeTicket,
+                AirportFrom: data00.AirportFrom,
+                AirportTo: data00.AirportTo,
+                FlightTime: data00.FlightTime,
+                LandingTime: data00.LandingTime,
+                DateGo: data00.DateGo,
+                TotalMoneyGo: storedInforFlight.moneyBaby,
+                TotalMoney: data00.TotalMoney,
+                CodeTicket: data00.CodeTicket,
+                FlightNumber: data00.FlightNumber,
+                UserName: user[i].Username,
+                ID_Card: user[i].ID_Card,
+                CodeSeat: codeSeatSingle[i],
+                Email: user[i].Email,
+                TypeTicketReturn: data00.TypeTicketReturn,
+                FlightNumberReturn: data00.FlightNumberReturn,
+                FlightTimeReturn: data00.FlightTimeReturn,
+                LandingTimeReturn: data00.LandingTimeReturn,
+                CodeSeatReturn: CodeSeatReturnSingle[i],
+                DateReturn: data00.DateReturn,
+            };
+
+            if (data00.TotalMoneyReturn) {
+                postData.TotalMoneyReturn = data00.TotalMoneyReturn * 0.5;
+            }
+
+            axios
+                .post('http://localhost:4000/info', postData)
+                .then((response) => console.log(response))
+                .catch((error) => console.log(error));
+        }
+
+        // for (let i = totalPeople - Number(storedQuantity.baby); i < totalPeople; i++) {
+        //     axios
+        //         .post('http://localhost:4000/info', {
+        //             TypeFlight: data00.TypeFlight,
+        //             TypeTicket: data00.TypeTicket,
+        //             AirportFrom: data00.AirportFrom,
+        //             AirportTo: data00.AirportTo,
+        //             FlightTime: data00.FlightTime,
+        //             LandingTime: data00.LandingTime,
+        //             DateGo: data00.DateGo,
+        //             TotalMoneyGo: storedInforFlight.moneyBaby,
+        //             TotalMoneyReturn: data00.TotalMoneyReturn * 0.5,
+        //             TotalMoney: data00.TotalMoney,
+        //             CodeTicket: data00.CodeTicket,
+        //             FlightNumber: data00.FlightNumber,
+        //             UserName: user[i].Username,
+        //             ID_Card: user[i].ID_Card,
+        //             CodeSeat: codeSeatSingle[i],
+        //             Email: user[i].Email,
+        //             TypeTicketReturn: data00.TypeTicketReturn,
+        //             FlightNumberReturn: data00.FlightNumberReturn,
+        //             FlightTimeReturn: data00.FlightTimeReturn,
+        //             LandingTimeReturn: data00.LandingTimeReturn,
+        //             CodeSeatReturn: CodeSeatReturnSingle[i],
+        //             DateReturn: data00.DateReturn,
+        //         })
+        //         .then((response) => console.log(response))
+        //         .catch((error) => console.log(error));
+        // }
     }
 
     const handlePay = (e) => {
@@ -301,14 +437,15 @@ function Paying() {
             if (isNumberCard) {
                 setShow(true);
 
-                sendInfoData();
+                // sendInfoData();
+                handleSendEmail();
 
                 pushSeat(storedInforFlight.item._id);
 
                 if (checkTypeTrip()) {
                     pushSeat2(storedInforFlightReturn.item._id);
                 }
-                handlePustTicketDetail(e);
+                handlePustTicketDetail();
 
                 toast.success('Thanh toán thành công!');
                 setTimeout(() => {

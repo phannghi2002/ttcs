@@ -401,7 +401,7 @@ export const EditAdmin = ({ row, open, setOpen, handleClose, reRender, setReRend
                                         format="DD/MM/YYYY"
                                         name="DayOfBirth"
                                         // value={data.DayOfBirth}
-
+                                        maxDate={dayjs()}
                                         defaultValue={dayjs(row.DayOfBirth)}
                                         value={data.DayOfBirth ? dayjs(data.DayOfBirth) : null}
                                         onChange={(date) => handleChangeDate(date)}

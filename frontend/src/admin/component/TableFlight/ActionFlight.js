@@ -294,6 +294,7 @@ export const AddFlight = ({ open, handleClose, onUpdate, setReRender }) => {
                         },
                         EconomyClass: {
                             PriceAdult: '',
+                            CodeSeat: [],
                         },
                         BusinessClass: {
                             PriceAdult: '',
@@ -356,6 +357,7 @@ export const AddFlight = ({ open, handleClose, onUpdate, setReRender }) => {
                                 helperText={errors['FlightNumber'] || ''}
                                 onChange={handleChange}
                                 sx={{
+                                    width: '223px',
                                     '& .MuiFormHelperText-root': {
                                         color: errors['FlightNumber'] ? 'red' : 'inherit',
                                     },
@@ -406,7 +408,8 @@ export const AddFlight = ({ open, handleClose, onUpdate, setReRender }) => {
                                 helperText={errors['EconomyClass'] || ''}
                                 onChange={handleChangeSpecial}
                                 sx={{
-                                    paddingRight: '20px',
+                                    marginRight: '20px',
+                                    width: '223px',
                                     '& .MuiFormHelperText-root': {
                                         color: errors['EconomyClass'] ? 'red' : 'inherit',
                                     },
@@ -421,6 +424,7 @@ export const AddFlight = ({ open, handleClose, onUpdate, setReRender }) => {
                                 helperText={errors['PremiumClass'] || ''}
                                 onChange={handleChangeSpecial}
                                 sx={{
+                                    width: '223px',
                                     '& .MuiFormHelperText-root': {
                                         color: errors['PremiumClass'] ? 'red' : 'inherit',
                                     },
@@ -437,7 +441,8 @@ export const AddFlight = ({ open, handleClose, onUpdate, setReRender }) => {
                                 helperText={errors['BusinessClass'] || ''}
                                 onChange={handleChangeSpecial}
                                 sx={{
-                                    paddingRight: '20px',
+                                    marginRight: '20px',
+                                    width: '223px',
                                     '& .MuiFormHelperText-root': {
                                         color: errors['BusinessClass'] ? 'red' : 'inherit',
                                     },
@@ -452,6 +457,7 @@ export const AddFlight = ({ open, handleClose, onUpdate, setReRender }) => {
                                 helperText={errors['FirstClass'] || ''}
                                 onChange={handleChangeSpecial}
                                 sx={{
+                                    width: '223px',
                                     '& .MuiFormHelperText-root': {
                                         color: errors['FirstClass'] ? 'red' : 'inherit',
                                     },
@@ -469,7 +475,7 @@ export const AddFlight = ({ open, handleClose, onUpdate, setReRender }) => {
                                         seconds: renderTimeViewClock,
                                     }}
                                     value={data.FlightTime}
-                                    minDateTime={dayjs()}
+                                    // minDateTime={dayjs().add(15, 'day')}
                                     slotProps={{
                                         textField: {
                                             helperText: errors['FlightTime'] || '',
@@ -495,7 +501,7 @@ export const AddFlight = ({ open, handleClose, onUpdate, setReRender }) => {
                                         seconds: renderTimeViewClock,
                                     }}
                                     value={data.LandingTime}
-                                    minDateTime={dayjs()}
+                                    // minDateTime={dayjs().add(15, 'day')}
                                     slotProps={{
                                         textField: {
                                             helperText: errors['LandingTime'] || '',
@@ -594,6 +600,15 @@ export const EditFlight = ({ row, open, setOpen, handleClose, onUpdate, setReRen
         setErrors(newErrors);
     };
 
+    const Duration = (FlightTime, LandingTime) => {
+        const flightTime = new Date(FlightTime);
+        const landingTime = new Date(LandingTime);
+        return Math.floor((landingTime.getTime() - flightTime.getTime()) / 60000);
+    };
+    // if (row) {
+    //     console.log('thoi gian', typeof row.LandingTime);
+    // }
+
     const handleEdit = () => {
         validate();
 
@@ -610,21 +625,26 @@ export const EditFlight = ({ row, open, setOpen, handleClose, onUpdate, setReRen
                     AirportTo: data.AirportTo,
                     FirstClass: {
                         PriceAdult: data.FirstClass.PriceAdult,
+                        CodeSeat: data.FirstClass.CodeSeat,
                     },
                     EconomyClass: {
                         PriceAdult: data.EconomyClass.PriceAdult,
+                        CodeSeat: data.EconomyClass.CodeSeat,
                     },
                     BusinessClass: {
                         PriceAdult: data.BusinessClass.PriceAdult,
+                        CodeSeat: data.BusinessClass.CodeSeat,
                     },
                     PremiumClass: {
                         PriceAdult: data.PremiumClass.PriceAdult,
+                        CodeSeat: data.PremiumClass.CodeSeat,
                     },
 
                     FlightTime: data.FlightTime,
                     LandingTime: data.LandingTime,
                     // DateGo: data.FlightTime.toISOString(),
                     DateGo: FormatDateYMD(data.FlightTime),
+                    Duration: Duration(data.FlightTime, data.LandingTime),
                 })
                 .then((res) => {
                     console.log(res);
@@ -714,6 +734,7 @@ export const EditFlight = ({ row, open, setOpen, handleClose, onUpdate, setReRen
                                 onChange={handleChange}
                                 helperText={errors['FlightNumber'] || ''}
                                 sx={{
+                                    width: '223px',
                                     '& .MuiFormHelperText-root': {
                                         color: errors['FlightNumber'] ? 'red' : 'inherit',
                                     },
@@ -766,7 +787,8 @@ export const EditFlight = ({ row, open, setOpen, handleClose, onUpdate, setReRen
                                 helperText={errors['EconomyClass'] || ''}
                                 onChange={handleChangeSpecial}
                                 sx={{
-                                    paddingRight: '20px',
+                                    marginRight: '20px',
+                                    width: '223px',
                                     '& .MuiFormHelperText-root': {
                                         color: errors['EconomyClass'] ? 'red' : 'inherit',
                                     },
@@ -781,6 +803,7 @@ export const EditFlight = ({ row, open, setOpen, handleClose, onUpdate, setReRen
                                 helperText={errors['PremiumClass'] || ''}
                                 onChange={handleChangeSpecial}
                                 sx={{
+                                    width: '223px',
                                     '& .MuiFormHelperText-root': {
                                         color: errors['PremiumClass'] ? 'red' : 'inherit',
                                     },
@@ -797,7 +820,8 @@ export const EditFlight = ({ row, open, setOpen, handleClose, onUpdate, setReRen
                                 helperText={errors['BusinessClass'] || ''}
                                 onChange={handleChangeSpecial}
                                 sx={{
-                                    paddingRight: '20px',
+                                    marginRight: '20px',
+                                    width: '223px',
                                     '& .MuiFormHelperText-root': {
                                         color: errors['BusinessClass'] ? 'red' : 'inherit',
                                     },
@@ -812,6 +836,7 @@ export const EditFlight = ({ row, open, setOpen, handleClose, onUpdate, setReRen
                                 helperText={errors['FirstClass'] || ''}
                                 onChange={handleChangeSpecial}
                                 sx={{
+                                    width: '223px',
                                     '& .MuiFormHelperText-root': {
                                         color: errors['FirstClass'] ? 'red' : 'inherit',
                                     },
@@ -830,7 +855,7 @@ export const EditFlight = ({ row, open, setOpen, handleClose, onUpdate, setReRen
                                     }}
                                     defaultValue={dayjs(row.FlightTime)}
                                     value={data.FlightTime ? dayjs(data.FlightTime) : null}
-                                    minDateTime={dayjs()}
+                                    // minDateTime={dayjs().add(15, 'day')}
                                     onChange={(newValue) => {
                                         setData({ ...data, FlightTime: newValue });
                                     }}
@@ -845,7 +870,7 @@ export const EditFlight = ({ row, open, setOpen, handleClose, onUpdate, setReRen
                                     }}
                                     defaultValue={dayjs(row.LandingTime)}
                                     value={data.LandingTime ? dayjs(data.LandingTime) : null}
-                                    minDateTime={dayjs()}
+                                    // minDateTime={dayjs().add(15, 'day')}
                                     onChange={(newValue) => {
                                         setData({ ...data, LandingTime: newValue });
                                     }}
