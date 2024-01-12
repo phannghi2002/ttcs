@@ -202,6 +202,7 @@ import { ModalPaying } from '../../Modal';
 import { useNavigate } from 'react-router-dom';
 import Button from 'react-bootstrap/Button';
 import TypeCommon from './TypeCommon';
+import axios from 'axios';
 
 function SeatBooking() {
     const [bookedButton1, setBookedButton1] = useState([]);
@@ -211,8 +212,34 @@ function SeatBooking() {
     const navigate = useNavigate();
     const [number1, setNumber1] = useState(0);
     const [number2, setNumber2] = useState(0);
+    const [flight, setFlight] = useState({});
+    const [codeSeat, setCodeSeat] = useState([]);
 
     console.log('so1:' + bookedButton1, 'so2: ' + bookedButton2);
+
+    const inforFlight = JSON.parse(localStorage.getItem('inforFlight'));
+
+    const TypeFlight = inforFlight.selectedValue;
+
+    useEffect(() => {
+        axios
+            .get(`http://localhost:4000/codeSeat/${inforFlight.item.FlightNumber}`)
+            .then((response) => setFlight(response.data.data))
+            .catch((err) => console.log(err));
+    }, []);
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    useEffect(() => {
+        if (TypeFlight === 'EconomyClass') {
+            setCodeSeat(flight.EconomyClass);
+        } else if (TypeFlight === 'FirstClass') {
+            setCodeSeat(flight.FirstClass);
+        } else if (TypeFlight === 'BusinessClass') {
+            setCodeSeat(flight.BusinessClass);
+        } else if (TypeFlight === 'PremiumClass') {
+            setCodeSeat(flight.PremiumClass);
+        }
+    });
 
     const handleButtonClick1 = (event) => {
         const buttonText = event.target.textContent;
@@ -264,15 +291,50 @@ function SeatBooking() {
     };
 
     const handleBooking = () => {
-        toast.success('Đặt vé thành công!');
-        setTimeout(() => {
-            setShowModal(true);
-        }, 3000);
-        console.log(bookedButton1);
+        if (typeTrip === 'Oneway') {
+            if (codeSeat.length === 0) {
+                axios
+                    .put(
+                        `http://localhost:4000/codeSeat/${inforFlight.item.FlightNumber}?type=${TypeFlight}&seat=${bookedButton1}`,
+                    )
+                    .then((res) => console.log(res))
+                    .catch((err) => console.log(err));
+                setTimeout(() => {
+                    setShowModal(true);
+                }, 3000);
+                console.log(bookedButton1);
+                toast.success('Đặt vé thành công!');
 
-        // Store bookedButton in localStorage
-        localStorage.setItem('bookedButton', JSON.stringify(bookedButton1));
-        if (typeTrip === 'Roundtrip') localStorage.setItem('bookedButtonReturn', JSON.stringify(bookedButton2));
+                // Store bookedButton in localStorage
+                localStorage.setItem('bookedButton', JSON.stringify(bookedButton1));
+                if (typeTrip === 'Roundtrip') localStorage.setItem('bookedButtonReturn', JSON.stringify(bookedButton2));
+            } else {
+                for (let i = 0; i < bookedButton1.length; i++) {
+                    let check = codeSeat.includes(bookedButton1[i]);
+                    if (check === true) {
+                        toast.warning(`Ghế ${bookedButton1[i]} đã có người đặt trước`);
+                    } else {
+                        axios
+                            .put(
+                                `http://localhost:4000/codeSeat/${inforFlight.item.FlightNumber}?type=${TypeFlight}&seat=${bookedButton1}`,
+                            )
+                            .then((res) => console.log(res))
+                            .catch((err) => console.log(err));
+                        setTimeout(() => {
+                            setShowModal(true);
+                        }, 3000);
+                        console.log(bookedButton1);
+                        toast.success('Đặt vé thành công!');
+
+                        // Store bookedButton in localStorage
+                        localStorage.setItem('bookedButton', JSON.stringify(bookedButton1));
+                        if (typeTrip === 'Roundtrip')
+                            localStorage.setItem('bookedButtonReturn', JSON.stringify(bookedButton2));
+                    }
+                }
+            }
+        } else {
+        }
     };
 
     const handleReturn = () => {

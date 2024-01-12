@@ -235,7 +235,7 @@ function InforFlightRoundTrip({ item, name, handleConvert, handleSwitchPage, swi
     }, [value1, value2, value3, moneyAdult, moneyChildren, moneyBaby]);
 
     useEffect(() => {
-        setEmptySeat(12 - item.EconomyClass.CodeSeat.length);
+        setEmptySeat(12 - unique(item.EconomyClass.CodeSeat).length);
     }, []);
 
     const [selectedValue, setSelectedValue] = useState('EconomyClass');
@@ -324,23 +324,34 @@ function InforFlightRoundTrip({ item, name, handleConvert, handleSwitchPage, swi
     useEffect(() => {
         if (selectedValue === 'EconomyClass') {
             setMoneyAdult(item.EconomyClass.PriceAdult);
-            setEmptySeat(12 - item.EconomyClass.CodeSeat.length);
+            setEmptySeat(12 - unique(item.EconomyClass.CodeSeat).length);
         } else if (selectedValue === 'BusinessClass') {
             setMoneyAdult(item.BusinessClass.PriceAdult);
-            setEmptySeat(12 - item.BusinessClass.CodeSeat.length);
+            setEmptySeat(12 - unique(item.BusinessClass.CodeSeat).length);
             // console.log(convertTime(item.FlightTime));
         } else if (selectedValue === 'FirstClass') {
             setMoneyAdult(item.FirstClass.PriceAdult);
-            setEmptySeat(12 - item.FirstClass.CodeSeat.length);
+            setEmptySeat(12 - unique(item.FirstClass.CodeSeat).length);
             // console.log(convertTime(item.FlightTime));
         } else {
             setMoneyAdult(item.PremiumClass.PriceAdult);
-            setEmptySeat(12 - item.PremiumClass.CodeSeat.length);
+            setEmptySeat(12 - unique(item.PremiumClass.CodeSeat).length);
 
             // console.log(convertTime(item.FlightTime));
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [selectedValue]);
+
+    function unique(arr) {
+        var newArr = [];
+        for (var i = 0; i < arr.length; i++) {
+            if (!newArr.includes(arr[i])) {
+                newArr.push(arr[i]);
+            }
+        }
+        return newArr;
+    }
+    console.log(unique([1, 1, 2, 3, 5, 3, 1, 5, 6, 7, 4]));
 
     return (
         <div className="wrapper ms-3">

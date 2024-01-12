@@ -317,6 +317,17 @@ export const AddFlight = ({ open, handleClose, onUpdate, setReRender }) => {
 
                     toast.error(`${Object.keys(res.response.data.message.keyPattern)[0]} đã tồn tại`);
                 });
+
+            axios
+                .post('http://localhost:4000/codeSeat', {
+                    FlightNumber: data.FlightNumber,
+                })
+                .then((response) => {
+                    console.log(response.response.data);
+                })
+                .catch((errors) => {
+                    console.log(errors);
+                });
         }
     };
 
