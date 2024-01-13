@@ -25,7 +25,6 @@ export const createCodeSeat = async (req, res) => {
 
 export const updateCodeSeat = async (req, res) => {
     const id = req.params.id;
-    console.log(typeof req.query.seat);
     const type = req.query.type;
     const codeSeat = req.query.seat.split(',');
 
@@ -35,6 +34,33 @@ export const updateCodeSeat = async (req, res) => {
             {
                 $set: { [type]: codeSeat },
             },
+            { new: true },
+        );
+
+        res.status(200).json({
+            success: true,
+            message: 'Successfully updated',
+            data: updatedCodeSeat,
+        });
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({
+            success: false,
+            message: 'Failed to update. Try again ',
+        });
+    }
+};
+
+export const updateCodeSeatPayingFail = async (req, res) => {
+    const id = req.params.id;
+    console.log(typeof req.query.seat);
+    const type = req.query.type;
+    const codeSeat = req.query.seat.split(',');
+
+    try {
+        const updatedCodeSeat = await CodeSeat.updateOne(
+            { FlightNumber: id },
+            { $pull: { [type]: { $in: codeSeat } } },
             { new: true },
         );
 

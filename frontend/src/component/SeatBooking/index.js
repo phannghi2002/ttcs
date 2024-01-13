@@ -203,6 +203,7 @@ import { useNavigate } from 'react-router-dom';
 import Button from 'react-bootstrap/Button';
 import TypeCommon from './TypeCommon';
 import axios from 'axios';
+import Paying from '../Paying';
 
 function SeatBooking() {
     const [bookedButton1, setBookedButton1] = useState([]);
@@ -213,23 +214,56 @@ function SeatBooking() {
     const [number1, setNumber1] = useState(0);
     const [number2, setNumber2] = useState(0);
     const [flight, setFlight] = useState({});
+    const [flightReturn, setFlightReturn] = useState({});
     const [codeSeat, setCodeSeat] = useState([]);
+    const [codeSeatReturn, setCodeSeatReturn] = useState([]);
 
     console.log('so1:' + bookedButton1, 'so2: ' + bookedButton2);
 
     const inforFlight = JSON.parse(localStorage.getItem('inforFlight'));
-
-    const TypeFlight = inforFlight.selectedValue;
+    const inforFlightReturn = JSON.parse(localStorage.getItem('inforFlightReturn'));
+    const typeTrip = JSON.parse(localStorage.getItem('TypeTrip'));
 
     useEffect(() => {
-        axios
-            .get(`http://localhost:4000/codeSeat/${inforFlight.item.FlightNumber}`)
-            .then((response) => setFlight(response.data.data))
-            .catch((err) => console.log(err));
+        setTimeout(() => {
+            axios
+                .get(`http://localhost:4000/codeSeat/${inforFlight.item.FlightNumber}`)
+                .then((response) => setFlight(response.data.data))
+                .catch((err) => console.log(err));
+        }, 1000);
+    }, []);
+
+    useEffect(() => {
+        if (typeTrip === 'Roundtrip') {
+            setTimeout(() => {
+                axios
+                    .get(`http://localhost:4000/codeSeat/${inforFlightReturn.item.FlightNumber}`)
+                    .then((response) => setFlightReturn(response.data.data))
+                    .catch((err) => console.log(err));
+            }, 1000);
+        }
     }, []);
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
     useEffect(() => {
+        if (typeTrip === 'Roundtrip') {
+            const TypeFlightReturn = inforFlightReturn.selectedValue;
+            if (TypeFlightReturn === 'EconomyClass') {
+                setCodeSeatReturn(flightReturn.EconomyClass);
+            } else if (TypeFlightReturn === 'FirstClass') {
+                setCodeSeatReturn(flightReturn.FirstClass);
+            } else if (TypeFlightReturn === 'BusinessClass') {
+                setCodeSeatReturn(flightReturn.BusinessClass);
+            } else if (TypeFlightReturn === 'PremiumClass') {
+                setCodeSeatReturn(flightReturn.PremiumClass);
+            }
+        }
+    });
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    useEffect(() => {
+        const TypeFlight = inforFlight.selectedValue;
+
         if (TypeFlight === 'EconomyClass') {
             setCodeSeat(flight.EconomyClass);
         } else if (TypeFlight === 'FirstClass') {
@@ -290,9 +324,23 @@ function SeatBooking() {
         }
     };
 
+    function hasCommonElement(arr1, arr2) {
+        for (let element of arr1) {
+            if (arr2.includes(element)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    function getCommonElements(arr1, arr2) {
+        return arr1.filter((element) => arr2.includes(element));
+    }
+
     const handleBooking = () => {
         if (typeTrip === 'Oneway') {
             if (codeSeat.length === 0) {
+                const TypeFlight = inforFlight.selectedValue;
                 axios
                     .put(
                         `http://localhost:4000/codeSeat/${inforFlight.item.FlightNumber}?type=${TypeFlight}&seat=${bookedButton1}`,
@@ -309,31 +357,106 @@ function SeatBooking() {
                 localStorage.setItem('bookedButton', JSON.stringify(bookedButton1));
                 if (typeTrip === 'Roundtrip') localStorage.setItem('bookedButtonReturn', JSON.stringify(bookedButton2));
             } else {
-                for (let i = 0; i < bookedButton1.length; i++) {
-                    let check = codeSeat.includes(bookedButton1[i]);
-                    if (check === true) {
-                        toast.warning(`Ghế ${bookedButton1[i]} đã có người đặt trước`);
-                    } else {
-                        axios
-                            .put(
-                                `http://localhost:4000/codeSeat/${inforFlight.item.FlightNumber}?type=${TypeFlight}&seat=${bookedButton1}`,
-                            )
-                            .then((res) => console.log(res))
-                            .catch((err) => console.log(err));
-                        setTimeout(() => {
-                            setShowModal(true);
-                        }, 3000);
-                        console.log(bookedButton1);
-                        toast.success('Đặt vé thành công!');
-
-                        // Store bookedButton in localStorage
-                        localStorage.setItem('bookedButton', JSON.stringify(bookedButton1));
-                        if (typeTrip === 'Roundtrip')
-                            localStorage.setItem('bookedButtonReturn', JSON.stringify(bookedButton2));
+                const result = hasCommonElement(codeSeat, bookedButton1);
+                if (result) {
+                    const duplicateSeats = getCommonElements(codeSeat, bookedButton1);
+                    for (let element of duplicateSeats) {
+                        toast.error(`Ghế ${element} đã được đặt trước`);
                     }
+                } else {
+                    const newCodeSeat = [...codeSeat, ...bookedButton1];
+                    const TypeFlight = inforFlight.selectedValue;
+
+                    axios
+                        .put(
+                            `http://localhost:4000/codeSeat/${inforFlight.item.FlightNumber}?type=${TypeFlight}&seat=${newCodeSeat}`,
+                        )
+                        .then((res) => console.log(res))
+                        .catch((err) => console.log(err));
+                    setTimeout(() => {
+                        setShowModal(true);
+                    }, 3000);
+                    console.log(bookedButton1);
+                    toast.success('Đặt vé thành công!');
+
+                    // Store bookedButton in localStorage
+                    localStorage.setItem('bookedButton', JSON.stringify(bookedButton1));
+                    if (typeTrip === 'Roundtrip')
+                        localStorage.setItem('bookedButtonReturn', JSON.stringify(bookedButton2));
                 }
             }
         } else {
+            if (codeSeat.length === 0 && codeSeatReturn === 0) {
+                const TypeFlight = inforFlight.selectedValue;
+                const TypeFlightReturn = inforFlightReturn.selectedValue;
+                axios
+                    .put(
+                        `http://localhost:4000/codeSeat/${inforFlight.item.FlightNumber}?type=${TypeFlight}&seat=${bookedButton1}`,
+                    )
+                    .then((res) => console.log(res))
+                    .catch((err) => console.log(err));
+
+                axios
+                    .put(
+                        `http://localhost:4000/codeSeat/${inforFlightReturn.item.FlightNumber}?type=${TypeFlightReturn}&seat=${bookedButton2}`,
+                    )
+                    .then((res) => console.log(res))
+                    .catch((err) => console.log(err));
+                setTimeout(() => {
+                    setShowModal(true);
+                }, 3000);
+                console.log(bookedButton1);
+                toast.success('Đặt vé thành công!');
+
+                // Store bookedButton in localStorage
+                localStorage.setItem('bookedButton', JSON.stringify(bookedButton1));
+                if (typeTrip === 'Roundtrip') localStorage.setItem('bookedButtonReturn', JSON.stringify(bookedButton2));
+                <Paying code1={bookedButton1} code2={bookedButton2} />;
+            } else {
+                const result = hasCommonElement(codeSeat, bookedButton1);
+                const resultReturn = hasCommonElement(codeSeatReturn, bookedButton2);
+                if (result || resultReturn) {
+                    const duplicateSeats = getCommonElements(codeSeat, bookedButton1);
+                    const duplicateSeatsReturn = getCommonElements(codeSeatReturn, bookedButton2);
+
+                    for (let element of duplicateSeats) {
+                        toast.error(`Ghế ${element} của chuyến ${inforFlight.item.FlightNumber} đã được đặt trước`);
+                    }
+
+                    for (let element of duplicateSeatsReturn) {
+                        toast.error(
+                            `Ghế ${element} của chuyến ${inforFlightReturn.item.FlightNumber} đã được đặt trước`,
+                        );
+                    }
+                } else {
+                    const newCodeSeat = [...codeSeat, ...bookedButton1];
+                    const newCodeSeatReturn = [...codeSeatReturn, ...bookedButton2];
+                    const TypeFlight = inforFlight.selectedValue;
+                    const TypeFlightReturn = inforFlightReturn.selectedValue;
+                    axios
+                        .put(
+                            `http://localhost:4000/codeSeat/${inforFlight.item.FlightNumber}?type=${TypeFlight}&seat=${newCodeSeat}`,
+                        )
+                        .then((res) => console.log(res))
+                        .catch((err) => console.log(err));
+                    axios
+                        .put(
+                            `http://localhost:4000/codeSeat/${inforFlightReturn.item.FlightNumber}?type=${TypeFlightReturn}&seat=${newCodeSeatReturn}`,
+                        )
+                        .then((res) => console.log(res))
+                        .catch((err) => console.log(err));
+                    setTimeout(() => {
+                        setShowModal(true);
+                    }, 3000);
+                    toast.success('Đặt vé thành công!');
+
+                    // Store bookedButton in localStorage
+                    localStorage.setItem('bookedButton', JSON.stringify(bookedButton1));
+                    if (typeTrip === 'Roundtrip')
+                        localStorage.setItem('bookedButtonReturn', JSON.stringify(bookedButton2));
+                    <Paying code1={bookedButton1} code2={bookedButton2} />;
+                }
+            }
         }
     };
 
@@ -344,7 +467,6 @@ function SeatBooking() {
     // const type = "Business Class";
 
     const storedInforFlight = JSON.parse(localStorage.getItem('inforFlight'));
-    const typeTrip = JSON.parse(localStorage.getItem('TypeTrip'));
     const storedInforFlightReturn = JSON.parse(localStorage.getItem('inforFlightReturn'));
 
     const [dataNew, setDataNew] = useState();

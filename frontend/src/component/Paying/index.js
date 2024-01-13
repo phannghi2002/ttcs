@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 
 import GetAllData from '../GetAllData';
@@ -48,6 +48,7 @@ function Paying() {
     const storedInforSeat = JSON.parse(localStorage.getItem('bookedButton'));
     const storedTypeTrip = JSON.parse(localStorage.getItem('TypeTrip'));
     const storedQuantity = JSON.parse(localStorage.getItem('Quantity'));
+    const inforFlightReturn = JSON.parse(localStorage.getItem('inforFlightReturn'));
 
     const [plant, setPlant] = useState('');
     const [numberCard, setNumberCard] = useState('');
@@ -55,6 +56,8 @@ function Paying() {
     const [name, setName] = useState('');
     const [isNumberCard, setIsNumberCard] = useState(false);
     const [user, setUser] = useState([]);
+    const [timeoutId, setTimeoutId] = useState(null);
+    const [timeoutPay, setTimeoutPay] = useState(false);
 
     let storedInforFlightReturn, storedInforSeatReturn;
 
@@ -139,9 +142,6 @@ function Paying() {
     //             console.error('Error sending data:', error);
     //         });
     // };
-
-    console.log(data00.TypeTicket);
-    console.log(data00);
 
     const [dataNew, setDataNew] = useState();
     const [dataNew2, setDataNew2] = useState();
@@ -435,6 +435,7 @@ function Paying() {
     const handlePay = (e) => {
         if (numberCard !== '' && expirationDate !== '' && name !== '') {
             if (isNumberCard) {
+                setShouldStop(true);
                 setShow(true);
 
                 // sendInfoData();
@@ -451,6 +452,8 @@ function Paying() {
                 setTimeout(() => {
                     handleSendEmail();
                 }, 2000);
+                clearTimeout(timeoutId);
+                setCountdown(0);
             }
         } else {
             handleInputNumberCard(e);
@@ -522,16 +525,81 @@ function Paying() {
         }
     };
 
+    const [countdown, setCountdown] = useState(3);
+    const [shouldStop, setShouldStop] = useState(false); // Thêm biến shouldStop
+
+    useEffect(() => {
+        let interval;
+
+        if (countdown > 0 && !shouldStop) {
+            interval = setInterval(() => {
+                setCountdown((prevCountdown) => prevCountdown - 1);
+            }, 1000);
+        }
+
+        if (countdown === 0) {
+            setTimeoutPay(true);
+        }
+
+        return () => clearInterval(interval);
+    }, [countdown, shouldStop]);
+
+    const formatTime = (timeInSeconds) => {
+        const minutes = Math.floor(timeInSeconds / 60);
+        const seconds = timeInSeconds % 60;
+
+        return `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+    };
+
+    const handleDeleteCodeSeat = () => {
+        if (storedTypeTrip === 'Roundtrip') {
+            const TypeFlight = storedInforFlight.selectedValue;
+            const TypeFlightReturn = inforFlightReturn.selectedValue;
+            axios
+                .put(
+                    `http://localhost:4000/codeSeat/fail/${storedInforFlight.item.FlightNumber}?type=${TypeFlight}&seat=${storedInforSeat}`,
+                )
+                .catch((err) => console.error(err));
+            axios
+                .put(
+                    `http://localhost:4000/codeSeat/fail/${inforFlightReturn.item.FlightNumber}?type=${TypeFlightReturn}&seat=${storedInforSeatReturn}`,
+                )
+                .catch((err) => console.error(err));
+        } else {
+            const TypeFlight = storedInforFlight.selectedValue;
+
+            axios
+                .put(
+                    `http://localhost:4000/codeSeat/fail/${storedInforFlight.item.FlightNumber}?type=${TypeFlight}&seat=${storedInforSeat}`,
+                )
+                .catch((err) => console.error(err));
+        }
+    };
+
+    useEffect(() => {
+        const id = setTimeout(() => {
+            handleDeleteCodeSeat();
+        }, 300000);
+        setTimeoutId(id);
+
+        console.log('bat dau tinh gio');
+
+        return () => {
+            clearTimeout(timeoutId);
+        };
+    }, []);
+
     return (
         <div className={cx('wrapper_pay')}>
             <Header />
 
             <div className={cx('contain_pay')}>
-                {!show && (
+                {!show && !timeoutPay && (
                     <div className={cx('wrapper')}>
                         <div className={cx('container')}>
                             <div className={cx('header')}>
                                 <img className={cx('logo-img')} alt="logo" src="https://res.flynow.vn/logoflynow.png" />
+                                <span>Phiên giao dịch sẽ hết hạn sau : {formatTime(countdown)}</span>
                             </div>
                             <div className={cx('content')}>
                                 <div className={cx('information')}>
@@ -589,7 +657,7 @@ function Paying() {
                                     </span>
                                     <div className={cx('submit-btn')}>
                                         <Link to="/seatBook" className={cx('btn', 'return-btn')}>
-                                            <span>Trở lại</span>
+                                            <span onClick={handleDeleteCodeSeat}>Trở lại</span>
                                         </Link>
                                         <button className={cx('btn', 'next-btn')} onClick={handlePay}>
                                             Thanh toán
@@ -606,6 +674,7 @@ function Paying() {
                     <GetAllData data={data00} />
                     // </div>
                 )}
+                {timeoutPay && <h1>Đã hết thời gian thanh toán</h1>}
                 <ToastCustom />
             </div>
         </div>
