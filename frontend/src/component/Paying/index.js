@@ -525,7 +525,7 @@ function Paying() {
         }
     };
 
-    const [countdown, setCountdown] = useState(3);
+    const [countdown, setCountdown] = useState(300);
     const [shouldStop, setShouldStop] = useState(false); // Thêm biến shouldStop
 
     useEffect(() => {
@@ -674,7 +674,7 @@ function Paying() {
                     <GetAllData data={data00} />
                     // </div>
                 )}
-                {timeoutPay && <h1>Đã hết thời gian thanh toán</h1>}
+                {timeoutPay && !show && <h1>Đã hết thời gian thanh toán</h1>}
                 <ToastCustom />
             </div>
         </div>

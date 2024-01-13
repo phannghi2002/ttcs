@@ -29,19 +29,51 @@ export const updateCodeSeat = async (req, res) => {
     const codeSeat = req.query.seat.split(',');
 
     try {
-        const updatedCodeSeat = await CodeSeat.updateOne(
-            { FlightNumber: id },
-            {
-                $set: { [type]: codeSeat },
-            },
-            { new: true },
-        );
+        const oldCodeSeat = await CodeSeat.findOne({ FlightNumber: id }, { [type]: 1, _id: 0 });
 
-        res.status(200).json({
-            success: true,
-            message: 'Successfully updated',
-            data: updatedCodeSeat,
-        });
+        let codeSeatPresent;
+        const getCodeSeatPresent = () => {
+            if (type === 'EconomyClass') {
+                codeSeatPresent = oldCodeSeat.EconomyClass;
+            } else if (type === 'PremiumClass') {
+                codeSeatPresent = oldCodeSeat.PremiumClass;
+            } else if (type === 'BusinessClass') {
+                codeSeatPresent = oldCodeSeat.BusinessClass;
+            } else if (type === 'FirstClass') {
+                codeSeatPresent = oldCodeSeat.FirstClass;
+            }
+        };
+
+        getCodeSeatPresent();
+        console.log('code', codeSeatPresent);
+        var isUnique = codeSeat.every((value) => !codeSeatPresent.includes(value));
+
+        if (isUnique) {
+            const updatedCodeSeat = await CodeSeat.updateOne(
+                { FlightNumber: id },
+                {
+                    $set: { [type]: codeSeatPresent.concat(codeSeat) },
+                },
+                { new: true },
+            );
+
+            res.status(200).json({
+                success: true,
+                message: 'Successfully updated',
+                data: updatedCodeSeat,
+            });
+        } else {
+            function layPhanTuTrungLap(arr1, arr2) {
+                return arr1.filter((element) => arr2.includes(element));
+            }
+
+            const ketQua = layPhanTuTrungLap(codeSeat, codeSeatPresent);
+            res.status(500).json({
+                success: false,
+                message: 'Failed to update. Try again ',
+                data: ketQua,
+            });
+        }
     } catch (error) {
         console.log(error);
         res.status(500).json({
