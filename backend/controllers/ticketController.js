@@ -124,7 +124,6 @@ export const getAllTicket = async (req, res) => {
         // .limit(5);
 
         if (tickets.length > 0) {
-            console.log('kho vl');
             res.status(200).json({
                 success: true,
                 count: tickets.length,

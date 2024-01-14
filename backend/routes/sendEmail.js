@@ -7,8 +7,6 @@ import NodeMailer from 'nodemailer';
 //create new ticket
 // router.post("/", emailController.sendMail);
 router.post('/', (req, res) => {
-    //   console.log(req.body);
-
     const { email, code } = req.body;
 
     try {
@@ -42,7 +40,10 @@ router.post('/', (req, res) => {
 });
 
 router.post('/all', (req, res) => {
-    const { email, code, data } = req.body;
+    const { code, data } = req.body;
+
+    console.log(data);
+    console.log('da nhan dc tin hieu');
 
     try {
         const transporter = NodeMailer.createTransport({
@@ -410,7 +411,8 @@ router.post('/all', (req, res) => {
             return html;
         };
 
-        console.log(handleSendmail());
+        console.log('html', handleSendmail());
+        console.log('data-length', data.length);
 
         const mailOptions = {
             from: process.env.EMAIL,

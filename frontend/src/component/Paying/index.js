@@ -438,9 +438,6 @@ function Paying() {
                 setShouldStop(true);
                 setShow(true);
 
-                // sendInfoData();
-                handleSendEmail();
-
                 pushSeat(storedInforFlight.item._id);
 
                 if (checkTypeTrip()) {
@@ -472,12 +469,12 @@ function Paying() {
                         'Content-Type': 'application/json',
                     },
                     body: JSON.stringify({
-                        email: data00.Email,
                         code: data00.CodeTicket,
                         data: response.data.data,
                         type: data00.TypeFlight,
                     }),
                 });
+                console.log('Da gui email ve may ');
             })
             .catch((err) => console.log(err));
     };

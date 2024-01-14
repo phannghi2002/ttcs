@@ -365,77 +365,39 @@ function SeatBooking() {
                     }
                 });
         } else {
-            if (codeSeat.length === 0 && codeSeatReturn === 0) {
-                const TypeFlight = inforFlight.selectedValue;
-                const TypeFlightReturn = inforFlightReturn.selectedValue;
-                axios
-                    .put(
-                        `http://localhost:4000/codeSeat/${inforFlight.item.FlightNumber}?type=${TypeFlight}&seat=${bookedButton1}`,
-                    )
-                    .then((res) => console.log(res))
-                    .catch((err) => console.log(err));
-
-                axios
-                    .put(
-                        `http://localhost:4000/codeSeat/${inforFlightReturn.item.FlightNumber}?type=${TypeFlightReturn}&seat=${bookedButton2}`,
-                    )
-                    .then((res) => console.log(res))
-                    .catch((err) => console.log(err));
-                setTimeout(() => {
-                    setShowModal(true);
-                }, 3000);
-                console.log(bookedButton1);
-                toast.success('Đặt vé thành công!');
-
-                // Store bookedButton in localStorage
-                localStorage.setItem('bookedButton', JSON.stringify(bookedButton1));
-                if (typeTrip === 'Roundtrip') localStorage.setItem('bookedButtonReturn', JSON.stringify(bookedButton2));
-                <Paying code1={bookedButton1} code2={bookedButton2} />;
-            } else {
-                const result = hasCommonElement(codeSeat, bookedButton1);
-                const resultReturn = hasCommonElement(codeSeatReturn, bookedButton2);
-                if (result || resultReturn) {
-                    const duplicateSeats = getCommonElements(codeSeat, bookedButton1);
-                    const duplicateSeatsReturn = getCommonElements(codeSeatReturn, bookedButton2);
-
-                    for (let element of duplicateSeats) {
-                        toast.error(`Ghế ${element} của chuyến ${inforFlight.item.FlightNumber} đã được đặt trước`);
-                    }
-
-                    for (let element of duplicateSeatsReturn) {
-                        toast.error(
-                            `Ghế ${element} của chuyến ${inforFlightReturn.item.FlightNumber} đã được đặt trước`,
-                        );
-                    }
-                } else {
-                    const newCodeSeat = [...codeSeat, ...bookedButton1];
-                    const newCodeSeatReturn = [...codeSeatReturn, ...bookedButton2];
-                    const TypeFlight = inforFlight.selectedValue;
-                    const TypeFlightReturn = inforFlightReturn.selectedValue;
-                    axios
-                        .put(
-                            `http://localhost:4000/codeSeat/${inforFlight.item.FlightNumber}?type=${TypeFlight}&seat=${newCodeSeat}`,
-                        )
-                        .then((res) => console.log(res))
-                        .catch((err) => console.log(err));
-                    axios
-                        .put(
-                            `http://localhost:4000/codeSeat/${inforFlightReturn.item.FlightNumber}?type=${TypeFlightReturn}&seat=${newCodeSeatReturn}`,
-                        )
-                        .then((res) => console.log(res))
-                        .catch((err) => console.log(err));
+            const TypeFlight = inforFlight.selectedValue;
+            const TypeFlightReturn = inforFlightReturn.selectedValue;
+            axios
+                .put(
+                    `http://localhost:4000/codeSeat/roundTrip/${inforFlight.item.FlightNumber}?type=${TypeFlight}&seat=${bookedButton1}&typeReturn=${TypeFlightReturn}&seatReturn=${bookedButton2}&idReturn=${inforFlightReturn.item.FlightNumber}`,
+                )
+                .then((res) => {
+                    console.log(res);
                     setTimeout(() => {
                         setShowModal(true);
                     }, 3000);
+                    console.log(bookedButton1);
                     toast.success('Đặt vé thành công!');
 
                     // Store bookedButton in localStorage
                     localStorage.setItem('bookedButton', JSON.stringify(bookedButton1));
                     if (typeTrip === 'Roundtrip')
                         localStorage.setItem('bookedButtonReturn', JSON.stringify(bookedButton2));
-                    <Paying code1={bookedButton1} code2={bookedButton2} />;
-                }
-            }
+                })
+                .catch((err) => {
+                    const error = err.response.data.data;
+                    const errorReturn = err.response.data.dataReturn;
+
+                    for (let i = 0; i < error.length; i++) {
+                        toast.error(`Ghế ${error[i]} của máy bay ${inforFlight.item.FlightNumber} đã được đặt`);
+                    }
+
+                    for (let j = 0; j < errorReturn.length; j++) {
+                        toast.error(
+                            `Ghế ${errorReturn[j]} của máy bay ${inforFlightReturn.item.FlightNumber} đã được đặt`,
+                        );
+                    }
+                });
         }
     };
 

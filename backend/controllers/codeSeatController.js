@@ -83,12 +83,103 @@ export const updateCodeSeat = async (req, res) => {
     }
 };
 
-export const updateCodeSeatPayingFail = async (req, res) => {
+export const updateCodeSeatRoundTrip = async (req, res) => {
     const id = req.params.id;
-    console.log(typeof req.query.seat);
     const type = req.query.type;
     const codeSeat = req.query.seat.split(',');
+    const typeReturn = req.query.typeReturn;
+    const codeSeatReturn = req.query.seatReturn.split(',');
+    const idReturn = req.query.idReturn;
 
+    try {
+        const oldCodeSeat = await CodeSeat.findOne({ FlightNumber: id }, { [type]: 1, _id: 0 });
+        const oldCodeSeatReturn = await CodeSeat.findOne({ FlightNumber: idReturn }, { [type]: 1, _id: 0 });
+
+        let codeSeatPresent;
+        let codeSeatReturnPresent;
+
+        const getCodeSeatPresent = () => {
+            if (type === 'EconomyClass') {
+                codeSeatPresent = oldCodeSeat.EconomyClass;
+            } else if (type === 'PremiumClass') {
+                codeSeatPresent = oldCodeSeat.PremiumClass;
+            } else if (type === 'BusinessClass') {
+                codeSeatPresent = oldCodeSeat.BusinessClass;
+            } else if (type === 'FirstClass') {
+                codeSeatPresent = oldCodeSeat.FirstClass;
+            }
+        };
+
+        const getCodeSeatPresentReturn = () => {
+            if (typeReturn === 'EconomyClass') {
+                codeSeatReturnPresent = oldCodeSeatReturn.EconomyClass;
+            } else if (typeReturn === 'PremiumClass') {
+                codeSeatReturnPresent = oldCodeSeatReturn.PremiumClass;
+            } else if (typeReturn === 'BusinessClass') {
+                codeSeatReturnPresent = oldCodeSeatReturn.BusinessClass;
+            } else if (typeReturn === 'FirstClass') {
+                codeSeatReturnPresent = oldCodeSeatReturn.FirstClass;
+            }
+        };
+
+        getCodeSeatPresent();
+        getCodeSeatPresentReturn();
+
+        var isUnique = codeSeat.every((value) => !codeSeatPresent.includes(value));
+        var isUniqueReturn = codeSeatReturn.every((value) => !codeSeatReturnPresent.includes(value));
+
+        if (isUnique && isUniqueReturn) {
+            const updatedCodeSeat = await CodeSeat.updateOne(
+                { FlightNumber: id },
+                {
+                    $set: { [type]: codeSeatPresent.concat(codeSeat) },
+                },
+                { new: true },
+            );
+
+            const updatedCodeSeatReturn = await CodeSeat.updateOne(
+                { FlightNumber: idReturn },
+                {
+                    $set: { [type]: codeSeatReturnPresent.concat(codeSeatReturn) },
+                },
+                { new: true },
+            );
+
+            res.status(200).json({
+                success: true,
+                message: 'Successfully updated',
+                data: updatedCodeSeat,
+                data2: updatedCodeSeatReturn,
+            });
+        } else {
+            function layPhanTuTrungLap(arr1, arr2) {
+                return arr1.filter((element) => arr2.includes(element));
+            }
+
+            const ketQua = layPhanTuTrungLap(codeSeat, codeSeatPresent);
+            const ketQuaReturn = layPhanTuTrungLap(codeSeatReturn, codeSeatReturnPresent);
+
+            res.status(500).json({
+                success: false,
+                message: 'Failed to update. Try again ',
+                data: ketQua,
+                dataReturn: ketQuaReturn,
+            });
+        }
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({
+            success: false,
+            message: 'Failed to update. Try again ',
+        });
+    }
+};
+
+export const updateCodeSeatPayingFail = async (req, res) => {
+    const id = req.params.id;
+    const type = req.query.type;
+    const codeSeat = req.query.seat.split(',');
+    console.log('Da xu ly');
     try {
         const updatedCodeSeat = await CodeSeat.updateOne(
             { FlightNumber: id },
