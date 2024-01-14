@@ -40,10 +40,7 @@ router.post('/', (req, res) => {
 });
 
 router.post('/all', (req, res) => {
-    const { code, data } = req.body;
-
-    console.log(data);
-    console.log('da nhan dc tin hieu');
+    const { code, data, type } = req.body;
 
     try {
         const transporter = NodeMailer.createTransport({

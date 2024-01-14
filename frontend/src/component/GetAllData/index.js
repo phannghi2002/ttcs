@@ -73,6 +73,8 @@ function GetAllData({ data, className }) {
         };
     };
 
+    console.log(dateFlightGo);
+
     const checkCompany = (company) => {
         const COMPANY = [
             { name: 'VIETNAM AIRLINES', album: VNA },
