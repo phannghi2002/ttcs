@@ -61,26 +61,7 @@ function FlightToday() {
         const formattedDateTime = `${hour}:${minute}`;
         return formattedDateTime;
     };
-    // const FlightTime = convertTime(item.FlightTime);
-    // const LandingTime = convertTime(item.LandingTime);
 
-    // const duration = (FlightTime, LandingTime) => {
-    //     const [startHour, startMinute] = FlightTime.split(':');
-    //     const [endHour, endMinute] = LandingTime.split(':');
-
-    //     // Convert the hours and minutes to numbers
-    //     const startHourNum = parseInt(startHour, 10);
-    //     const startMinuteNum = parseInt(startMinute, 10);
-    //     const endHourNum = parseInt(endHour, 10);
-    //     const endMinuteNum = parseInt(endMinute, 10);
-
-    //     // Calculate the difference in minutes
-    //     const hourDifference = endHourNum - startHourNum;
-    //     const minuteDifference = endMinuteNum - startMinuteNum;
-    //     const totalMinutes = hourDifference * 60 + minuteDifference;
-
-    //     return totalMinutes;
-    // };
     const convertMinutesToHourMinute = (minutes) => {
         const hours = Math.floor(minutes / 60);
         const remainingMinutes = minutes % 60;
@@ -104,14 +85,13 @@ function FlightToday() {
         <>
             <h2 className={cx('title')}>Tất cả chuyến bay ngày hôm nay</h2>
 
-            <div className={cx('field')}>
-                <span>Điểm khởi hành</span>
-
-                <span className={cx('quantity_people')}>Số người</span>
-            </div>
-
             {data && data.length !== 0 && (
                 <div>
+                    <div className={cx('field')}>
+                        <span>Điểm khởi hành</span>
+
+                        <span className={cx('quantity_people')}>Số người</span>
+                    </div>
                     {data.map((item, key) => {
                         return (
                             <div key={item._id} className={cx('container')}>
@@ -157,7 +137,7 @@ function FlightToday() {
                 </div>
             )}
 
-            {(!data || data.length === 0) && <h2>Doi moc mom roi</h2>}
+            {(!data || data.length === 0) && <h4>Hôm nay không có chuyến bay</h4>}
         </>
     );
 }

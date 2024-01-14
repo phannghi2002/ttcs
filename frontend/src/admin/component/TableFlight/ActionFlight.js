@@ -213,6 +213,8 @@ export const AddFlight = ({ open, handleClose, onUpdate, setReRender }) => {
     const validate = () => {
         if (data.FlightNumber.trim() === '') {
             newErrors['FlightNumber'] = 'Trường này không được bỏ trống';
+        } else if (!data.FlightNumber.startsWith(data.AirlineCode)) {
+            newErrors['FlightNumber'] = 'Phải nhập mã bắt đầu chứa mã máy bay';
         }
         if (data.EconomyClass.PriceAdult.trim() === '') {
             newErrors['EconomyClass'] = 'Trường này không được bỏ trống';
@@ -242,6 +244,8 @@ export const AddFlight = ({ open, handleClose, onUpdate, setReRender }) => {
         }
         if (data.LandingTime === null) {
             newErrors['LandingTime'] = 'Trường này không được bỏ trống';
+        } else if (data.LandingTime <= data.FlightTime) {
+            newErrors['LandingTime'] = 'Thời gian đến phải muộn hơn thời gian đi';
         }
 
         setErrors(newErrors);
@@ -486,7 +490,7 @@ export const AddFlight = ({ open, handleClose, onUpdate, setReRender }) => {
                                         seconds: renderTimeViewClock,
                                     }}
                                     value={data.FlightTime}
-                                    // minDateTime={dayjs().add(15, 'day')}
+                                    minDateTime={dayjs().add(15, 'day')}
                                     slotProps={{
                                         textField: {
                                             helperText: errors['FlightTime'] || '',
@@ -512,7 +516,7 @@ export const AddFlight = ({ open, handleClose, onUpdate, setReRender }) => {
                                         seconds: renderTimeViewClock,
                                     }}
                                     value={data.LandingTime}
-                                    // minDateTime={dayjs().add(15, 'day')}
+                                    minDateTime={dayjs().add(15, 'day')}
                                     slotProps={{
                                         textField: {
                                             helperText: errors['LandingTime'] || '',
@@ -580,9 +584,22 @@ export const EditFlight = ({ row, open, setOpen, handleClose, onUpdate, setReRen
         }
         setErrors(newErrors);
     };
+
+    const handleChangeDate = (name, newValue) => {
+        console.log(newValue);
+        if (newValue === '' || newValue === null) {
+            newErrors[name] = 'Trường này không được bỏ trống';
+        } else {
+            delete newErrors[name];
+        }
+        setErrors(newErrors);
+        return newErrors;
+    };
     const validate = () => {
         if (data.FlightNumber.trim() === '') {
             newErrors['FlightNumber'] = 'Trường này không được bỏ trống';
+        } else if (!data.FlightNumber.startsWith(data.AirlineCode)) {
+            newErrors['FlightNumber'] = 'Phải nhập mã bắt đầu chứa mã máy bay';
         }
         if (!CheckNumber(data.EconomyClass.PriceAdult)) {
             newErrors['EconomyClass'] = 'Trường này phải là số';
@@ -607,6 +624,11 @@ export const EditFlight = ({ row, open, setOpen, handleClose, onUpdate, setReRen
         } else if (typeof data.FirstClass.PriceAdult === 'string' && data.FirstClass.PriceAdult.trim() === '') {
             newErrors['FirstClass'] = 'Trường này không được bỏ trống';
         }
+        if (data.LandingTime <= data.FlightTime) {
+            newErrors['LandingTime'] = 'Thời gian đến phải muộn hơn thời gian đi';
+        } else {
+            delete newErrors['LandingTime'];
+        }
 
         setErrors(newErrors);
     };
@@ -616,12 +638,11 @@ export const EditFlight = ({ row, open, setOpen, handleClose, onUpdate, setReRen
         const landingTime = new Date(LandingTime);
         return Math.floor((landingTime.getTime() - flightTime.getTime()) / 60000);
     };
-    // if (row) {
-    //     console.log('thoi gian', typeof row.LandingTime);
-    // }
 
     const handleEdit = () => {
         validate();
+
+        console.log('sai roi');
 
         if (Object.keys(newErrors).length > 0) {
             setErrors(newErrors);
@@ -867,6 +888,7 @@ export const EditFlight = ({ row, open, setOpen, handleClose, onUpdate, setReRen
                                     defaultValue={dayjs(row.FlightTime)}
                                     value={data.FlightTime ? dayjs(data.FlightTime) : null}
                                     // minDateTime={dayjs().add(15, 'day')}
+
                                     onChange={(newValue) => {
                                         setData({ ...data, FlightTime: newValue });
                                     }}
@@ -882,8 +904,19 @@ export const EditFlight = ({ row, open, setOpen, handleClose, onUpdate, setReRen
                                     defaultValue={dayjs(row.LandingTime)}
                                     value={data.LandingTime ? dayjs(data.LandingTime) : null}
                                     // minDateTime={dayjs().add(15, 'day')}
+                                    slotProps={{
+                                        textField: {
+                                            helperText: errors['LandingTime'] || '',
+                                        },
+                                    }}
                                     onChange={(newValue) => {
                                         setData({ ...data, LandingTime: newValue });
+                                        handleChangeDate('LandingTime', newValue);
+                                    }}
+                                    sx={{
+                                        '& .MuiFormHelperText-root': {
+                                            color: errors['LandingTime'] ? 'red' : 'inherit',
+                                        },
                                     }}
                                 />
                             </DemoContainer>

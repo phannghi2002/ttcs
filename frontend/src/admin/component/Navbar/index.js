@@ -12,8 +12,9 @@ import MoreIcon from '@mui/icons-material/MoreVert';
 import { Helmet } from 'react-helmet';
 import LogoutIcon from '@mui/icons-material/Logout';
 import { useAppStore } from '../../index';
-import { useNavigate } from 'react-router-dom';
+
 import AvatarPeople from '../AvatarPeople';
+// import NotificationsIcon from '@mui/icons-material/Notifications';
 
 const AppBar = styled(
     MuiAppBar,
@@ -48,10 +49,11 @@ export default function Navbar() {
     const handleMobileMenuOpen = (event) => {
         setMobileMoreAnchorEl(event.currentTarget);
     };
-    const navigate = useNavigate();
+    // const navigate = useNavigate();
 
     const handleLogout = () => {
-        navigate('/');
+        // navigate('/');
+        window.location.href = '/';
         localStorage.removeItem('Login');
     };
     const menuId = 'primary-search-account-menu';
@@ -139,6 +141,7 @@ export default function Navbar() {
 
                     <Box sx={{ flexGrow: 1 }} />
                     <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
+                        {/* <NotificationsIcon /> */}
                         <span className="d-flex align-items-center">{getName}</span>
                         <IconButton
                             size="large"
@@ -149,7 +152,6 @@ export default function Navbar() {
                             onClick={handleProfileMenuOpen}
                             color="inherit"
                         >
-                            {/* <AccountCircle /> */}
                             <AvatarPeople string={getName} />
                         </IconButton>
                     </Box>
