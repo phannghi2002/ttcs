@@ -78,6 +78,16 @@ router.post('/all', (req, res) => {
             return transform[location];
         };
 
+        const FormatTime = (dateString) => {
+            if (dateString) {
+                const date = new Date(dateString);
+                const hours = date.getHours() < 10 ? `0${date.getHours()}` : date.getHours();
+                const minutes = date.getMinutes() < 10 ? `0${date.getMinutes()}` : date.getMinutes();
+                return `${hours}:${minutes}`;
+            }
+            return '';
+        };
+
         const handleAirline = (company) => {
             const COMPANY = [
                 { name: 'VIETNAM AIRLINES' },
@@ -100,7 +110,8 @@ router.post('/all', (req, res) => {
         const getTime = (time) => {
             const time2 = time.split('T')[1];
             const time3 = time2.split(':');
-            const timeNew = time3[0] + ':' + time3[1];
+            const time4 = Number(time3[0]) + 7;
+            const timeNew = time4 + ':' + time3[1];
             return timeNew;
         };
 
@@ -180,11 +191,11 @@ router.post('/all', (req, res) => {
               <tr style="padding: 5px;">
                 <td style="width: 50%; text-align: center">
                   <span style="display: block; font-size: 14px"> Giờ khởi hành </span>
-                  <span>${getTime(data[index].FlightTime)}</span>
+                  <span>${FormatTime(data[index].FlightTime)}</span>
                 </td>
                 <td style="width: 50%; text-align: center">
                   <span style="display: block; font-size: 14px"> Giờ đến </span>
-                  <span>${getTime(data[index].LandingTime)}</span>
+                  <span>${FormatTime(data[index].LandingTime)}</span>
                 </td>
               </tr>
             </table>
@@ -278,11 +289,11 @@ router.post('/all', (req, res) => {
                           <tr style="padding: 5px">
                             <td style="width: 50%; text-align: center">
                               <span style="display: block; font-size: 14px"> Giờ khởi hành </span>
-                              <span>${getTime(data[index].FlightTime)}</span>
+                              <span>${FormatTime(data[index].FlightTime)}</span>
                             </td>
                             <td style="width: 50%; text-align: center">
                               <span style="display: block; font-size: 14px"> Giờ đến </span>
-                              <span>${getTime(data[index].LandingTime)}</span>
+                              <span>${FormatTime(data[index].LandingTime)}</span>
                             </td>
                           </tr>
                         </table>
@@ -364,11 +375,11 @@ router.post('/all', (req, res) => {
                           <tr style="padding: 5px">
                             <td style="width: 50%; text-align: center">
                               <span style="display: block; font-size: 14px"> Giờ khởi hành </span>
-                              <span>${getTime(data[index].FlightTimeReturn)}</span>
+                              <span>${FormatTime(data[index].FlightTimeReturn)}</span>
                             </td>
                             <td style="width: 50%; text-align: center">
                               <span style="display: block; font-size: 14px"> Giờ đến </span>
-                              <span>${getTime(data[index].LandingTimeReturn)}</span>
+                              <span>${FormatTime(data[index].LandingTimeReturn)}</span>
                             </td>
                           </tr>
                         </table>

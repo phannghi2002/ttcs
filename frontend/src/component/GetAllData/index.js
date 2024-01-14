@@ -45,6 +45,7 @@ function GetAllData({ data, className }) {
         const year = dateConvert.getUTCFullYear();
 
         const hour = dateConvert.getUTCHours() + 7;
+        const hourAfternoon = dateConvert.getUTCHours();
         const minute = dateConvert.getUTCMinutes();
 
         return {
@@ -53,6 +54,7 @@ function GetAllData({ data, className }) {
             month: month,
             year: year,
             hour: hour,
+            hourAfternoon: hourAfternoon,
             minute: minute,
         };
     };
@@ -101,6 +103,16 @@ function GetAllData({ data, className }) {
         time_return = convertDuration(duration_return);
         company_return = checkCompany(data.FlightNumberReturn);
     }
+
+    const FormatTime = (dateString) => {
+        if (dateString) {
+            const date = new Date(dateString);
+            const hours = date.getHours() < 10 ? `0${date.getHours()}` : date.getHours();
+            const minutes = date.getMinutes() < 10 ? `0${date.getMinutes()}` : date.getMinutes();
+            return `${hours}:${minutes}`;
+        }
+        return '';
+    };
 
     return (
         // <div className={cx('contain')} >
@@ -184,13 +196,14 @@ function GetAllData({ data, className }) {
                                                 Giờ khởi hành:{' '}
                                                 <div className={cx('time')}>
                                                     {' '}
-                                                    {dateFlightGo.hour < 10
+                                                    {/* {dateFlightGo.hour < 10
                                                         ? `0${dateFlightGo.hour}`
                                                         : dateFlightGo.hour}
                                                     :
                                                     {dateFlightGo.minute < 10
                                                         ? `0${dateFlightGo.minute}`
-                                                        : dateFlightGo.minute}
+                                                        : dateFlightGo.minute} */}
+                                                    {FormatTime(data.FlightTime)}
                                                 </div>
                                             </span>
                                         </div>
@@ -199,10 +212,11 @@ function GetAllData({ data, className }) {
                                             <span>
                                                 Giờ đến:{' '}
                                                 <div className={cx('time')}>
-                                                    {dateLandGo.hour < 10 ? `0${dateLandGo.hour}` : dateLandGo.hour}:
+                                                    {/* {dateLandGo.hour < 10 ? `0${dateLandGo.hour}` : dateLandGo.hour}:
                                                     {dateLandGo.minute < 10
                                                         ? `0${dateLandGo.minute}`
-                                                        : dateLandGo.minute}
+                                                        : dateLandGo.minute} */}
+                                                    {FormatTime(data.LandingTime)}
                                                 </div>
                                             </span>
                                         </div>
@@ -287,14 +301,15 @@ function GetAllData({ data, className }) {
                                                     <span>
                                                         Giờ khởi hành:{' '}
                                                         <div className={cx('time')}>
-                                                            {' '}
+                                                            {/* {' '}
                                                             {dateFlightReturn.hour < 10
                                                                 ? `0${dateFlightReturn.hour}`
                                                                 : dateFlightReturn.hour}
                                                             :
                                                             {dateFlightReturn.minute < 10
                                                                 ? `0${dateFlightReturn.minute}`
-                                                                : dateFlightReturn.minute}
+                                                                : dateFlightReturn.minute} */}
+                                                            {FormatTime(data.FlightTimeReturn)}
                                                         </div>
                                                     </span>
                                                 </div>
@@ -303,13 +318,14 @@ function GetAllData({ data, className }) {
                                                     <span>
                                                         Giờ đến:{' '}
                                                         <div className={cx('time')}>
-                                                            {dateLandReturn.hour < 10
+                                                            {/* {dateLandReturn.hour < 10
                                                                 ? `0${dateLandReturn.hour}`
                                                                 : dateLandReturn.hour}
                                                             :
                                                             {dateLandReturn.minute < 10
                                                                 ? `0${dateLandReturn.minute}`
-                                                                : dateLandReturn.minute}
+                                                                : dateLandReturn.minute} */}
+                                                            {FormatTime(data.LandingTimeReturn)}
                                                         </div>
                                                     </span>
                                                 </div>

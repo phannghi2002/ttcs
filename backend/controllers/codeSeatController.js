@@ -93,7 +93,7 @@ export const updateCodeSeatRoundTrip = async (req, res) => {
 
     try {
         const oldCodeSeat = await CodeSeat.findOne({ FlightNumber: id }, { [type]: 1, _id: 0 });
-        const oldCodeSeatReturn = await CodeSeat.findOne({ FlightNumber: idReturn }, { [type]: 1, _id: 0 });
+        const oldCodeSeatReturn = await CodeSeat.findOne({ FlightNumber: idReturn }, { [typeReturn]: 1, _id: 0 });
 
         let codeSeatPresent;
         let codeSeatReturnPresent;

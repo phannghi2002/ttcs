@@ -324,19 +324,6 @@ function SeatBooking() {
         }
     };
 
-    function hasCommonElement(arr1, arr2) {
-        for (let element of arr1) {
-            if (arr2.includes(element)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    function getCommonElements(arr1, arr2) {
-        return arr1.filter((element) => arr2.includes(element));
-    }
-
     const handleBooking = () => {
         if (typeTrip === 'Oneway') {
             const TypeFlight = inforFlight.selectedValue;
@@ -388,14 +375,18 @@ function SeatBooking() {
                     const error = err.response.data.data;
                     const errorReturn = err.response.data.dataReturn;
 
-                    for (let i = 0; i < error.length; i++) {
-                        toast.error(`Ghế ${error[i]} của máy bay ${inforFlight.item.FlightNumber} đã được đặt`);
+                    if (error) {
+                        for (let i = 0; i < error.length; i++) {
+                            toast.error(`Ghế ${error[i]} của máy bay ${inforFlight.item.FlightNumber} đã được đặt`);
+                        }
                     }
 
-                    for (let j = 0; j < errorReturn.length; j++) {
-                        toast.error(
-                            `Ghế ${errorReturn[j]} của máy bay ${inforFlightReturn.item.FlightNumber} đã được đặt`,
-                        );
+                    if (errorReturn) {
+                        for (let j = 0; j < errorReturn.length; j++) {
+                            toast.error(
+                                `Ghế ${errorReturn[j]} của máy bay ${inforFlightReturn.item.FlightNumber} đã được đặt`,
+                            );
+                        }
                     }
                 });
         }
