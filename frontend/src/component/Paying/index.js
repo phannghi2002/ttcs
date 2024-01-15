@@ -165,7 +165,12 @@ function Paying() {
     if (numberCard && expirationDate && name && isNumberCard) {
         if (dataNew) {
             array1 = dataNew[data00.TypeTicket].CodeSeat;
-            array1.push(...storedInforSeat);
+
+            storedInforSeat.forEach((value) => {
+                if (!array1.includes(value)) {
+                    array1.push(value);
+                }
+            });
         } else {
             fetchAPI1(storedInforFlight.item._id);
         }
@@ -175,7 +180,16 @@ function Paying() {
         if (numberCard && expirationDate && name && isNumberCard) {
             if (dataNew2) {
                 array2 = dataNew2[data00.TypeTicketReturn].CodeSeat;
-                array2.push(...storedInforSeatReturn);
+
+                // if (!array2.includes(storedInforSeatReturn)) {
+                //     array2.push(...storedInforSeatReturn);
+                // }
+                // array2.push(...storedInforSeatReturn);
+                storedInforSeatReturn.forEach((value) => {
+                    if (!array2.includes(value)) {
+                        array2.push(value);
+                    }
+                });
             } else {
                 console.log(storedInforFlightReturn.item);
                 fetchAPI2(storedInforFlightReturn.item._id);
@@ -400,36 +414,6 @@ function Paying() {
                 .then((response) => console.log(response))
                 .catch((error) => console.log(error));
         }
-
-        // for (let i = totalPeople - Number(storedQuantity.baby); i < totalPeople; i++) {
-        //     axios
-        //         .post('http://localhost:4000/info', {
-        //             TypeFlight: data00.TypeFlight,
-        //             TypeTicket: data00.TypeTicket,
-        //             AirportFrom: data00.AirportFrom,
-        //             AirportTo: data00.AirportTo,
-        //             FlightTime: data00.FlightTime,
-        //             LandingTime: data00.LandingTime,
-        //             DateGo: data00.DateGo,
-        //             TotalMoneyGo: storedInforFlight.moneyBaby,
-        //             TotalMoneyReturn: data00.TotalMoneyReturn * 0.5,
-        //             TotalMoney: data00.TotalMoney,
-        //             CodeTicket: data00.CodeTicket,
-        //             FlightNumber: data00.FlightNumber,
-        //             UserName: user[i].Username,
-        //             ID_Card: user[i].ID_Card,
-        //             CodeSeat: codeSeatSingle[i],
-        //             Email: user[i].Email,
-        //             TypeTicketReturn: data00.TypeTicketReturn,
-        //             FlightNumberReturn: data00.FlightNumberReturn,
-        //             FlightTimeReturn: data00.FlightTimeReturn,
-        //             LandingTimeReturn: data00.LandingTimeReturn,
-        //             CodeSeatReturn: CodeSeatReturnSingle[i],
-        //             DateReturn: data00.DateReturn,
-        //         })
-        //         .then((response) => console.log(response))
-        //         .catch((error) => console.log(error));
-        // }
     }
 
     const handlePay = (e) => {
