@@ -8,6 +8,7 @@ import ticketRoute from './routes/ticket.js';
 import userRoute from './routes/user.js';
 import authRoute from './routes/auth.js';
 import infoRoute from './routes/info.js';
+import cancelRoute from './routes/cancel.js';
 
 import sendEmailRoute from './routes/sendEmail.js';
 import ticketDetailsRoute from './routes/ticketDetail.js';
@@ -54,6 +55,8 @@ app.use('/sendEmail', sendEmailRoute);
 app.use('/login', loginRoute);
 app.use('/ticketDetail', ticketDetailsRoute);
 app.use('/codeSeat', codeSeatRoute);
+
+app.use('/cancel', cancelRoute);
 
 app.listen(port, () => {
     connect();

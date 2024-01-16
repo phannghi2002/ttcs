@@ -15,6 +15,7 @@ import {
     getInfoBookedMonthOnewayAndCompanyNow,
     fetchAPIRoundtripAndCompanyAndDateGoThisMonth,
     fetchAPIRoundtripAndCompanyAndDateReturnThisMonth,
+    fetchAPICancelInfoTicket,
 } from './../controllers/infoBookedController.js';
 
 const router = express.Router();
@@ -66,4 +67,7 @@ router.get(
     '/search/fetchAPIRoundtripAndCompanyAndDateReturnThisMonth',
     fetchAPIRoundtripAndCompanyAndDateReturnThisMonth,
 );
+
+//check infoTicket to Cancel
+router.get('/search/fetchAPICancelInfoTicket', fetchAPICancelInfoTicket);
 export default router;

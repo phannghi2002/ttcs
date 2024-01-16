@@ -12,9 +12,15 @@ import MoreIcon from '@mui/icons-material/MoreVert';
 import { Helmet } from 'react-helmet';
 import LogoutIcon from '@mui/icons-material/Logout';
 import { useAppStore } from '../../index';
+import { useState, useEffect } from 'react';
 
 import AvatarPeople from '../AvatarPeople';
-// import NotificationsIcon from '@mui/icons-material/Notifications';
+import NotificationsIcon from '@mui/icons-material/Notifications';
+import classNames from 'classnames/bind';
+import styles from './Navbar.module.scss';
+import ShowNotifyCancel from '../ShowNotifyCancel';
+
+const cx = classNames.bind(styles);
 
 const AppBar = styled(
     MuiAppBar,
@@ -118,6 +124,56 @@ export default function Navbar() {
 
     const getName = localStorage.getItem('Login');
 
+    const [quantityNotify, setQuantityNotify] = useState(0);
+    const [data, setData] = useState();
+
+    const fetchAPI = async () => {
+        try {
+            let response = await fetch(`http://localhost:4000/cancel`);
+
+            if (!response.ok) {
+                throw new Error('Failed to fetch data');
+            }
+
+            let data1 = await response.json();
+            setQuantityNotify(data1.data.length);
+            setData(data1.data);
+            return data1.data;
+        } catch (error) {
+            console.error(error);
+        }
+    };
+
+    useEffect(() => {
+        fetchAPI();
+    }, [quantityNotify]);
+
+    // const [clickNotify, setClickNotify] = useState(false);
+
+    // const handleClickNotify = () => {
+    //     setClickNotify(!clickNotify);
+    // };
+
+    // const handleClickOutside = (event) => {
+    //     if (clickNotify && !event.target.closest('.notify')) {
+    //         setClickNotify(false);
+    //     }
+    // };
+
+    // useEffect(() => {
+    //     document.addEventListener('click', handleClickOutside);
+
+    //     return () => {
+    //         document.removeEventListener('click', handleClickOutside);
+    //     };
+    // }, [clickNotify]);
+
+    const [clickNotify, setClickNotify] = useState(false);
+
+    const handleClickNotify = () => {
+        setClickNotify(!clickNotify);
+    };
+
     return (
         <Box sx={{ flexGrow: 1 }}>
             <Helmet>
@@ -141,8 +197,23 @@ export default function Navbar() {
 
                     <Box sx={{ flexGrow: 1 }} />
                     <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
-                        {/* <NotificationsIcon /> */}
-                        <span className="d-flex align-items-center">{getName}</span>
+                        <div
+                            style={{ display: 'flex', alignItems: 'center', marginRight: '100px' }}
+                            onClick={handleClickNotify}
+                        >
+                            <NotificationsIcon />
+                            {quantityNotify !== 0 && <span className={cx('quantity')}>{quantityNotify}</span>}
+
+                            {clickNotify && (
+                                <div className={cx('notify')} onClick={(e) => e.stopPropagation()}>
+                                    {data.slice(0, quantityNotify).map((item, index) => (
+                                        <ShowNotifyCancel key={index} data={item} />
+                                    ))}
+                                </div>
+                            )}
+                        </div>
+
+                        <span className="d-flex align-items-center ">{getName}</span>
                         <IconButton
                             size="large"
                             edge="end"

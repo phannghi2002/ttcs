@@ -57,7 +57,7 @@ function Home() {
             }
 
             let data1 = await response.json();
-            console.log(data1.data);
+            // console.log(data1.data);
 
             return data1.data;
         } catch (error) {
@@ -75,7 +75,6 @@ function Home() {
     const [moneyRoundtrip, setMoneyRoundtrip] = useState(0);
 
     const getTotalMoney = (data) => {
-        console.log(data);
         return data.reduce((accumuluator, currentValue) => {
             return accumuluator + currentValue.TotalMoney;
         }, 0);
