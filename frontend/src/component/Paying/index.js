@@ -263,6 +263,11 @@ function Paying() {
             .catch((err) => console.error(err));
     }, []);
 
+    const handleGetNewCodeTicket = (code, type) => {
+        const newCode = code + type;
+        return newCode;
+    };
+
     function handlePustTicketDetail() {
         const totalPeople =
             Number(storedQuantity.adults) + Number(storedQuantity.children) + Number(storedQuantity.baby);
@@ -283,9 +288,38 @@ function Paying() {
         }
         console.log(codeSeatSingle[0]);
 
-        for (let i = 0; i < totalPeople; i++) {
+        // for (let i = 0; i < totalPeople; i++) {
+        //     axios
+        //         .post('http://localhost:4000/ticketDetail', {
+        //             TypeFlight: data00.TypeFlight,
+        //             TypeTicket: data00.TypeTicket,
+        //             AirportFrom: data00.AirportFrom,
+        //             AirportTo: data00.AirportTo,
+        //             FlightTime: data00.FlightTime,
+        //             LandingTime: data00.LandingTime,
+        //             DateGo: data00.DateGo,
+        //             TotalMoney: data00.TotalMoney,
+        //             CodeTicket: data00.CodeTicket,
+        //             FlightNumber: data00.FlightNumber,
+        //             UserName: user[i].Username,
+        //             ID_Card: user[i].ID_Card,
+        //             CodeSeat: codeSeatSingle[i],
+        //             Email: user[i].Email,
+        //             TypeTicketReturn: data00.TypeTicketReturn,
+        //             FlightNumberReturn: data00.FlightNumberReturn,
+        //             FlightTimeReturn: data00.FlightTimeReturn,
+        //             LandingTimeReturn: data00.LandingTimeReturn,
+        //             CodeSeatReturn: CodeSeatReturnSingle[i],
+        //             DateReturn: data00.DateReturn,
+        //         })
+        //         .then((response) => console.log(response))
+        //         .catch((error) => console.log(error));
+        // }
+
+        for (let i = 0; i < Number(storedQuantity.adults); i++) {
+            const newCodeTicket = handleGetNewCodeTicket(data00.CodeTicket, 'A') + i;
             axios
-                .post('http://localhost:4000/ticketDetail', {
+                .post('http://localhost:4000/info', {
                     TypeFlight: data00.TypeFlight,
                     TypeTicket: data00.TypeTicket,
                     AirportFrom: data00.AirportFrom,
@@ -293,8 +327,10 @@ function Paying() {
                     FlightTime: data00.FlightTime,
                     LandingTime: data00.LandingTime,
                     DateGo: data00.DateGo,
+                    TotalMoneyGo: storedInforFlight.moneyAdult,
+                    TotalMoneyReturn: data00.TotalMoneyReturn,
                     TotalMoney: data00.TotalMoney,
-                    CodeTicket: data00.CodeTicket,
+                    CodeTicket: newCodeTicket,
                     FlightNumber: data00.FlightNumber,
                     UserName: user[i].Username,
                     ID_Card: user[i].ID_Card,
@@ -309,11 +345,9 @@ function Paying() {
                 })
                 .then((response) => console.log(response))
                 .catch((error) => console.log(error));
-        }
 
-        for (let i = 0; i < Number(storedQuantity.adults); i++) {
             axios
-                .post('http://localhost:4000/info', {
+                .post('http://localhost:4000/ticketDetail', {
                     TypeFlight: data00.TypeFlight,
                     TypeTicket: data00.TypeTicket,
                     AirportFrom: data00.AirportFrom,
@@ -321,10 +355,9 @@ function Paying() {
                     FlightTime: data00.FlightTime,
                     LandingTime: data00.LandingTime,
                     DateGo: data00.DateGo,
-                    TotalMoneyGo: storedInforFlight.moneyAdult,
-                    TotalMoneyReturn: data00.TotalMoneyReturn,
                     TotalMoney: data00.TotalMoney,
-                    CodeTicket: data00.CodeTicket,
+                    CodeTicket: newCodeTicket,
+                    CodeTicketGeneral: data00.CodeTicket,
                     FlightNumber: data00.FlightNumber,
                     UserName: user[i].Username,
                     ID_Card: user[i].ID_Card,
@@ -346,6 +379,8 @@ function Paying() {
             i < Number(storedQuantity.adults) + Number(storedQuantity.children);
             i++
         ) {
+            const newCodeTicketChildren = handleGetNewCodeTicket(data00.CodeTicket, 'C') + i;
+
             const postData = {
                 TypeFlight: data00.TypeFlight,
                 TypeTicket: data00.TypeTicket,
@@ -356,7 +391,7 @@ function Paying() {
                 DateGo: data00.DateGo,
                 TotalMoneyGo: storedInforFlight.moneyChildren,
                 TotalMoney: data00.TotalMoney,
-                CodeTicket: data00.CodeTicket,
+                CodeTicket: newCodeTicketChildren,
                 FlightNumber: data00.FlightNumber,
                 UserName: user[i].Username,
                 ID_Card: user[i].ID_Card,
@@ -378,9 +413,38 @@ function Paying() {
                 .post('http://localhost:4000/info', postData)
                 .then((response) => console.log(response))
                 .catch((error) => console.log(error));
+
+            axios
+                .post('http://localhost:4000/ticketDetail', {
+                    TypeFlight: data00.TypeFlight,
+                    TypeTicket: data00.TypeTicket,
+                    AirportFrom: data00.AirportFrom,
+                    AirportTo: data00.AirportTo,
+                    FlightTime: data00.FlightTime,
+                    LandingTime: data00.LandingTime,
+                    DateGo: data00.DateGo,
+                    TotalMoney: data00.TotalMoney,
+                    CodeTicket: newCodeTicketChildren,
+                    CodeTicketGeneral: data00.CodeTicket,
+                    FlightNumber: data00.FlightNumber,
+                    UserName: user[i].Username,
+                    ID_Card: user[i].ID_Card,
+                    CodeSeat: codeSeatSingle[i],
+                    Email: user[i].Email,
+                    TypeTicketReturn: data00.TypeTicketReturn,
+                    FlightNumberReturn: data00.FlightNumberReturn,
+                    FlightTimeReturn: data00.FlightTimeReturn,
+                    LandingTimeReturn: data00.LandingTimeReturn,
+                    CodeSeatReturn: CodeSeatReturnSingle[i],
+                    DateReturn: data00.DateReturn,
+                })
+                .then((response) => console.log(response))
+                .catch((error) => console.log(error));
         }
 
         for (let i = totalPeople - Number(storedQuantity.baby); i < totalPeople; i++) {
+            const newCodeTicketBaby = handleGetNewCodeTicket(data00.CodeTicket, 'B') + i;
+
             const postData = {
                 TypeFlight: data00.TypeFlight,
                 TypeTicket: data00.TypeTicket,
@@ -391,7 +455,7 @@ function Paying() {
                 DateGo: data00.DateGo,
                 TotalMoneyGo: storedInforFlight.moneyBaby,
                 TotalMoney: data00.TotalMoney,
-                CodeTicket: data00.CodeTicket,
+                CodeTicket: newCodeTicketBaby,
                 FlightNumber: data00.FlightNumber,
                 UserName: user[i].Username,
                 ID_Card: user[i].ID_Card,
@@ -411,6 +475,33 @@ function Paying() {
 
             axios
                 .post('http://localhost:4000/info', postData)
+                .then((response) => console.log(response))
+                .catch((error) => console.log(error));
+
+            axios
+                .post('http://localhost:4000/ticketDetail', {
+                    TypeFlight: data00.TypeFlight,
+                    TypeTicket: data00.TypeTicket,
+                    AirportFrom: data00.AirportFrom,
+                    AirportTo: data00.AirportTo,
+                    FlightTime: data00.FlightTime,
+                    LandingTime: data00.LandingTime,
+                    DateGo: data00.DateGo,
+                    TotalMoney: data00.TotalMoney,
+                    CodeTicket: newCodeTicketBaby,
+                    CodeTicketGeneral: data00.CodeTicket,
+                    FlightNumber: data00.FlightNumber,
+                    UserName: user[i].Username,
+                    ID_Card: user[i].ID_Card,
+                    CodeSeat: codeSeatSingle[i],
+                    Email: user[i].Email,
+                    TypeTicketReturn: data00.TypeTicketReturn,
+                    FlightNumberReturn: data00.FlightNumberReturn,
+                    FlightTimeReturn: data00.FlightTimeReturn,
+                    LandingTimeReturn: data00.LandingTimeReturn,
+                    CodeSeatReturn: CodeSeatReturnSingle[i],
+                    DateReturn: data00.DateReturn,
+                })
                 .then((response) => console.log(response))
                 .catch((error) => console.log(error));
         }
@@ -652,7 +743,7 @@ function Paying() {
 
                 {show && (
                     // <div className={cx('animation')}>
-                    <GetAllData data={data00} />
+                    <GetAllData data={data00} type="get" />
                     // </div>
                 )}
                 {timeoutPay && !show && <h1>Đã hết thời gian thanh toán</h1>}

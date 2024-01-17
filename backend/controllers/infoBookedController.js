@@ -188,8 +188,6 @@ export const getInfoBookedBySearch = async (req, res) => {
 
     const codeTicket = new RegExp(`^${req.query.CodeTicket}$`);
 
-    console.log('in codeTicket cho t', codeTicket);
-
     try {
         const InfoBookeds = await InfoBooked.find({
             // CodeTicket: { $eq: CodeTicket },
@@ -202,8 +200,6 @@ export const getInfoBookedBySearch = async (req, res) => {
             count: InfoBookeds.length,
             data: InfoBookeds,
         });
-
-        console.log(InfoBookeds);
     } catch (error) {
         res.status(404).json({
             success: false,
@@ -217,12 +213,10 @@ const getMonth = () => {
     currentMonthStart.setDate(1);
     currentMonthStart.setMonth(currentMonthStart.getMonth() + 0, 0);
     currentMonthStart.setHours(0, 0, 0, 0);
-    console.log(currentMonthStart);
 
     const currentMonthEnd = new Date();
     currentMonthEnd.setMonth(currentMonthEnd.getMonth() + 1, 0);
     currentMonthEnd.setHours(23, 59, 59, 999);
-    console.log(currentMonthEnd);
 
     return {
         currentMonthStart: currentMonthStart,
@@ -344,12 +338,10 @@ const getMonth_11_2023 = (start) => {
     currentMonthStart.setDate(1);
     currentMonthStart.setMonth(currentMonthStart.getMonth() + 0, 0);
     currentMonthStart.setHours(0, 0, 0, 0);
-    console.log(currentMonthStart);
 
     const currentMonthEnd = new Date();
     currentMonthEnd.setMonth(currentMonthEnd.getMonth() + 1, 0);
     currentMonthEnd.setHours(23, 59, 59, 999);
-    console.log(currentMonthEnd);
 
     return {
         currentMonthStart: currentMonthStart,

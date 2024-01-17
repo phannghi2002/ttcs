@@ -224,6 +224,9 @@ function Check() {
         }
         return isAddress;
     };
+
+    const [CCCDSameTime, setCCCDSameTime] = useState([]);
+
     const handleCheckCCCD = () => {
         const errorCMND = document.querySelector('#check-5');
         const isNumberCCCD = isNaN(data.ID_Card.trim());
@@ -232,22 +235,28 @@ function Check() {
             errorCMND.style.color = 'red';
             isCCCD = false;
         } else if (data.ID_Card.trim().length === 12 && !isNumberCCCD) {
-            if (dataCCCD.length > 0) {
-                for (let i = 0; i < dataCCCD.length; i++) {
-                    if (dataCCCD[i].ID_Card === data.ID_Card) {
-                        console.log('Checking');
-                        errorCMND.innerText = 'Số CCCD đã tồn tại trên chuyến bay';
-                        errorCMND.style.color = 'red';
-                        isCCCD = false;
-                        break;
-                    } else {
-                        errorCMND.style.color = 'transparent';
-                        isCCCD = true;
-                    }
-                }
+            if (CCCDSameTime.includes(data.ID_Card.trim())) {
+                errorCMND.innerText = 'Số CCCD đã tồn tại trên chuyến bay';
+                errorCMND.style.color = 'red';
+                isCCCD = false;
             } else {
-                errorCMND.style.color = 'transparent';
-                isCCCD = true;
+                setCCCDSameTime([...CCCDSameTime, data.ID_Card.trim()]);
+                if (dataCCCD.length > 0) {
+                    for (let i = 0; i < dataCCCD.length; i++) {
+                        if (dataCCCD[i].ID_Card === data.ID_Card) {
+                            errorCMND.innerText = 'Số CCCD đã tồn tại trên chuyến bay';
+                            errorCMND.style.color = 'red';
+                            isCCCD = false;
+                            break;
+                        } else {
+                            errorCMND.style.color = 'transparent';
+                            isCCCD = true;
+                        }
+                    }
+                } else {
+                    errorCMND.style.color = 'transparent';
+                    isCCCD = true;
+                }
             }
         } else {
             errorCMND.innerText = 'Số CCCD không hơp lệ';
@@ -256,6 +265,7 @@ function Check() {
         }
         return isCCCD;
     };
+
     const handleCheckPhone = () => {
         const errorPhone = document.querySelector('#check-6');
         const phoneRegex = /((09|03|07|08|05)+([0-9]{8})\b)/g;
