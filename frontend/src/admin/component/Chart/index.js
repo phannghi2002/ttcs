@@ -135,7 +135,7 @@ export const LineChart = () => {
     const options = {
         chart: {
             title: 'Biểu đồ so sánh lợi nhuận mỗi ngày trong tháng 01/2024',
-            subtitle: 'Được tính theo triệu đồng (VNĐ)',
+            subtitle: 'Được tính theo đồng (VNĐ)',
         },
         // colors: ['blue'], // Set custom color (e.g., blue)
     };
@@ -176,7 +176,7 @@ export const LineChartOption = ({ data, company, date, month }) => {
     const options = {
         chart: {
             title: `Biểu đồ so sánh lợi nhuận mỗi ngày trong tháng ${date} của hãng hàng không ${company}`,
-            subtitle: 'Được tính theo triệu đồng (VNĐ)',
+            subtitle: 'Được tính theo đồng (VNĐ)',
         },
         // colors: ['blue'], // Set custom color (e.g., blue)
         vAxis: {

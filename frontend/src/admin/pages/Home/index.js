@@ -15,8 +15,8 @@ import CardContent from '@mui/material/CardContent';
 import HourglassTopIcon from '@mui/icons-material/HourglassTop';
 import DoneIcon from '@mui/icons-material/Done';
 import MonetizationOnIcon from '@mui/icons-material/MonetizationOn';
-import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
-import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
+// import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
+// import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
 import FlightToday from '../../component/FlightToday';
 import { useEffect, useState } from 'react';
 // import NumberFormat from '../component/NumberFormat/NumberFormat';
@@ -57,7 +57,7 @@ function Home() {
             }
 
             let data1 = await response.json();
-            console.log(data1.data);
+            // console.log(data1.data);
 
             return data1.data;
         } catch (error) {
@@ -75,7 +75,6 @@ function Home() {
     const [moneyRoundtrip, setMoneyRoundtrip] = useState(0);
 
     const getTotalMoney = (data) => {
-        console.log(data);
         return data.reduce((accumuluator, currentValue) => {
             return accumuluator + currentValue.TotalMoney;
         }, 0);
@@ -185,8 +184,8 @@ function Home() {
                                                 className={cx('quantity')}
                                             >
                                                 <CountUp start={0} end={quantityCompleted} duration={2} />
-                                                <ArrowDownwardIcon className={cx('decrease')} />
-                                                <ArrowUpwardIcon className={cx('increase')} />
+                                                {/* <ArrowDownwardIcon className={cx('decrease')} />
+                                                <ArrowUpwardIcon className={cx('increase')} /> */}
                                             </Typography>
                                         </CardContent>
                                     </Card>
@@ -218,8 +217,8 @@ function Home() {
                                                     separator="."
                                                 />{' '}
                                                 đ{/* <NumberFormat number={moneyOneway + moneyRoundtrip} /> đ */}
-                                                <ArrowDownwardIcon className={cx('decrease')} />
-                                                <ArrowUpwardIcon className={cx('increase')} />
+                                                {/* <ArrowDownwardIcon className={cx('decrease')} />
+                                                <ArrowUpwardIcon className={cx('increase')} /> */}
                                             </Typography>
                                         </CardContent>
                                     </Card>

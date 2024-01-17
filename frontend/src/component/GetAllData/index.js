@@ -13,25 +13,44 @@ import axios from 'axios';
 import { useEffect, useRef, useState } from 'react';
 
 const cx = classNames.bind(styles);
-function GetAllData({ data, className }) {
+function GetAllData({ data, className, type }) {
     const [user, setUser] = useState([]);
-
+    console.log(type);
     useEffect(() => {
-        const timePaying = setTimeout(() => {
-            console.log('ban api');
-            const fetchData = async () => {
-                await axios.get(`http://localhost:4000/ticketDetail/${data.CodeTicket}`).then((response) => {
-                    setUser(response.data.data);
+        if (type === 'get') {
+            const timePaying = setTimeout(() => {
+                console.log('ban api');
+                const fetchData = async () => {
+                    await axios.get(`http://localhost:4000/ticketDetail/${data.CodeTicket}`).then((response) => {
+                        setUser(response.data.data);
+                    });
+                };
+                fetchData().catch((error) => {
+                    console.log(error);
                 });
-            };
-            fetchData().catch((error) => {
-                console.log(error);
-            });
-        }, 2000);
+            }, 2000);
 
-        setTimeout(() => {
-            clearTimeout(timePaying);
-        }, 6000);
+            setTimeout(() => {
+                clearTimeout(timePaying);
+            }, 6000);
+        } else if (type === 'find') {
+            const timePaying = setTimeout(() => {
+                console.log('ban api', data.CodeTicket);
+                const fetchData = async () => {
+                    await axios.get(`http://localhost:4000/ticketDetail/search/${data.CodeTicket}`).then((response) => {
+                        console.log('data2', response);
+                        setUser(response.data.data);
+                    });
+                };
+                fetchData().catch((error) => {
+                    console.log(error);
+                });
+            }, 2000);
+
+            setTimeout(() => {
+                clearTimeout(timePaying);
+            }, 6000);
+        }
     }, []);
 
     const convertDate = (date) => {
@@ -127,7 +146,7 @@ function GetAllData({ data, className }) {
                                 CHI TIẾT ĐẶT CHỖ CHO: <span className={cx('name')}>{user.UserName}</span>
                             </div>
                             <div>
-                                MÃ GIỮ CHỖ: <b className={cx('code_ticket')}>{data.CodeTicket}</b>
+                                MÃ GIỮ CHỖ: <b className={cx('code_ticket')}>{user.CodeTicket}</b>
                             </div>
                         </div>
 

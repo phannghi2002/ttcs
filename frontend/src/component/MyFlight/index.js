@@ -86,7 +86,7 @@ function MyFlight() {
 
             {showInfo && (
                 <div className={cx('show')}>
-                    <GetAllData data={data} />
+                    <GetAllData data={data} type="find" />
                 </div>
             )}
             <ToastCustom />

@@ -265,6 +265,7 @@ function Check() {
         }
         return isCCCD;
     };
+
     const handleCheckPhone = () => {
         const errorPhone = document.querySelector('#check-6');
         const phoneRegex = /((09|03|07|08|05)+([0-9]{8})\b)/g;

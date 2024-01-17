@@ -151,7 +151,7 @@ router.post('/all', (req, res) => {
               </h3>
             </div>
             <div style="font-size: 14px; margin-top: 10px">
-              MÃ ĐẶT CHỖ: <span>${code}</span>
+              MÃ ĐẶT CHỖ: <span>${data[index].CodeTicket}</span>
             </div>
             <div style="width: 100%; height: 2px; background-color: #000"></div>
       

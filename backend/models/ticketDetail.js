@@ -42,6 +42,10 @@ const ticketDetail = new mongoose.Schema(
             type: String,
             required: true,
         },
+        CodeTicketGeneral: {
+            type: String,
+            required: true,
+        },
         FlightNumber: {
             type: String,
             required: true,
