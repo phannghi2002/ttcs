@@ -67,7 +67,7 @@ function Home() {
     };
     const valueRole = CheckRole();
     useEffect(() => {
-        handlePushData('VNA', date.Month, date.Year);
+        handlePushData(valueRole.Code, date.Month, date.Year);
     }, []);
 
     const chartData = [['Ngày', 'Doanh thu']];
