@@ -28,6 +28,7 @@ export const addAdmin = async (req, res) => {
             Password: req.body.Password,
             Name: req.body.Name,
             DayOfBirth: req.body.DayOfBirth,
+            Role: req.body.Role,
         });
 
         await newAdmin.save();
@@ -77,6 +78,30 @@ export const updateAdmin = async (req, res) => {
         res.status(500).json({
             success: false,
             message: error,
+        });
+    }
+};
+
+export const getMyAccount = async (req, res) => {
+    const accountName = new RegExp(`^${req.query.AccountName}$`);
+
+    try {
+        const accounts = await Login.find({
+            AccountName: accountName,
+        });
+
+        res.status(200).json({
+            success: true,
+            message: 'Successfully found search',
+            count: accounts.length,
+            data: accounts,
+        });
+
+        console.log(accounts);
+    } catch (error) {
+        res.status(404).json({
+            success: false,
+            message: 'Not found booked',
         });
     }
 };

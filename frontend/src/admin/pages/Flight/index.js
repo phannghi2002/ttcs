@@ -18,18 +18,22 @@ function Flight() {
                 <Sidenav />
                 <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
                     <TableFlight
-                        param="/search/getTicketIncompletedMonthNow"
+                        param="/search/getTicketIncompletedMonthNowOfCompany"
                         title="Chuyến bay chưa hoàn thành"
                         onUpdate={handleUpdate}
                     />
 
                     <TableFlight
-                        param="/search/getTicketCompletedMonthNow"
+                        param="/search/getTicketCompletedMonthNowOfCompany"
                         title="Chuyến bay đã hoàn thành"
                         onUpdate={handleUpdate}
                     />
 
-                    <TableFlight param="/" title="Tất cả các chuyến bay" onUpdate={handleUpdate} />
+                    <TableFlight
+                        param="/search/getAllTicketOfCompany"
+                        title="Tất cả các chuyến bay"
+                        onUpdate={handleUpdate}
+                    />
                 </Box>
             </Box>
         </>

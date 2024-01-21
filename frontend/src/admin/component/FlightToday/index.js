@@ -10,6 +10,7 @@ import classNames from 'classnames/bind';
 import styles from './FlightToday.module.scss';
 import { useEffect, useState } from 'react';
 import HandlePlace from '../../../component/HandlePlace';
+import CheckRole from '../CheckRole';
 
 const cx = classNames.bind(styles);
 
@@ -26,11 +27,13 @@ function FlightToday() {
     const DateGo = getCurrentDate();
 
     const [data, setData] = useState();
+    const valueRole = CheckRole();
 
     async function fetchAPI() {
         try {
-            // let response = await fetch(`http://localhost:4000/tickets/search/getTicketByToday?DateGo=${DateGo}`);
-            let response = await fetch(`http://localhost:4000/tickets/search/getTicketByToday?DateGo=${DateGo}`);
+            let response = await fetch(
+                `http://localhost:4000/tickets/search/getTicketByTodayOfCompany?DateGo=2024-01-15&AirlineCode=${valueRole.Code}`,
+            );
 
             console.log(DateGo);
             if (!response.ok) {
@@ -65,7 +68,8 @@ function FlightToday() {
     const convertMinutesToHourMinute = (minutes) => {
         const hours = Math.floor(minutes / 60);
         const remainingMinutes = minutes % 60;
-        return `${hours}h${remainingMinutes}`;
+        const formattedMinutes = remainingMinutes < 10 ? `0${remainingMinutes}` : remainingMinutes;
+        return `${hours}h${formattedMinutes}`;
     };
 
     const allPassenger = (item) => {
@@ -112,7 +116,7 @@ function FlightToday() {
                                     <div className={cx('time')}>
                                         {convertTime(item.FlightTime)}
 
-                                        <HandlePlace place="HAN" />
+                                        <HandlePlace place={item.AirportFrom} />
                                     </div>
 
                                     <div className={cx('line')}>
@@ -126,7 +130,7 @@ function FlightToday() {
                                     <div className={cx('time')}>
                                         {convertTime(item.LandingTime)}
 
-                                        <HandlePlace place="SGN" />
+                                        <HandlePlace place={item.AirportTo} />
                                     </div>
                                 </div>
 

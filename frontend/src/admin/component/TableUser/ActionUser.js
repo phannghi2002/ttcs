@@ -24,134 +24,10 @@ import { renderTimeViewClock } from '@mui/x-date-pickers/timeViewRenderers';
 import { FormatDateYMD } from '../../../function/FormatDate';
 import dayjs from 'dayjs';
 
-//use add all
-// const selectTypeFlight = [
-//     {
-//       value: 'Oneway',
-//       label: 'One way',
-//     },
-//     {
-//       value: 'Roundtrip',
-//       label: 'Round trip',
-//     },
+import { selectAirport, selectTypeTicket } from '../CONST';
+import CheckRole from '../CheckRole';
+import CheckNumber from '../../../function/CheckNumber';
 
-//   ];
-
-const selectTypeTicket = [
-    {
-        value: 'EconomyClass',
-        label: 'Economy Class',
-    },
-    {
-        value: 'PremiumClass',
-        label: 'Premium Class',
-    },
-
-    {
-        value: 'BusinessClass',
-        label: 'Business Class',
-    },
-    {
-        value: 'FirstClass',
-        label: 'First Class',
-    },
-];
-
-const selectAirport = [
-    {
-        value: 'HAN',
-        label: 'Hà Nội (HAN)',
-    },
-    {
-        value: 'HPH',
-        label: 'Hải Phòng (HPH)',
-    },
-
-    {
-        value: 'DIN',
-        label: 'Điện Biên (DIN)',
-    },
-    {
-        value: 'THD',
-        label: 'Thanh Hóa (THD)',
-    },
-    {
-        value: 'VDO',
-        label: 'Quảng Ninh (VDO)',
-    },
-    {
-        value: 'VII',
-        label: 'Vinh (VII)',
-    },
-
-    {
-        value: 'HUI',
-        label: 'Huế (HUI)',
-    },
-    {
-        value: 'VDH',
-        label: 'Đồng Nai (VDH)',
-    },
-    {
-        value: 'DAD',
-        label: 'Đà Nẵng (DAD)',
-    },
-    {
-        value: 'PXU',
-        label: 'Pleiku (PXU)',
-    },
-
-    {
-        value: 'TBB',
-        label: 'Tuy Hòa (TBB)',
-    },
-    {
-        value: 'SGN',
-        label: 'Hồ Chí Minh (SGN)',
-    },
-    {
-        value: 'CXR',
-        label: 'Nha Trang (CXR)',
-    },
-    {
-        value: 'DLI',
-        label: 'Đà Lạt (DLI)',
-    },
-
-    {
-        value: 'PQC',
-        label: 'Phú Quốc (PQC)',
-    },
-    {
-        value: 'VCL',
-        label: 'Tam Kỳ (VCL)',
-    },
-    {
-        value: 'UIH',
-        label: 'Qui Nhơn (UIH)',
-    },
-    {
-        value: 'VCA',
-        label: 'Cần Thơ (VCA)',
-    },
-
-    {
-        value: 'VCS',
-        label: 'Côn Đảa (VCS)',
-    },
-    {
-        value: 'BMV',
-        label: 'Ban Mê Thuật (BMV)',
-    },
-    {
-        value: 'VKG',
-        label: 'Rạch Giá (VKG)',
-    },
-    {
-        value: 'CAH',
-        label: 'Cà Mau (CAH)',
-    },
-];
 export const AddUser = ({ open, handleClose, setReRender }) => {
     const [data, setData] = useState({
         CodeTicket: '',
@@ -161,7 +37,7 @@ export const AddUser = ({ open, handleClose, setReRender }) => {
         Email: '',
         TypeTicket: 'EconomyClass',
         AirportFrom: 'HAN',
-        AirportTo: 'HAN',
+        AirportTo: 'SGN',
         CodeSeat: '',
         TotalMoney: '',
         FlightTime: null,
@@ -169,16 +45,87 @@ export const AddUser = ({ open, handleClose, setReRender }) => {
         DateGo: null,
         TypeFlight: 'Oneway',
     });
+    const checkRole = CheckRole();
+
+    const [errors, setErrors] = useState({});
+    const newErrors = { ...errors };
 
     const handleChange = (e) => {
         const value = e.target.value;
         const name = e.target.name;
 
         setData({ ...data, [name]: value });
+
+        if (value.trim() === '') {
+            newErrors[name] = 'Trường này không được bỏ trống';
+        } else {
+            delete newErrors[name];
+        }
+        setErrors(newErrors);
+    };
+
+    const handleChangeDate = (name, newValue) => {
+        console.log(newValue);
+        if (newValue === '' || newValue === null) {
+            newErrors[name] = 'Trường này không được bỏ trống';
+        } else {
+            delete newErrors[name];
+        }
+        setErrors(newErrors);
+        return newErrors;
+    };
+
+    const validate = () => {
+        if (data.CodeTicket.trim() === '') {
+            newErrors['CodeTicket'] = 'Trường này không được bỏ trống';
+        }
+        if (data.FlightNumber.trim() === '') {
+            newErrors['FlightNumber'] = 'Trường này không được bỏ trống';
+        } else if (!data.FlightNumber.startsWith(checkRole.Code)) {
+            newErrors['FlightNumber'] = `Phải nhập mã bắt đầu chứa ${checkRole.Code}`;
+        }
+        if (data.UserName.trim() === '') {
+            newErrors['UserName'] = 'Trường này không được bỏ trống';
+        }
+        if (data.ID_Card.trim() === '') {
+            newErrors['ID_Card'] = 'Trường này không được bỏ trống';
+        }
+        if (data.Email.trim() === '') {
+            newErrors['Email'] = 'Trường này không được bỏ trống';
+        }
+        if (data.CodeSeatReturn.trim() === '') {
+            newErrors['CodeSeatReturn'] = 'Trường này không được bỏ trống';
+        }
+
+        if (data.TotalMoneyGo.trim() === '') {
+            newErrors['TotalMoneyGo'] = 'Trường này không được bỏ trống';
+        } else if (!CheckNumber(data.TotalMoneyGo)) {
+            newErrors['TotalMoneyGo'] = 'Trường này phải là số';
+        }
+        if (data.TotalMoney.trim() === '') {
+            newErrors['TotalMoney'] = 'Trường này không được bỏ trống';
+        } else if (!CheckNumber(data.TotalMoney)) {
+            newErrors['TotalMoney'] = 'Trường này phải là số';
+        }
+        if (data.FlightTime === null) {
+            newErrors['FlightTime'] = 'Trường này không được bỏ trống';
+        }
+        if (data.LandingTime === null) {
+            newErrors['LandingTime'] = 'Trường này không được bỏ trống';
+        } else if (data.LandingTime <= data.FlightTime) {
+            newErrors['LandingTime'] = 'Thời gian đến phải muộn hơn thời gian đi';
+        }
+
+        setErrors(newErrors);
     };
 
     const handleAdd = () => {
-        console.log(data);
+        validate();
+
+        if (Object.keys(newErrors).length > 0) {
+            setErrors(newErrors);
+            return;
+        }
         if (data) {
             axios
                 .post('http://localhost:4000/info/', {
@@ -192,6 +139,7 @@ export const AddUser = ({ open, handleClose, setReRender }) => {
                     AirportTo: data.AirportTo,
                     CodeSeat: data.CodeSeat,
                     TotalMoney: data.TotalMoney,
+                    TotalMoneyGo: data.TotalMoney,
                     TypeFlight: 'Oneway',
 
                     FlightTime: data.FlightTime,
@@ -200,7 +148,7 @@ export const AddUser = ({ open, handleClose, setReRender }) => {
                     DateGo: FormatDateYMD(data.FlightTime),
                 })
                 .then((res) => {
-                    console.log(res);
+                    console.log('in ra lõi xem nào', res);
 
                     setData({
                         CodeTicket: '',
@@ -246,7 +194,14 @@ export const AddUser = ({ open, handleClose, setReRender }) => {
                                 margin="normal"
                                 value={data.CodeTicket}
                                 onChange={handleChange}
-                                sx={{ paddingRight: '20px' }}
+                                helperText={errors['CodeTicket'] || ''}
+                                sx={{
+                                    marginRight: '20px',
+                                    width: '223px',
+                                    '& .MuiFormHelperText-root': {
+                                        color: errors['CodeTicket'] ? 'red' : 'inherit',
+                                    },
+                                }}
                             />
                             <TextField
                                 name="FlightNumber"
@@ -255,6 +210,13 @@ export const AddUser = ({ open, handleClose, setReRender }) => {
                                 margin="normal"
                                 value={data.FlightNumber}
                                 onChange={handleChange}
+                                helperText={errors['FlightNumber'] || ''}
+                                sx={{
+                                    width: '223px',
+                                    '& .MuiFormHelperText-root': {
+                                        color: errors['FlightNumber'] ? 'red' : 'inherit',
+                                    },
+                                }}
                             />
                         </div>
 
@@ -266,7 +228,14 @@ export const AddUser = ({ open, handleClose, setReRender }) => {
                                 margin="normal"
                                 value={data.UserName}
                                 onChange={handleChange}
-                                sx={{ paddingRight: '20px' }}
+                                helperText={errors['UserName'] || ''}
+                                sx={{
+                                    marginRight: '20px',
+                                    width: '223px',
+                                    '& .MuiFormHelperText-root': {
+                                        color: errors['UserName'] ? 'red' : 'inherit',
+                                    },
+                                }}
                             />
 
                             <TextField
@@ -276,6 +245,13 @@ export const AddUser = ({ open, handleClose, setReRender }) => {
                                 margin="normal"
                                 value={data.ID_Card}
                                 onChange={handleChange}
+                                helperText={errors['ID_Card'] || ''}
+                                sx={{
+                                    width: '223px',
+                                    '& .MuiFormHelperText-root': {
+                                        color: errors['ID_Card'] ? 'red' : 'inherit',
+                                    },
+                                }}
                             />
                         </div>
                         <div>
@@ -286,7 +262,14 @@ export const AddUser = ({ open, handleClose, setReRender }) => {
                                 margin="normal"
                                 value={data.Email}
                                 onChange={handleChange}
-                                sx={{ paddingRight: '20px' }}
+                                helperText={errors['Email'] || ''}
+                                sx={{
+                                    marginRight: '20px',
+                                    width: '223px',
+                                    '& .MuiFormHelperText-root': {
+                                        color: errors['Email'] ? 'red' : 'inherit',
+                                    },
+                                }}
                             />
 
                             <TextField
@@ -347,7 +330,14 @@ export const AddUser = ({ open, handleClose, setReRender }) => {
                                 margin="normal"
                                 value={data.CodeSeat}
                                 onChange={handleChange}
-                                sx={{ paddingRight: '20px' }}
+                                helperText={errors['CodeSeat'] || ''}
+                                sx={{
+                                    marginRight: '20px',
+                                    width: '223px',
+                                    '& .MuiFormHelperText-root': {
+                                        color: errors['CodeSeat'] ? 'red' : 'inherit',
+                                    },
+                                }}
                             />
                             <TextField
                                 name="TotalMoney"
@@ -356,6 +346,13 @@ export const AddUser = ({ open, handleClose, setReRender }) => {
                                 margin="normal"
                                 value={data.TotalMoney}
                                 onChange={handleChange}
+                                helperText={errors['TotalMoney'] || ''}
+                                sx={{
+                                    width: '223px',
+                                    '& .MuiFormHelperText-root': {
+                                        color: errors['TotalMoney'] ? 'red' : 'inherit',
+                                    },
+                                }}
                             />
                         </div>
                         <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -369,8 +366,19 @@ export const AddUser = ({ open, handleClose, setReRender }) => {
                                         seconds: renderTimeViewClock,
                                     }}
                                     value={data.FlightTime}
+                                    slotProps={{
+                                        textField: {
+                                            helperText: errors['FlightTime'] || '',
+                                        },
+                                    }}
                                     onChange={(newValue) => {
                                         setData({ ...data, FlightTime: newValue });
+                                        handleChangeDate('FlightTime', newValue);
+                                    }}
+                                    sx={{
+                                        '& .MuiFormHelperText-root': {
+                                            color: errors['FlightTime'] ? 'red' : 'inherit',
+                                        },
                                     }}
                                 />
                                 <DateTimePicker
@@ -382,52 +390,23 @@ export const AddUser = ({ open, handleClose, setReRender }) => {
                                         seconds: renderTimeViewClock,
                                     }}
                                     value={data.LandingTime}
+                                    slotProps={{
+                                        textField: {
+                                            helperText: errors['LandingTime'] || '',
+                                        },
+                                    }}
                                     onChange={(newValue) => {
                                         setData({ ...data, LandingTime: newValue });
+                                        handleChangeDate('LandingTime', newValue);
+                                    }}
+                                    sx={{
+                                        '& .MuiFormHelperText-root': {
+                                            color: errors['LandingTime'] ? 'red' : 'inherit',
+                                        },
                                     }}
                                 />
                             </DemoContainer>
                         </LocalizationProvider>
-                        {/* <div style={{ display: 'flex', marginTop: '8px', marginBottom: '12px' }}>
-                            <LocalizationProvider dateAdapter={AdapterDayjs}>
-                                <DemoContainer components={['TimePicker']} sx={{ width: '223px', marginRight: '20px' }}>
-                                    <TimePicker
-                                        label="Giờ đi"
-                                        viewRenderers={{
-                                            hours: renderTimeViewClock,
-                                            minutes: renderTimeViewClock,
-                                        }}
-                                        value={data.FlightTime}
-                                        onChange={handleChange}
-                                    />
-                                </DemoContainer>
-                            </LocalizationProvider>
-
-                            <LocalizationProvider dateAdapter={AdapterDayjs}>
-                                <DemoContainer components={['TimePicker']} sx={{ width: '223px' }}>
-                                    <TimePicker
-                                        label="Giờ đến"
-                                        viewRenderers={{
-                                            hours: renderTimeViewClock,
-                                            minutes: renderTimeViewClock,
-                                        }}
-                                    />
-                                </DemoContainer>
-                            </LocalizationProvider>
-                        </div>
-                        <div className="date">
-                            <LocalizationProvider dateAdapter={AdapterDayjs}>
-                                <DemoContainer components={['Ngày đi']}>
-                                    <DatePicker
-                                        label="Ngày đi"
-                                        format="DD/MM/YYYY"
-                                        name="DateGo"
-                                        value={data.DateGo}
-                                        onChange={(date) => handleChangeDate(date)}
-                                    />
-                                </DemoContainer>
-                            </LocalizationProvider>
-                        </div> */}
                     </form>
                 </DialogContent>
                 <DialogActions>
@@ -451,11 +430,7 @@ export const EditUser = ({ row, open, setOpen, handleClose, reRender, setReRende
 
         setData({ ...data, [name]: value });
     };
-    // const handleChangeDate = (date) => {
-    //     const formattedDate = dayjs(date).format('YYYY-MM-DDTHH:mm:ss.SSSZ');
-    //     console.log(formattedDate);
-    //     setData({ ...data, DayOfBirth: formattedDate });
-    // };
+
     const handleEdit = () => {
         if (data) {
             axios
@@ -714,7 +689,8 @@ export const AddUserRoundtrip = ({ open, handleClose, setReRender }) => {
         AirportFrom: 'HAN',
         AirportTo: 'HAN',
         CodeSeat: '',
-        TotalMoney: '',
+        TotalMoneyGo: '',
+        TotalMoneyReturn: '',
         FlightTime: null,
         LandingTime: null,
         DateGo: null,
@@ -727,15 +703,99 @@ export const AddUserRoundtrip = ({ open, handleClose, setReRender }) => {
         DateReturn: null,
     });
 
+    const [errors, setErrors] = useState({});
+    const newErrors = { ...errors };
+
     const handleChange = (e) => {
         const value = e.target.value;
         const name = e.target.name;
 
         setData({ ...data, [name]: value });
+
+        if (value.trim() === '') {
+            newErrors[name] = 'Trường này không được bỏ trống';
+        } else {
+            delete newErrors[name];
+        }
+        setErrors(newErrors);
     };
 
+    const handleChangeDate = (name, newValue) => {
+        console.log(newValue);
+        if (newValue === '' || newValue === null) {
+            newErrors[name] = 'Trường này không được bỏ trống';
+        } else {
+            delete newErrors[name];
+        }
+        setErrors(newErrors);
+        return newErrors;
+    };
+
+    const validate = () => {
+        if (data.CodeTicket.trim() === '') {
+            newErrors['CodeTicket'] = 'Trường này không được bỏ trống';
+        }
+        if (data.FlightNumber.trim() === '') {
+            newErrors['FlightNumber'] = 'Trường này không được bỏ trống';
+        }
+        if (data.FlightNumberReturn.trim() === '') {
+            newErrors['FlightNumberReturn'] = 'Trường này không được bỏ trống';
+        }
+        if (data.UserName.trim() === '') {
+            newErrors['UserName'] = 'Trường này không được bỏ trống';
+        }
+        if (data.ID_Card.trim() === '') {
+            newErrors['ID_Card'] = 'Trường này không được bỏ trống';
+        }
+        if (data.Email.trim() === '') {
+            newErrors['Email'] = 'Trường này không được bỏ trống';
+        }
+        if (data.CodeSeat.trim() === '') {
+            newErrors['CodeSeat'] = 'Trường này không được bỏ trống';
+        }
+        if (data.CodeSeatReturn.trim() === '') {
+            newErrors['CodeSeatReturn'] = 'Trường này không được bỏ trống';
+        }
+        if (data.TotalMoneyGo.trim() === '') {
+            newErrors['TotalMoneyGo'] = 'Trường này không được bỏ trống';
+        } else if (!CheckNumber(data.TotalMoneyGo)) {
+            newErrors['TotalMoneyGo'] = 'Trường này phải là số';
+        }
+        if (data.TotalMoneyReturn.trim() === '') {
+            newErrors['TotalMoneyReturn'] = 'Trường này không được bỏ trống';
+        } else if (!CheckNumber(data.TotalMoneyReturn)) {
+            newErrors['TotalMoneyReturn'] = 'Trường này phải là số';
+        }
+
+        if (data.FlightTime === null) {
+            newErrors['FlightTime'] = 'Trường này không được bỏ trống';
+        }
+        if (data.LandingTime === null) {
+            newErrors['LandingTime'] = 'Trường này không được bỏ trống';
+        } else if (data.LandingTime <= data.FlightTime) {
+            newErrors['LandingTime'] = 'Thời gian đến phải muộn hơn thời gian đi';
+        }
+
+        if (data.FlightTimeReturn === null) {
+            newErrors['FlightTimeReturn'] = 'Trường này không được bỏ trống';
+        } else if (data.FlightTimeReturn <= data.FlightTime) {
+            newErrors['FlightTimeReturn'] = 'Thời gian chuyến về phải muộn hơn thời gian chuyến đi';
+        }
+        if (data.LandingTimeReturn === null) {
+            newErrors['LandingTimeReturn'] = 'Trường này không được bỏ trống';
+        } else if (data.LandingTimeReturn <= data.FlightTimeReturn) {
+            newErrors['LandingTimeReturn'] = 'Thời gian đến phải muộn hơn thời gian đi';
+        }
+
+        setErrors(newErrors);
+    };
     const handleAdd = () => {
-        console.log(data);
+        validate();
+
+        if (Object.keys(newErrors).length > 0) {
+            setErrors(newErrors);
+            return;
+        }
         if (data) {
             axios
                 .post('http://localhost:4000/info/', {
@@ -748,7 +808,9 @@ export const AddUserRoundtrip = ({ open, handleClose, setReRender }) => {
                     AirportFrom: data.AirportFrom, //
                     AirportTo: data.AirportTo, //
                     CodeSeat: data.CodeSeat, //
-                    TotalMoney: data.TotalMoney, //
+                    TotalMoneyGo: data.TotalMoneyGo,
+                    TotalMoneyReturn: data.TotalMoneyReturn,
+                    TotalMoney: data.TotalMoneyGo + data.TotalMoneyReturn,
                     TypeFlight: 'Roundtrip',
 
                     FlightTime: data.FlightTime, //
@@ -775,7 +837,8 @@ export const AddUserRoundtrip = ({ open, handleClose, setReRender }) => {
                         AirportFrom: 'HAN',
                         AirportTo: 'HAN',
                         CodeSeat: '',
-                        TotalMoney: '',
+                        TotalMoneyGo: '',
+                        TotalMoneyReturn: '',
                         FlightTime: null,
                         LandingTime: null,
                         DateGo: null,
@@ -808,15 +871,6 @@ export const AddUserRoundtrip = ({ open, handleClose, setReRender }) => {
                 <DialogTitle id="alert-dialog-title">Thêm thông tin người dùng khứ hồi</DialogTitle>
                 <DialogContent>
                     <form style={{ display: 'flex', flexDirection: 'column' }}>
-                        <TextField
-                            name="CodeTicket"
-                            label="Mã vé"
-                            variant="outlined"
-                            margin="normal"
-                            // fullWidth
-                            value={data.CodeTicket}
-                            onChange={handleChange}
-                        />
                         <div>
                             <TextField
                                 name="FlightNumber"
@@ -825,7 +879,14 @@ export const AddUserRoundtrip = ({ open, handleClose, setReRender }) => {
                                 margin="normal"
                                 value={data.FlightNumber}
                                 onChange={handleChange}
-                                sx={{ paddingRight: '20px' }}
+                                helperText={errors['FlightNumber'] || ''}
+                                sx={{
+                                    marginRight: '20px',
+                                    width: '223px',
+                                    '& .MuiFormHelperText-root': {
+                                        color: errors['FlightNumber'] ? 'red' : 'inherit',
+                                    },
+                                }}
                             />
                             <TextField
                                 name="FlightNumberReturn"
@@ -834,10 +895,32 @@ export const AddUserRoundtrip = ({ open, handleClose, setReRender }) => {
                                 margin="normal"
                                 value={data.FlightNumberReturn}
                                 onChange={handleChange}
+                                helperText={errors['FlightNumberReturn'] || ''}
+                                sx={{
+                                    width: '223px',
+                                    '& .MuiFormHelperText-root': {
+                                        color: errors['FlightNumberReturn'] ? 'red' : 'inherit',
+                                    },
+                                }}
                             />
                         </div>
-
                         <div>
+                            <TextField
+                                name="CodeTicket"
+                                label="Mã vé"
+                                variant="outlined"
+                                margin="normal"
+                                value={data.CodeTicket}
+                                onChange={handleChange}
+                                helperText={errors['CodeTicket'] || ''}
+                                sx={{
+                                    marginRight: '20px',
+                                    width: '223px',
+                                    '& .MuiFormHelperText-root': {
+                                        color: errors['CodeTicket'] ? 'red' : 'inherit',
+                                    },
+                                }}
+                            />
                             <TextField
                                 name="UserName"
                                 label="Tên"
@@ -845,18 +928,16 @@ export const AddUserRoundtrip = ({ open, handleClose, setReRender }) => {
                                 margin="normal"
                                 value={data.UserName}
                                 onChange={handleChange}
-                                sx={{ paddingRight: '20px' }}
-                            />
-
-                            <TextField
-                                name="ID_Card"
-                                label="Số CMND"
-                                variant="outlined"
-                                margin="normal"
-                                value={data.ID_Card}
-                                onChange={handleChange}
+                                helperText={errors['UserName'] || ''}
+                                sx={{
+                                    width: '223px',
+                                    '& .MuiFormHelperText-root': {
+                                        color: errors['UserName'] ? 'red' : 'inherit',
+                                    },
+                                }}
                             />
                         </div>
+
                         <div>
                             <TextField
                                 name="Email"
@@ -865,15 +946,62 @@ export const AddUserRoundtrip = ({ open, handleClose, setReRender }) => {
                                 margin="normal"
                                 value={data.Email}
                                 onChange={handleChange}
-                                sx={{ paddingRight: '20px' }}
+                                helperText={errors['Email'] || ''}
+                                sx={{
+                                    marginRight: '20px',
+                                    width: '223px',
+                                    '& .MuiFormHelperText-root': {
+                                        color: errors['Email'] ? 'red' : 'inherit',
+                                    },
+                                }}
                             />
                             <TextField
-                                name="TotalMoney"
-                                label="Tổng tiền (VND)"
+                                name="ID_Card"
+                                label="Số CMND"
                                 variant="outlined"
                                 margin="normal"
-                                value={data.TotalMoney}
+                                value={data.ID_Card}
                                 onChange={handleChange}
+                                helperText={errors['ID_Card'] || ''}
+                                sx={{
+                                    width: '223px',
+                                    '& .MuiFormHelperText-root': {
+                                        color: errors['ID_Card'] ? 'red' : 'inherit',
+                                    },
+                                }}
+                            />
+                        </div>
+                        <div>
+                            <TextField
+                                name="TotalMoneyGo"
+                                label="Tổng tiền đi(VND)"
+                                variant="outlined"
+                                margin="normal"
+                                value={data.TotalMoneyGo}
+                                onChange={handleChange}
+                                helperText={errors['TotalMoneyGo'] || ''}
+                                sx={{
+                                    marginRight: '20px',
+                                    width: '223px',
+                                    '& .MuiFormHelperText-root': {
+                                        color: errors['TotalMoneyGo'] ? 'red' : 'inherit',
+                                    },
+                                }}
+                            />
+                            <TextField
+                                name="TotalMoneyReturn"
+                                label="Tổng tiền về(VND)"
+                                variant="outlined"
+                                margin="normal"
+                                value={data.TotalMoneyReturn}
+                                onChange={handleChange}
+                                helperText={errors['TotalMoneyReturn'] || ''}
+                                sx={{
+                                    width: '223px',
+                                    '& .MuiFormHelperText-root': {
+                                        color: errors['TotalMoneyReturn'] ? 'red' : 'inherit',
+                                    },
+                                }}
                             />
                         </div>
 
@@ -951,7 +1079,14 @@ export const AddUserRoundtrip = ({ open, handleClose, setReRender }) => {
                                 margin="normal"
                                 value={data.CodeSeat}
                                 onChange={handleChange}
-                                sx={{ paddingRight: '20px' }}
+                                helperText={errors['CodeSeat'] || ''}
+                                sx={{
+                                    marginRight: '20px',
+                                    width: '223px',
+                                    '& .MuiFormHelperText-root': {
+                                        color: errors['CodeSeat'] ? 'red' : 'inherit',
+                                    },
+                                }}
                             />
                             <TextField
                                 name="CodeSeatReturn"
@@ -960,6 +1095,13 @@ export const AddUserRoundtrip = ({ open, handleClose, setReRender }) => {
                                 margin="normal"
                                 value={data.CodeSeatReturn}
                                 onChange={handleChange}
+                                helperText={errors['CodeSeatReturn'] || ''}
+                                sx={{
+                                    width: '223px',
+                                    '& .MuiFormHelperText-root': {
+                                        color: errors['CodeSeatReturn'] ? 'red' : 'inherit',
+                                    },
+                                }}
                             />
                         </div>
 
@@ -975,8 +1117,19 @@ export const AddUserRoundtrip = ({ open, handleClose, setReRender }) => {
                                             seconds: renderTimeViewClock,
                                         }}
                                         value={data.FlightTime}
+                                        slotProps={{
+                                            textField: {
+                                                helperText: errors['FlightTime'] || '',
+                                            },
+                                        }}
                                         onChange={(newValue) => {
                                             setData({ ...data, FlightTime: newValue });
+                                            handleChangeDate('FlightTime', newValue);
+                                        }}
+                                        sx={{
+                                            '& .MuiFormHelperText-root': {
+                                                color: errors['FlightTime'] ? 'red' : 'inherit',
+                                            },
                                         }}
                                     />
                                     <DateTimePicker
@@ -988,8 +1141,19 @@ export const AddUserRoundtrip = ({ open, handleClose, setReRender }) => {
                                             seconds: renderTimeViewClock,
                                         }}
                                         value={data.LandingTime}
+                                        slotProps={{
+                                            textField: {
+                                                helperText: errors['LandingTime'] || '',
+                                            },
+                                        }}
                                         onChange={(newValue) => {
                                             setData({ ...data, LandingTime: newValue });
+                                            handleChangeDate('LandingTime', newValue);
+                                        }}
+                                        sx={{
+                                            '& .MuiFormHelperText-root': {
+                                                color: errors['LandingTime'] ? 'red' : 'inherit',
+                                            },
                                         }}
                                     />
                                 </DemoContainer>
@@ -1008,8 +1172,19 @@ export const AddUserRoundtrip = ({ open, handleClose, setReRender }) => {
                                             seconds: renderTimeViewClock,
                                         }}
                                         value={data.FlightTimeReturn}
+                                        slotProps={{
+                                            textField: {
+                                                helperText: errors['FlightTimeReturn'] || '',
+                                            },
+                                        }}
                                         onChange={(newValue) => {
                                             setData({ ...data, FlightTimeReturn: newValue });
+                                            handleChangeDate('FlightTimeReturn', newValue);
+                                        }}
+                                        sx={{
+                                            '& .MuiFormHelperText-root': {
+                                                color: errors['FlightTimeReturn'] ? 'red' : 'inherit',
+                                            },
                                         }}
                                     />
                                     <DateTimePicker
@@ -1021,8 +1196,19 @@ export const AddUserRoundtrip = ({ open, handleClose, setReRender }) => {
                                             seconds: renderTimeViewClock,
                                         }}
                                         value={data.LandingTimeReturn}
+                                        slotProps={{
+                                            textField: {
+                                                helperText: errors['LandingTimeReturn'] || '',
+                                            },
+                                        }}
                                         onChange={(newValue) => {
                                             setData({ ...data, LandingTimeReturn: newValue });
+                                            handleChangeDate('LandingTimeReturn', newValue);
+                                        }}
+                                        sx={{
+                                            '& .MuiFormHelperText-root': {
+                                                color: errors['LandingTimeReturn'] ? 'red' : 'inherit',
+                                            },
                                         }}
                                     />
                                 </DemoContainer>
@@ -1069,8 +1255,11 @@ export const EditUserRoundtrip = ({ row, open, setOpen, handleClose, reRender, s
                     AirportFrom: data.AirportFrom,
                     AirportTo: data.AirportTo,
                     CodeSeat: data.CodeSeat,
-                    TotalMoney: data.TotalMoney,
+
                     TypeFlight: 'Roundtrip',
+                    TotalMoneyGo: data.TotalMoneyGo,
+                    TotalMoneyReturn: data.TotalMoneyReturn,
+                    TotalMoney: data.TotalMoneyGo + data.TotalMoneyReturn,
 
                     FlightTime: data.FlightTime,
                     LandingTime: data.LandingTime,
@@ -1111,13 +1300,16 @@ export const EditUserRoundtrip = ({ row, open, setOpen, handleClose, reRender, s
             AirportFrom: row.AirportFrom,
             AirportTo: row.AirportTo,
             CodeSeat: row.CodeSeat,
-            TotalMoney: row.TotalMoney,
+
             TypeFlight: row.TypeFlight,
+            TotalMoneyGo: row.TotalMoneyGo,
+            TotalMoneyReturn: row.TotalMoneyReturn,
+            TotalMoney: row.TotalMoney,
 
             FlightTime: row.FlightTime,
             LandingTime: row.LandingTime,
             DateGo: row.FlightTime,
-            //DayOfBirth: row.DayOfBirth,
+
             TypeTicketReturn: row.TypeTicketReturn, //
             FlightNumberReturn: row.FlightNumberReturn, //
             CodeSeatReturn: row.CodeSeatReturn, //
@@ -1141,15 +1333,6 @@ export const EditUserRoundtrip = ({ row, open, setOpen, handleClose, reRender, s
                 <DialogTitle id="alert-dialog-title">Cập nhật thông tin người dùng khứ hồi</DialogTitle>
                 <DialogContent>
                     <form style={{ display: 'flex', flexDirection: 'column' }}>
-                        <TextField
-                            name="CodeTicket"
-                            label="Mã vé"
-                            variant="outlined"
-                            margin="normal"
-                            // fullWidth
-                            value={data.CodeTicket}
-                            onChange={handleChange}
-                        />
                         <div>
                             <TextField
                                 name="FlightNumber"
@@ -1158,7 +1341,10 @@ export const EditUserRoundtrip = ({ row, open, setOpen, handleClose, reRender, s
                                 margin="normal"
                                 value={data.FlightNumber}
                                 onChange={handleChange}
-                                sx={{ paddingRight: '20px' }}
+                                sx={{
+                                    marginRight: '20px',
+                                    width: '223px',
+                                }}
                             />
                             <TextField
                                 name="FlightNumberReturn"
@@ -1167,10 +1353,24 @@ export const EditUserRoundtrip = ({ row, open, setOpen, handleClose, reRender, s
                                 margin="normal"
                                 value={data.FlightNumberReturn}
                                 onChange={handleChange}
+                                sx={{
+                                    width: '223px',
+                                }}
                             />
                         </div>
-
                         <div>
+                            <TextField
+                                name="CodeTicket"
+                                label="Mã vé"
+                                variant="outlined"
+                                margin="normal"
+                                value={data.CodeTicket}
+                                onChange={handleChange}
+                                sx={{
+                                    marginRight: '20px',
+                                    width: '223px',
+                                }}
+                            />
                             <TextField
                                 name="UserName"
                                 label="Tên"
@@ -1178,18 +1378,12 @@ export const EditUserRoundtrip = ({ row, open, setOpen, handleClose, reRender, s
                                 margin="normal"
                                 value={data.UserName}
                                 onChange={handleChange}
-                                sx={{ paddingRight: '20px' }}
-                            />
-
-                            <TextField
-                                name="ID_Card"
-                                label="Số CMND"
-                                variant="outlined"
-                                margin="normal"
-                                value={data.ID_Card}
-                                onChange={handleChange}
+                                sx={{
+                                    width: '223px',
+                                }}
                             />
                         </div>
+
                         <div>
                             <TextField
                                 name="Email"
@@ -1198,18 +1392,49 @@ export const EditUserRoundtrip = ({ row, open, setOpen, handleClose, reRender, s
                                 margin="normal"
                                 value={data.Email}
                                 onChange={handleChange}
-                                sx={{ paddingRight: '20px' }}
+                                sx={{
+                                    marginRight: '20px',
+                                    width: '223px',
+                                }}
                             />
                             <TextField
-                                name="TotalMoney"
-                                label="Tổng tiền (VND)"
+                                name="ID_Card"
+                                label="Số CMND"
                                 variant="outlined"
                                 margin="normal"
-                                value={data.TotalMoney}
+                                value={data.ID_Card}
                                 onChange={handleChange}
+                                sx={{
+                                    width: '223px',
+                                }}
                             />
                         </div>
 
+                        <div>
+                            <TextField
+                                name="TotalMoneyGo"
+                                label="Tổng tiền đi(VND)"
+                                variant="outlined"
+                                margin="normal"
+                                value={data.TotalMoneyGo}
+                                onChange={handleChange}
+                                sx={{
+                                    marginRight: '20px',
+                                    width: '223px',
+                                }}
+                            />
+                            <TextField
+                                name="TotalMoneyReturn"
+                                label="Tổng tiền về(VND)"
+                                variant="outlined"
+                                margin="normal"
+                                value={data.TotalMoneyReturn}
+                                onChange={handleChange}
+                                sx={{
+                                    width: '223px',
+                                }}
+                            />
+                        </div>
                         <div>
                             <TextField
                                 name="TypeTicket"

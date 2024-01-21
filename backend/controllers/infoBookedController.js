@@ -128,7 +128,6 @@ export const getAllInfoBookedOneway = async (req, res) => {
         });
 
         if (infoBooked.length > 0) {
-            console.log('ao that day');
             res.status(200).json({
                 success: true,
                 count: infoBooked.length,
@@ -159,6 +158,65 @@ export const getAllInfoBookedRoundtrip = async (req, res) => {
         });
         //     .skip(page * 5)
         //     .limit(5);
+
+        if (infoBooked.length > 0) {
+            console.log('ao that day');
+            res.status(200).json({
+                success: true,
+                count: infoBooked.length,
+                message: 'Successfully',
+                data: infoBooked,
+            });
+        } else {
+            throw new Error('No tickets found'); // Throw an error when tickets.length is <= 0
+        }
+    } catch (error) {
+        res.status(404).json({
+            success: false,
+            message: 'Not found ',
+        });
+    }
+};
+
+//get All ticket oneway of each company
+export const getAllInfoBookedOnewayOfCompany = async (req, res) => {
+    const flightNumber = new RegExp(req.query.FlightNumber, 'i');
+
+    try {
+        const infoBooked = await InfoBooked.find({
+            TypeFlight: { $eq: 'Oneway' },
+            FlightNumber: flightNumber,
+        });
+
+        if (infoBooked.length > 0) {
+            res.status(200).json({
+                success: true,
+                count: infoBooked.length,
+                message: 'Successfully',
+                data: infoBooked,
+            });
+        } else {
+            throw new Error('No tickets found'); // Throw an error when tickets.length is <= 0
+        }
+    } catch (error) {
+        res.status(404).json({
+            success: false,
+            message: 'Not found ',
+        });
+    }
+};
+
+//get All ticket oneway of each company
+
+export const getAllInfoBookedRoundtripOfCompany = async (req, res) => {
+    const flightNumber = new RegExp(req.query.FlightNumber, 'i');
+    const flightNumberReturn = new RegExp(req.query.FlightNumberReturn, 'i');
+
+    try {
+        const infoBooked = await InfoBooked.find({
+            TypeFlight: { $eq: 'Roundtrip' },
+            $or: [{ FlightNumber: flightNumber }, { FlightNumberReturn: flightNumberReturn }],
+        });
 
         if (infoBooked.length > 0) {
             console.log('ao that day');

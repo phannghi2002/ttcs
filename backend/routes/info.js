@@ -16,6 +16,8 @@ import {
     fetchAPIRoundtripAndCompanyAndDateGoThisMonth,
     fetchAPIRoundtripAndCompanyAndDateReturnThisMonth,
     fetchAPICancelInfoTicket,
+    getAllInfoBookedOnewayOfCompany,
+    getAllInfoBookedRoundtripOfCompany,
 } from './../controllers/infoBookedController.js';
 
 const router = express.Router();
@@ -40,6 +42,12 @@ router.get('/search/getAllInfoBookedOneway', getAllInfoBookedOneway);
 
 //get all ticket roundtrip
 router.get('/search/getAllInfoBookedRoundtrip', getAllInfoBookedRoundtrip);
+
+//get all ticket oneway each company
+router.get('/search/getAllInfoBookedOnewayOfCompany', getAllInfoBookedOnewayOfCompany);
+
+//get all ticket roundtrip each company
+router.get('/search/getAllInfoBookedRoundtripOfCompany', getAllInfoBookedRoundtripOfCompany);
 
 //get all ticket by search
 router.get('/search/getInfoBookedBySearch', getInfoBookedBySearch);

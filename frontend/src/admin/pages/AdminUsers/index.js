@@ -58,14 +58,14 @@ export default function AdminUsers() {
             headerName: 'Tên tài khoản',
             headerClassName: 'custom-header',
             cellClassName: 'custom-cell',
-            flex: 0.3,
+            flex: 0.2,
         },
         {
             field: 'Password',
             headerName: 'Mật khẩu',
             headerClassName: 'custom-header',
             cellClassName: 'custom-cell',
-            flex: 0.15,
+            flex: 0.1,
         },
         {
             field: 'Name',
@@ -78,6 +78,13 @@ export default function AdminUsers() {
             field: 'DayOfBirth',
             headerName: 'Ngày sinh',
             renderCell: (params) => FormatDate(params.value),
+            headerClassName: 'custom-header',
+            cellClassName: 'custom-cell',
+            flex: 0.15,
+        },
+        {
+            field: 'Role',
+            headerName: 'Vai trò',
             headerClassName: 'custom-header',
             cellClassName: 'custom-cell',
             flex: 0.15,
@@ -190,7 +197,7 @@ export default function AdminUsers() {
                 <Sidenav />
                 <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
                     <div className="title">
-                        <h1 style={{ marginBottom: '30px' }}>Thông tin Admin</h1>
+                        <h1 style={{ marginBottom: '30px' }}>Thông tin người dùng</h1>
                         <Button variant="contained" color="success" className="add" onClick={handleClickOpen}>
                             <PersonAddAlt1Icon sx={{ marginRight: '10px' }} /> Thêm người
                         </Button>

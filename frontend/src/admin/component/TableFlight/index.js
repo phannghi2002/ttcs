@@ -28,6 +28,7 @@ import ToastCustom from '../../../Toast';
 import 'react-toastify/dist/ReactToastify.css';
 
 import { AddFlight, EditFlight } from './ActionFlight';
+import CheckRole from '../CheckRole';
 
 function CustomToolbar() {
     return (
@@ -98,7 +99,7 @@ const TableFlight = ({ param, title, onUpdate }) => {
             flex: 0.15,
         },
     ];
-    if (param === '/') {
+    if (param === '/search/getAllTicketOfCompany') {
         columns.push({
             field: 'Action',
             headerName: 'Hành động',
@@ -182,9 +183,12 @@ const TableFlight = ({ param, title, onUpdate }) => {
         setOpenEditFlight(false);
     };
 
+    const role = CheckRole();
+
     //Fetch Data
     const fetchUserData = () => {
-        fetch(`http://localhost:4000/tickets${param}`)
+        fetch(`http://localhost:4000/tickets${param}?AirlineCode=${role.Code}
+        `)
             .then((res) => res.json())
             .then((res) => {
                 setData(res.data);
@@ -198,7 +202,7 @@ const TableFlight = ({ param, title, onUpdate }) => {
         <div style={{ marginBottom: '50px' }}>
             <div className="title">
                 <h1 style={{ marginBottom: '30px' }}>{title}</h1>
-                {param === '/' && (
+                {param === '/search/getAllTicketOfCompany' && (
                     <Button variant="contained" color="success" className="add" onClick={handleClickOpen}>
                         <PersonAddAlt1Icon sx={{ marginRight: '10px' }} /> Thêm chuyến bay
                     </Button>

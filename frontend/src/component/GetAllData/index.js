@@ -20,9 +20,12 @@ function GetAllData({ data, className }) {
         const timePaying = setTimeout(() => {
             console.log('ban api');
             const fetchData = async () => {
-                await axios.get(`http://localhost:4000/ticketDetail/${data.CodeTicket}`).then((response) => {
-                    setUser(response.data.data);
-                });
+                // await axios.get(`http://localhost:4000/ticketDetail/${data.CodeTicket}`).then((response) => {
+                await axios
+                    .get(`http://localhost:4000/info/search/getInfoBookedBySearch?CodeTicket=${data.CodeTicket}`)
+                    .then((response) => {
+                        setUser(response.data.data);
+                    });
             };
             fetchData().catch((error) => {
                 console.log(error);
