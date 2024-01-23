@@ -30,11 +30,28 @@ function SignIn() {
 
     const handleLogin = () => {
         const data = datas.data;
+
         for (let i = 0; i < data.length; i++) {
             if (data[i].AccountName === userName && data[i].Password === password) {
                 setIsSuccess(true);
-                window.location = 'http://localhost:3000/admin';
-                localStorage.setItem('Login', data[i].Name);
+
+                console.log(data[i]);
+
+                const dataLogin = {
+                    Name: data[i].Name,
+                    Role: data[i].Role,
+                    AccountName: data[i].AccountName,
+                };
+                localStorage.setItem('Login', JSON.stringify(dataLogin));
+
+                if (data[i].Role === 'Quản trị viên hệ thống') {
+                    console.log('hong roi');
+                    window.location = 'http://localhost:3000/admin/adminUsers';
+                } else {
+                    console.log('ao the nhi');
+                    window.location = 'http://localhost:3000/admin';
+                }
+
                 break;
             } else {
                 setIsSuccess(false);

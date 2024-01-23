@@ -28,6 +28,7 @@ import axios from 'axios';
 import { toast } from 'react-toastify';
 import ToastCustom from '../../../Toast';
 import 'react-toastify/dist/ReactToastify.css';
+import CheckRole from '../CheckRole';
 // import NoRowData from '../NoRowData';
 
 function CustomToolbar() {
@@ -212,28 +213,29 @@ export function TableUserOneway() {
     };
 
     //Fetch Data
-    const fetchUserData = () => {
-        fetch('http://localhost:4000/info/search/getAllInfoBookedOneway')
+    const fetchUserData = (company) => {
+        fetch(`http://localhost:4000/info/search/getAllInfoBookedOnewayOfCompany?FlightNumber=${company}`)
             .then((res) => res.json())
             .then((res) => {
                 setData(res.data);
             });
     };
+
     useEffect(() => {
-        fetchUserData();
+        fetchUserData(CheckRole().Code);
     }, []);
 
     // Re-render
     const [reRender, setReRender] = useState(false);
     if (reRender) {
-        fetchUserData();
+        fetchUserData(CheckRole().Code);
         setReRender(false);
     }
 
     return (
         <>
             <div className="title">
-                <h1 style={{ marginBottom: '30px' }}>Thông tin người dùng đi một chiều</h1>
+                <h1 style={{ marginBottom: '30px' }}>Thông tin khách hàng đi một chiều</h1>
                 <Button variant="contained" color="success" className="add" onClick={handleClickOpen}>
                     <PersonAddAlt1Icon sx={{ marginRight: '10px' }} /> Thêm người
                 </Button>
@@ -285,14 +287,6 @@ export function TableUserOneway() {
         </>
     );
 }
-
-// const CustomNoRowsOverlay = () => (
-//     <GridOverlay>
-//         <div style={{ textAlign: 'center' }}>
-//             <NoRowData />
-//         </div>
-//     </GridOverlay>
-// );
 
 export function TableUserRoundtrip() {
     const [data, setData] = useState([]);
@@ -477,21 +471,23 @@ export function TableUserRoundtrip() {
     };
 
     //Fetch Data
-    const fetchUserData = () => {
-        fetch('http://localhost:4000/info/search/getAllInfoBookedRoundtrip')
+    const fetchUserData = (company) => {
+        fetch(
+            `http://localhost:4000/info/search/getAllInfoBookedRoundtripOfCompany?FlightNumber=${company}&FlightNumberReturn=${company}`,
+        )
             .then((res) => res.json())
             .then((res) => {
                 setData(res.data);
             });
     };
     useEffect(() => {
-        fetchUserData();
+        fetchUserData(CheckRole().Code);
     }, []);
 
     // Re-render
     const [reRender, setReRender] = useState(false);
     if (reRender) {
-        fetchUserData();
+        fetchUserData(CheckRole().Code);
         setReRender(false);
     }
 

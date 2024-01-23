@@ -4,62 +4,113 @@ import Sidenav from '../../component/Sidenav';
 import Navbar from '../../component/Navbar';
 import Grid from '@mui/material/Grid';
 import Outside from '../../component/Outside';
-
 import classNames from 'classnames/bind';
 import styles from './Home.module.scss';
-
 import Card from '@mui/material/Card';
 import Typography from '@mui/material/Typography';
 import CardContent from '@mui/material/CardContent';
-
 import HourglassTopIcon from '@mui/icons-material/HourglassTop';
 import DoneIcon from '@mui/icons-material/Done';
 import MonetizationOnIcon from '@mui/icons-material/MonetizationOn';
-// import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
-// import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
 import FlightToday from '../../component/FlightToday';
 import { useEffect, useState } from 'react';
-// import NumberFormat from '../component/NumberFormat/NumberFormat';
-
 import { useNavigate } from 'react-router-dom';
-import { LineChart } from '../../component/Chart/index';
-
 import CountUp from 'react-countup';
+import CheckRole from '../../component/CheckRole';
+import { fetchAPIOnewayAndCompanyThisMonth, fetchAPIRoundtripAndCompanyAndDateThisMonth } from '../Revenue/FetchAPI';
+import { calculateMoneyPerDay, generateEmptyResult, mergeResults } from '../Revenue/RevenueEachCompany';
+import { Chart } from 'react-google-charts';
+import GetDateNow from '../../../function/GetDateNow';
 
 const cx = classNames.bind(styles);
 
 function Home() {
-    async function fetchAPI(param) {
+    const [data, setData] = useState(null);
+    const date = GetDateNow();
+
+    console.log(date);
+    const handlePushData = async (company, month, year) => {
+        const endOfMonth = new Date(year, month, 0).getDate();
+
         try {
-            let response = await fetch(`http://localhost:4000/tickets/search/getTicket${param}MonthNow`);
+            const result_1 = await fetchAPIOnewayAndCompanyThisMonth(company, month, year);
+            const result_2 = await fetchAPIRoundtripAndCompanyAndDateThisMonth(company, 'DateGo', month, year);
+            const result_3 = await fetchAPIRoundtripAndCompanyAndDateThisMonth(company, 'DateReturn', month, year);
+            console.log(company, month, year, result_1, result_2, result_3);
 
-            if (!response.ok) {
-                throw new Error('Failed to fetch data');
+            if (result_1 || result_2 || result_3) {
+                let calculatedResult_1, calculatedResult_2, calculatedResult_3;
+                if (result_1 && result_1.length > 0)
+                    calculatedResult_1 = calculateMoneyPerDay(result_1, 'TotalMoneyGo');
+                else calculatedResult_1 = generateEmptyResult(endOfMonth, month);
+                if (result_2 && result_2.length > 0)
+                    calculatedResult_2 = calculateMoneyPerDay(result_2, 'TotalMoneyGo');
+                else calculatedResult_2 = generateEmptyResult(endOfMonth, month);
+                if (result_3 && result_3.length > 0)
+                    calculatedResult_3 = calculateMoneyPerDay(result_3, 'TotalMoneyReturn');
+                else calculatedResult_3 = generateEmptyResult(endOfMonth, month);
+
+                const mergedResult = mergeResults(calculatedResult_1, calculatedResult_2, calculatedResult_3);
+                setData(mergedResult);
+                // console.log('chay voa day');
+                // console.log(calculatedResult_1, calculatedResult_2, calculatedResult_3);
+            } else {
+                // Handle the case where the API response has count: 0 or an error occurred
+
+                const emptyResult = generateEmptyResult(endOfMonth, month);
+                setData(emptyResult);
+                console.log('chay duoi nay');
             }
-
-            let data1 = await response.json();
-            console.log(data1.count);
-
-            return data1.count;
         } catch (error) {
-            // Handle the error here
             console.error(error);
+        }
+    };
+    const valueRole = CheckRole();
+    useEffect(() => {
+        handlePushData(valueRole.Code, date.Month, date.Year);
+    }, []);
 
-            // You can also set an error state or show an error message to the user
+    const chartData = [['Ngày', 'Doanh thu']];
+    let total = 0;
+    if (data) {
+        const moneyPerDay = data;
+        console.log('IN tien nay', moneyPerDay);
+        for (let day = 1; day <= date.lastDayOfMonth; day++) {
+            const ngay = `${day}/${date.Month}`;
+            const doanhThu = moneyPerDay[ngay] || 0;
+            console.log(doanhThu);
+            total += doanhThu;
+            chartData.push([ngay, doanhThu]);
         }
     }
-    async function fetchAPIGetMoney(param) {
+    const options = {
+        chart: {
+            title: `Biểu đồ so sánh lợi nhuận mỗi ngày trong tháng  của hãng hàng không`,
+            subtitle: 'Được tính theo đồng (VNĐ)',
+        },
+        // colors: ['blue'], // Set custom color (e.g., blue)
+        vAxis: {
+            viewWindow: {
+                min: 0,
+                max: 1,
+            },
+        },
+    };
+
+    async function fetchAPI(param) {
         try {
-            let response = await fetch(`http://localhost:4000/info/search/getInfoBooked${param}MonthNow`);
+            let response = await fetch(
+                `http://localhost:4000/tickets/search/getTicket${param}MonthNowOfCompany?AirlineCode=${valueRole.Code}`,
+            );
 
             if (!response.ok) {
                 throw new Error('Failed to fetch data');
             }
 
             let data1 = await response.json();
-            // console.log(data1.data);
+            // console.log(data1.count);
 
-            return data1.data;
+            return data1.count;
         } catch (error) {
             // Handle the error here
             console.error(error);
@@ -71,29 +122,14 @@ function Home() {
     const [quantityCompleted, setQuantityCompleted] = useState(0);
     const [quantityIncompleted, setQuantityIncompleted] = useState(0);
 
-    const [moneyOneway, setMoneyOneway] = useState(0);
-    const [moneyRoundtrip, setMoneyRoundtrip] = useState(0);
-
-    const getTotalMoney = (data) => {
-        return data.reduce((accumuluator, currentValue) => {
-            return accumuluator + currentValue.TotalMoney;
-        }, 0);
-    };
-
     useEffect(() => {
         async function fetchData() {
             try {
                 const completed = await fetchAPI('Completed');
                 const incompleted = await fetchAPI('Incompleted');
 
-                let Oneway = await fetchAPIGetMoney('Oneway');
-                let Roundtrip = await fetchAPIGetMoney('Roundtrip');
-
                 setQuantityCompleted(completed);
                 setQuantityIncompleted(incompleted);
-
-                setMoneyOneway(getTotalMoney(Oneway));
-                setMoneyRoundtrip(getTotalMoney(Roundtrip));
 
                 // Handle the quantity data as needed
             } catch (error) {
@@ -104,8 +140,6 @@ function Home() {
 
         fetchData();
     }, [quantityCompleted, quantityIncompleted]);
-
-    console.log(moneyOneway, moneyRoundtrip);
 
     const navigate = useNavigate();
 
@@ -132,8 +166,18 @@ function Home() {
                                 <Grid item xs={8} className={cx('one')}>
                                     <FlightToday />
 
-                                    <div style={{ paddingTop: '50px' }}>
+                                    {/* <div style={{ paddingTop: '50px' }}>
                                         <LineChart />
+                                    </div> */}
+
+                                    <div style={{ marginTop: '40px' }}>
+                                        <Chart
+                                            chartType="Line"
+                                            width="100%"
+                                            height="400px"
+                                            data={chartData}
+                                            options={options}
+                                        />
                                     </div>
                                 </Grid>
 
@@ -184,8 +228,6 @@ function Home() {
                                                 className={cx('quantity')}
                                             >
                                                 <CountUp start={0} end={quantityCompleted} duration={2} />
-                                                {/* <ArrowDownwardIcon className={cx('decrease')} />
-                                                <ArrowUpwardIcon className={cx('increase')} /> */}
                                             </Typography>
                                         </CardContent>
                                     </Card>
@@ -210,15 +252,7 @@ function Home() {
                                                 color="text.secondary"
                                                 className={cx('quantity')}
                                             >
-                                                <CountUp
-                                                    start={0}
-                                                    end={moneyOneway + moneyRoundtrip}
-                                                    duration={2}
-                                                    separator="."
-                                                />{' '}
-                                                đ{/* <NumberFormat number={moneyOneway + moneyRoundtrip} /> đ */}
-                                                {/* <ArrowDownwardIcon className={cx('decrease')} />
-                                                <ArrowUpwardIcon className={cx('increase')} /> */}
+                                                <CountUp start={0} end={total} duration={2} separator="." /> đ
                                             </Typography>
                                         </CardContent>
                                     </Card>

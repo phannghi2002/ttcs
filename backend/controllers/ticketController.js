@@ -297,16 +297,14 @@ export const getTicketBySearchDuration = async (req, res) => {
 };
 
 //get ticket by day
-export const getTicketByToday = async (req, res) => {
+export const getTicketByTodayOfCompany = async (req, res) => {
     const DateGo = new Date(req.query.DateGo);
-
-    const DateReturn = '2024-01-02T14:30';
-
-    const formattedDateReturn = new Date(DateReturn).toISOString();
+    const airlineCode = new RegExp(`^${req.query.AirlineCode}$`);
 
     try {
         const tickets = await Ticket.find({
             DateGo,
+            AirlineCode: airlineCode,
             // Roundtrip: {
             //   DateReturn: DateReturn,
             // },
@@ -404,15 +402,17 @@ export const getTicketIncompletedAll = async (req, res) => {
     }
 };
 
-export const getTicketIncompletedMonthNow = async (req, res) => {
+export const getTicketIncompletedMonthNowOfCompany = async (req, res) => {
     const LandingTime = new Date(req.query.LandingTime);
 
     const currentDate = new Date();
     const currentMonthEnd = getMonth().currentMonthEnd;
+    const airlineCode = new RegExp(`^${req.query.AirlineCode}$`);
 
     try {
         const tickets = await Ticket.find({
             LandingTime: { $gte: currentDate, $lt: currentMonthEnd },
+            AirlineCode: airlineCode,
         });
 
         res.status(200).json({
@@ -429,15 +429,18 @@ export const getTicketIncompletedMonthNow = async (req, res) => {
     }
 };
 
-export const getTicketCompletedMonthNow = async (req, res) => {
+export const getTicketCompletedMonthNowOfCompany = async (req, res) => {
     const LandingTime = new Date(req.query.LandingTime);
 
     const currentDate = new Date();
     const currentMonthStart = getMonth().currentMonthStart;
 
+    const airlineCode = new RegExp(`^${req.query.AirlineCode}$`);
+
     try {
         const tickets = await Ticket.find({
             LandingTime: { $gte: currentMonthStart, $lt: currentDate },
+            AirlineCode: airlineCode,
         });
 
         res.status(200).json({
@@ -446,6 +449,35 @@ export const getTicketCompletedMonthNow = async (req, res) => {
             count: tickets.length,
             data: tickets,
         });
+    } catch (error) {
+        res.status(404).json({
+            success: false,
+            message: 'Not found ',
+        });
+    }
+};
+
+export const getAllTicketOfCompany = async (req, res) => {
+    //for pagination
+    // const page = parseInt(req.query.page);
+
+    const airlineCode = new RegExp(`^${req.query.AirlineCode}$`);
+
+    try {
+        const tickets = await Ticket.find({
+            AirlineCode: airlineCode,
+        });
+
+        if (tickets.length > 0) {
+            res.status(200).json({
+                success: true,
+                count: tickets.length,
+                message: 'Successfully',
+                data: tickets,
+            });
+        } else {
+            throw new Error('No tickets found'); // Throw an error when tickets.length is <= 0
+        }
     } catch (error) {
         res.status(404).json({
             success: false,

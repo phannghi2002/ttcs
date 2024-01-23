@@ -28,6 +28,8 @@ import { useAppStore } from '../../index';
 
 import classNames from 'classnames/bind';
 import styles from './Sidenav.module.scss';
+// import CheckRevenue from '../../pages/Revenue/CheckRevenue';
+import CheckRole from '../CheckRole';
 // import CustomList from './CustomList';
 const cx = classNames.bind(styles);
 
@@ -90,6 +92,9 @@ export default function Sidenav() {
     //     navigate(path);
     //   };
 
+    const valueRole = CheckRole();
+    console.log('In ra checkRole', valueRole);
+
     return (
         <Box sx={{ display: 'flex' }}>
             <Box height={64} />
@@ -99,104 +104,117 @@ export default function Sidenav() {
                 <DrawerHeader>
                     <IconButton>{theme.direction === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon />}</IconButton>
                 </DrawerHeader>
-                <Divider />
-                <List>
-                    <ListItem
-                        disablePadding
-                        sx={{ display: 'block' }}
-                        onClick={() => navigate('/admin')}
-                        // className={isClicked ?  'clicked' : ''}
-                    >
-                        <ListItemButton
-                            sx={{
-                                minHeight: 48,
-                                justifyContent: open ? 'initial' : 'center',
-                                px: 2.5,
-                            }}
-                        >
-                            <ListItemIcon
-                                sx={{
-                                    minWidth: 0,
-                                    mr: open ? 3 : 'auto',
-                                    justifyContent: 'center',
-                                }}
-                            >
-                                <HomeIcon />
-                            </ListItemIcon>
-                            <ListItemText primary="Trang chủ" sx={{ opacity: open ? 1 : 0 }} />
-                        </ListItemButton>
-                    </ListItem>
-                </List>
 
-                {/* <CustomList path="/admin" icon={<HomeIcon />} primary="Trang chủ" /> */}
+                {valueRole.Code !== 'AD' && (
+                    <>
+                        <Divider />
+                        <List>
+                            <ListItem
+                                disablePadding
+                                sx={{ display: 'block' }}
+                                onClick={() => navigate('/admin')}
+                                // className={isClicked ?  'clicked' : ''}
+                            >
+                                <ListItemButton
+                                    sx={{
+                                        minHeight: 48,
+                                        justifyContent: open ? 'initial' : 'center',
+                                        px: 2.5,
+                                    }}
+                                >
+                                    <ListItemIcon
+                                        sx={{
+                                            minWidth: 0,
+                                            mr: open ? 3 : 'auto',
+                                            justifyContent: 'center',
+                                        }}
+                                    >
+                                        <HomeIcon />
+                                    </ListItemIcon>
+                                    <ListItemText primary="Trang chủ" sx={{ opacity: open ? 1 : 0 }} />
+                                </ListItemButton>
+                            </ListItem>
+                        </List>
+                        <Divider />
+                        <List>
+                            <ListItem
+                                disablePadding
+                                sx={{ display: 'block' }}
+                                onClick={() => navigate('/admin/flight')}
+                            >
+                                <ListItemButton
+                                    sx={{
+                                        minHeight: 48,
+                                        justifyContent: open ? 'initial' : 'center',
+                                        px: 2.5,
+                                    }}
+                                >
+                                    <ListItemIcon
+                                        sx={{
+                                            minWidth: 0,
+                                            mr: open ? 3 : 'auto',
+                                            justifyContent: 'center',
+                                        }}
+                                    >
+                                        <ConnectingAirportsIcon />
+                                    </ListItemIcon>
+                                    <ListItemText primary="Chuyến bay" sx={{ opacity: open ? 1 : 0 }} />
+                                </ListItemButton>
+                            </ListItem>
+                        </List>
+                        <List>
+                            <ListItem disablePadding sx={{ display: 'block' }} onClick={() => navigate('/admin/users')}>
+                                <ListItemButton
+                                    sx={{
+                                        minHeight: 48,
+                                        justifyContent: open ? 'initial' : 'center',
+                                        px: 2.5,
+                                    }}
+                                >
+                                    <ListItemIcon
+                                        sx={{
+                                            minWidth: 0,
+                                            mr: open ? 3 : 'auto',
+                                            justifyContent: 'center',
+                                        }}
+                                    >
+                                        <PersonIcon />
+                                    </ListItemIcon>
+                                    <ListItemText primary="Quản lý khách hàng" sx={{ opacity: open ? 1 : 0 }} />
+                                </ListItemButton>
+                            </ListItem>
+                        </List>
+                    </>
+                )}
 
-                <Divider />
-                <List>
-                    <ListItem disablePadding sx={{ display: 'block' }} onClick={() => navigate('/admin/flight')}>
-                        <ListItemButton
-                            sx={{
-                                minHeight: 48,
-                                justifyContent: open ? 'initial' : 'center',
-                                px: 2.5,
-                            }}
+                {valueRole.Code === 'AD' && (
+                    <List>
+                        <ListItem
+                            disablePadding
+                            sx={{ display: 'block' }}
+                            onClick={() => navigate('/admin/adminUsers')}
                         >
-                            <ListItemIcon
+                            <ListItemButton
                                 sx={{
-                                    minWidth: 0,
-                                    mr: open ? 3 : 'auto',
-                                    justifyContent: 'center',
+                                    minHeight: 48,
+                                    justifyContent: open ? 'initial' : 'center',
+                                    px: 2.5,
                                 }}
                             >
-                                <ConnectingAirportsIcon />
-                            </ListItemIcon>
-                            <ListItemText primary="Chuyến bay" sx={{ opacity: open ? 1 : 0 }} />
-                        </ListItemButton>
-                    </ListItem>
-                </List>
-                <List>
-                    <ListItem disablePadding sx={{ display: 'block' }} onClick={() => navigate('/admin/users')}>
-                        <ListItemButton
-                            sx={{
-                                minHeight: 48,
-                                justifyContent: open ? 'initial' : 'center',
-                                px: 2.5,
-                            }}
-                        >
-                            <ListItemIcon
-                                sx={{
-                                    minWidth: 0,
-                                    mr: open ? 3 : 'auto',
-                                    justifyContent: 'center',
-                                }}
-                            >
-                                <PersonIcon />
-                            </ListItemIcon>
-                            <ListItemText primary="Người dùng" sx={{ opacity: open ? 1 : 0 }} />
-                        </ListItemButton>
-                    </ListItem>
-                </List>
-                <List>
-                    <ListItem disablePadding sx={{ display: 'block' }} onClick={() => navigate('/admin/adminUsers')}>
-                        <ListItemButton
-                            sx={{
-                                minHeight: 48,
-                                justifyContent: open ? 'initial' : 'center',
-                                px: 2.5,
-                            }}
-                        >
-                            <ListItemIcon
-                                sx={{
-                                    minWidth: 0,
-                                    mr: open ? 3 : 'auto',
-                                    justifyContent: 'center',
-                                }}
-                            >
-                                <ManageAccountsIcon />
-                            </ListItemIcon>
-                            <ListItemText primary="Quản lý Admin" sx={{ opacity: open ? 1 : 0 }} />
-                        </ListItemButton>
-                    </ListItem>
-                </List>
+                                <ListItemIcon
+                                    sx={{
+                                        minWidth: 0,
+                                        mr: open ? 3 : 'auto',
+                                        justifyContent: 'center',
+                                    }}
+                                >
+                                    <ManageAccountsIcon />
+                                </ListItemIcon>
+                                <ListItemText primary="Quản lý người dùng" sx={{ opacity: open ? 1 : 0 }} />
+                            </ListItemButton>
+                        </ListItem>
+                    </List>
+                )}
                 <List>
                     <ListItem disablePadding sx={{ display: 'block' }} onClick={() => navigate('/admin/revenue')}>
                         <ListItemButton
@@ -219,14 +237,7 @@ export default function Sidenav() {
                         </ListItemButton>
                     </ListItem>
                 </List>
-                <img
-                    src={Flight3D}
-                    alt="Máy bay"
-                    // height={240}
-                    // width={240}
-                    // sx={{ mt: '20px' }}
-                    className={cx('image')}
-                />
+                <img src={Flight3D} alt="Máy bay" className={cx('image')} />
             </Drawer>
         </Box>
     );

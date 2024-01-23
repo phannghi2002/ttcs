@@ -23,125 +23,15 @@ import { renderTimeViewClock } from '@mui/x-date-pickers/timeViewRenderers';
 import { FormatDateYMD } from '../../../function/FormatDate';
 import dayjs from 'dayjs';
 import CheckNumber from '../../../function/CheckNumber';
+import { selectAirport } from '../CONST';
+import CheckRole from '../CheckRole';
 
-const selectAirport = [
-    {
-        value: 'HAN',
-        label: 'Hà Nội (HAN)',
-    },
-    {
-        value: 'HPH',
-        label: 'Hải Phòng (HPH)',
-    },
+const valueRole = CheckRole();
 
-    {
-        value: 'DIN',
-        label: 'Điện Biên (DIN)',
-    },
-    {
-        value: 'THD',
-        label: 'Thanh Hóa (THD)',
-    },
-    {
-        value: 'VDO',
-        label: 'Quảng Ninh (VDO)',
-    },
-    {
-        value: 'VII',
-        label: 'Vinh (VII)',
-    },
-
-    {
-        value: 'HUI',
-        label: 'Huế (HUI)',
-    },
-    {
-        value: 'VDH',
-        label: 'Đồng Nai (VDH)',
-    },
-    {
-        value: 'DAD',
-        label: 'Đà Nẵng (DAD)',
-    },
-    {
-        value: 'PXU',
-        label: 'Pleiku (PXU)',
-    },
-
-    {
-        value: 'TBB',
-        label: 'Tuy Hòa (TBB)',
-    },
-    {
-        value: 'SGN',
-        label: 'Hồ Chí Minh (SGN)',
-    },
-    {
-        value: 'CXR',
-        label: 'Nha Trang (CXR)',
-    },
-    {
-        value: 'DLI',
-        label: 'Đà Lạt (DLI)',
-    },
-
-    {
-        value: 'PQC',
-        label: 'Phú Quốc (PQC)',
-    },
-    {
-        value: 'VCL',
-        label: 'Tam Kỳ (VCL)',
-    },
-    {
-        value: 'UIH',
-        label: 'Qui Nhơn (UIH)',
-    },
-    {
-        value: 'VCA',
-        label: 'Cần Thơ (VCA)',
-    },
-
-    {
-        value: 'VCS',
-        label: 'Côn Đảa (VCS)',
-    },
-    {
-        value: 'BMV',
-        label: 'Ban Mê Thuật (BMV)',
-    },
-    {
-        value: 'VKG',
-        label: 'Rạch Giá (VKG)',
-    },
-    {
-        value: 'CAH',
-        label: 'Cà Mau (CAH)',
-    },
-];
-
-const selectAirCode = [
-    {
-        value: 'VNA',
-        label: 'VNA',
-    },
-    {
-        value: 'VJ',
-        label: 'VJ',
-    },
-    {
-        value: 'QH',
-        label: 'QH',
-    },
-    {
-        value: 'BL',
-        label: 'BL',
-    },
-];
 export const AddFlight = ({ open, handleClose, onUpdate, setReRender }) => {
     const [data, setData] = useState({
         FlightNumber: '',
-        AirlineCode: 'VNA',
+        AirlineCode: `${valueRole.Code}`,
         AirportFrom: 'HAN',
         AirportTo: 'SGN',
         DateGo: null,
@@ -264,7 +154,7 @@ export const AddFlight = ({ open, handleClose, onUpdate, setReRender }) => {
             axios
                 .post('http://localhost:4000/tickets', {
                     FlightNumber: data.FlightNumber,
-                    AirlineCode: data.AirlineCode,
+                    AirlineCode: `${valueRole.Code}`,
                     AirportFrom: data.AirportFrom,
                     AirportTo: data.AirportTo,
                     FirstClass: {
@@ -290,7 +180,7 @@ export const AddFlight = ({ open, handleClose, onUpdate, setReRender }) => {
 
                     setData({
                         FlightNumber: '',
-                        AirlineCode: 'VNA',
+                        AirlineCode: `${valueRole.Code}`,
                         AirportFrom: 'HAN',
                         AirportTo: 'SGN',
                         FirstClass: {
@@ -348,21 +238,16 @@ export const AddFlight = ({ open, handleClose, onUpdate, setReRender }) => {
                     <form style={{ display: 'flex', flexDirection: 'column' }}>
                         <div>
                             <TextField
+                                id="outlined-read-only-input"
                                 name="AirlineCode"
-                                select
                                 label="Mã máy bay"
-                                defaultValue={data.AirlineCode}
-                                value={data.AirlineCode}
-                                onChange={handleChange}
+                                defaultValue={valueRole.Code}
+                                InputProps={{
+                                    readOnly: true,
+                                }}
                                 sx={{ width: '223px', marginRight: '20px' }}
                                 margin="normal"
-                            >
-                                {selectAirCode.map((option) => (
-                                    <MenuItem key={option.value} value={option.value}>
-                                        {option.label}
-                                    </MenuItem>
-                                ))}
-                            </TextField>
+                            />
                             <TextField
                                 name="FlightNumber"
                                 label="Mã chuyến bay"
@@ -741,7 +626,7 @@ export const EditFlight = ({ row, open, setOpen, handleClose, onUpdate, setReRen
                 <DialogContent>
                     <form style={{ display: 'flex', flexDirection: 'column' }}>
                         <div>
-                            <TextField
+                            {/* <TextField
                                 name="AirlineCode"
                                 select
                                 label="Mã máy bay"
@@ -756,7 +641,18 @@ export const EditFlight = ({ row, open, setOpen, handleClose, onUpdate, setReRen
                                         {option.label}
                                     </MenuItem>
                                 ))}
-                            </TextField>
+                            </TextField> */}
+                            <TextField
+                                id="outlined-read-only-input"
+                                name="AirlineCode"
+                                label="Mã máy bay"
+                                defaultValue={valueRole.Code}
+                                InputProps={{
+                                    readOnly: true,
+                                }}
+                                sx={{ width: '223px', marginRight: '20px' }}
+                                margin="normal"
+                            />
                             <TextField
                                 name="FlightNumber"
                                 label="Mã chuyến bay"

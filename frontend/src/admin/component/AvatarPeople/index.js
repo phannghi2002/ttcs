@@ -1,6 +1,5 @@
 import * as React from 'react';
 import Avatar from '@mui/material/Avatar';
-// import Stack from '@mui/material/Stack';
 
 function stringToColor(string) {
     let hash = 0;
@@ -38,18 +37,21 @@ function stringAvatar(name) {
     };
 }
 
-export default function AvatarPeople({ string }) {
-    return (
-        // <Stack direction="row" spacing={2}>
-        <Avatar
-            {...stringAvatar(string)}
-            // sx={{
-            //     width: 40, // Customize the width of the Avatar
-            //     height: 40, // Customize the height of the Avatar
-            //     fontSize: 18, // Customize the font size of the text inside the Avatar
-            // }}
-        />
+export default function AvatarPeople({ string, height, width, fontSize }) {
+    const avatarProps = stringAvatar(string);
+    console.log(string, height, width);
 
-        // </Stack>
-    );
+    if (height) {
+        avatarProps.sx.height = height;
+    }
+
+    if (width) {
+        avatarProps.sx.width = width;
+    }
+
+    if (fontSize) {
+        avatarProps.sx.fontSize = fontSize;
+    }
+
+    return <Avatar {...avatarProps} />;
 }

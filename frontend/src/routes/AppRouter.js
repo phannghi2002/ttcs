@@ -17,6 +17,7 @@ import Revenue from '../admin/pages/Revenue';
 import SignIn from '../component/SignIn';
 import PrivateRoute from './PrivateRoute';
 import CancelTicket from '../component/CancelTicket';
+import MyAccount from '../admin/component/MyAccount';
 
 function AppRouter() {
     return (
@@ -67,6 +68,14 @@ function AppRouter() {
                 element={
                     <PrivateRoute>
                         <Revenue />
+                    </PrivateRoute>
+                }
+            />
+            <Route
+                path="/admin/myaccount"
+                element={
+                    <PrivateRoute>
+                        <MyAccount />
                     </PrivateRoute>
                 }
             />

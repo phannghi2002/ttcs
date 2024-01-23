@@ -28,6 +28,25 @@ import 'react-toastify/dist/ReactToastify.css';
 import { useEffect } from 'react';
 import dayjs from 'dayjs';
 import FormHelperText from '@mui/material/FormHelperText';
+import MenuItem from '@mui/material/MenuItem';
+
+export const selectRole = [
+    {
+        label: 'Quản trị viên hệ thống',
+    },
+    {
+        label: 'Đại lý VietJet Air',
+    },
+    {
+        label: 'Đại lý Vietnam Airlines',
+    },
+    {
+        label: 'Đại lý Jetstar Pacific Airlines',
+    },
+    {
+        label: 'Đại lý Bambo Airways',
+    },
+];
 
 export const AddAdmin = ({ open, handleClose, reRender, setReRender }) => {
     const [data, setData] = useState({
@@ -35,6 +54,7 @@ export const AddAdmin = ({ open, handleClose, reRender, setReRender }) => {
         Password: '',
         Name: '',
         DayOfBirth: null,
+        Role: '',
     });
     const [showPassword, setShowPassword] = useState(false);
 
@@ -107,6 +127,7 @@ export const AddAdmin = ({ open, handleClose, reRender, setReRender }) => {
                     Password: data.Password,
                     Name: data.Name,
                     DayOfBirth: FormatDate(data.DayOfBirth),
+                    Role: data.Role,
                 })
                 .then((res) => {
                     console.log(res);
@@ -116,6 +137,7 @@ export const AddAdmin = ({ open, handleClose, reRender, setReRender }) => {
                         Password: '',
                         Name: '',
                         DayOfBirth: null,
+                        Role: '',
                     });
 
                     setReRender(true);
@@ -138,7 +160,7 @@ export const AddAdmin = ({ open, handleClose, reRender, setReRender }) => {
                 aria-labelledby="alert-dialog-title"
                 aria-describedby="alert-dialog-description"
             >
-                <DialogTitle id="alert-dialog-title">Thêm thông tin Admin</DialogTitle>
+                <DialogTitle id="alert-dialog-title">Thêm thông tin người dùng</DialogTitle>
                 <DialogContent>
                     <form>
                         <TextField
@@ -176,12 +198,6 @@ export const AddAdmin = ({ open, handleClose, reRender, setReRender }) => {
                                     </InputAdornment>
                                 }
                                 label="Password"
-                                // helperText={errors['Password'] || ''}
-                                // sx={{
-                                //     '& .MuiFormHelperText-root': {
-                                //         color: 'red',
-                                //     },
-                                // }}
                             />
                             <FormHelperText sx={{ color: 'red' }}>{errors['Password'] || ''}</FormHelperText>
                         </FormControl>
@@ -228,6 +244,24 @@ export const AddAdmin = ({ open, handleClose, reRender, setReRender }) => {
                                 </DemoContainer>
                             </LocalizationProvider>
                         </div>
+
+                        <TextField
+                            name="Role"
+                            select
+                            label="Vai trò"
+                            defaultValue={selectRole[0].label}
+                            value={data.Role}
+                            onChange={handleChange}
+                            // sx={{ width: '223px', marginRight: '20px' }}
+                            fullWidth
+                            margin="normal"
+                        >
+                            {selectRole.map((option) => (
+                                <MenuItem key={option.label} value={option.label}>
+                                    {option.label}
+                                </MenuItem>
+                            ))}
+                        </TextField>
                     </form>
                 </DialogContent>
                 <DialogActions>
@@ -300,6 +334,7 @@ export const EditAdmin = ({ row, open, setOpen, handleClose, reRender, setReRend
                     Password: data.Password,
                     Name: data.Name,
                     DayOfBirth: FormatDate(data.DayOfBirth),
+                    Role: data.Role,
                 })
                 .then((res) => {
                     console.log(res);
@@ -323,6 +358,7 @@ export const EditAdmin = ({ row, open, setOpen, handleClose, reRender, setReRend
             Password: row.Password,
             Name: row.Name,
             DayOfBirth: row.DayOfBirth,
+            Role: row.Role,
         });
     }, [row]);
 
@@ -409,6 +445,24 @@ export const EditAdmin = ({ row, open, setOpen, handleClose, reRender, setReRend
                                 </DemoContainer>
                             </LocalizationProvider>
                         </div>
+
+                        <TextField
+                            name="Role"
+                            select
+                            label="Vai trò"
+                            defaultValue={data.Role}
+                            value={data.Role}
+                            onChange={handleChange}
+                            // sx={{ width: '223px', marginRight: '20px' }}
+                            fullWidth
+                            margin="normal"
+                        >
+                            {selectRole.map((option) => (
+                                <MenuItem key={option.label} value={option.label}>
+                                    {option.label}
+                                </MenuItem>
+                            ))}
+                        </TextField>
                     </form>
                 </DialogContent>
                 <DialogActions>

@@ -19,6 +19,8 @@ import NotificationsIcon from '@mui/icons-material/Notifications';
 import classNames from 'classnames/bind';
 import styles from './Navbar.module.scss';
 import ShowNotifyCancel from '../ShowNotifyCancel';
+import AccountBoxIcon from '@mui/icons-material/AccountBox';
+import { useNavigate } from 'react-router-dom';
 
 const cx = classNames.bind(styles);
 
@@ -55,13 +57,19 @@ export default function Navbar() {
     const handleMobileMenuOpen = (event) => {
         setMobileMoreAnchorEl(event.currentTarget);
     };
-    // const navigate = useNavigate();
+    const navigate = useNavigate();
 
     const handleLogout = () => {
         // navigate('/');
         window.location.href = '/';
         localStorage.removeItem('Login');
     };
+
+    const handleProfile = () => {
+        navigate('/admin/myaccount');
+        alert('hello may cung');
+    };
+
     const menuId = 'primary-search-account-menu';
     const renderMenu = (
         <Menu
@@ -100,6 +108,21 @@ export default function Navbar() {
                     <LogoutIcon />
                 </IconButton>
             </MenuItem>
+
+            <MenuItem onClick={handleProfile} sx={{ height: '30px' }}>
+                Tài khoản
+                <IconButton
+                    size="large"
+                    edge="end"
+                    aria-label="account of current user"
+                    aria-controls={menuId}
+                    aria-haspopup="true"
+                    // onClick={handleLogout}
+                    color="inherit"
+                >
+                    <AccountBoxIcon />
+                </IconButton>
+            </MenuItem>
         </Menu>
     );
 
@@ -122,7 +145,7 @@ export default function Navbar() {
         ></Menu>
     );
 
-    const getName = localStorage.getItem('Login');
+    const getName = JSON.parse(localStorage.getItem('Login')).Name;
 
     const [quantityNotify, setQuantityNotify] = useState(0);
     const [data, setData] = useState();
