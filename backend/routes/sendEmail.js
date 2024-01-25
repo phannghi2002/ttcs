@@ -234,11 +234,11 @@ router.post('/all', (req, res) => {
                           <span style="font-size: 14px">ĐÃ CHUẨN BỊ CHO</span>
                           <h3 style="margin: 0; padding: 5px 0px">
                             Ông (Bà) ${data[index].UserName}
-                            <span style="text-transform: uppercase"></span>
+                            <span style="text-transform: uppercase"></span><p></p>
                           </h3>
                         </div>
                         <div style="font-size: 14px; margin-top: 10px">
-                          MÃ ĐẶT CHỖ: <span>${code}</span>
+                          MÃ ĐẶT CHỖ: <span>${data[index].CodeTicket}</span>
                         </div>
                         <div style="width: 100%; height: 2px; background-color: #000"></div>
                         <div style="margin-top: 5px; font-weight: bold">Chuyến đi</div>
