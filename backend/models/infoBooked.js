@@ -49,7 +49,7 @@ const infoBookedSchema = new mongoose.Schema(
         CodeTicket: {
             type: String,
             required: true,
-            // unique: true,
+            unique: true,
         },
         FlightNumber: {
             type: String,

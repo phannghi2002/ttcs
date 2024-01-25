@@ -13,6 +13,7 @@ export const createInfoBooked = async (req, res) => {
             data: saveInfoBooked,
         });
     } catch (error) {
+        console.log(error);
         res.status(500).json({
             success: false,
             message: error,
@@ -42,7 +43,7 @@ export const updateInfoBooked = async (req, res) => {
         console.log('Loi o day ne', error);
         res.status(500).json({
             success: false,
-            message: 'Failed to update. Try again ',
+            message: error,
         });
     }
 };
@@ -237,7 +238,7 @@ export const getAllInfoBookedRoundtripOfCompany = async (req, res) => {
     }
 };
 
-//get ticket by search
+//get ticket by search code ticket
 export const getInfoBookedBySearch = async (req, res) => {
     //here 'i' means case sensitive
 
@@ -407,6 +408,7 @@ const getMonth_11_2023 = (start) => {
     };
 };
 
+// dday
 export const getInfoBookedMonthOnewayAndCompanyNow = async (req, res) => {
     const flightNumber = new RegExp(req.query.FlightNumber, 'i');
     const { month, year } = req.query;

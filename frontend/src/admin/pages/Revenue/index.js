@@ -46,7 +46,7 @@ function Revenue() {
             <Box sx={{ display: 'flex' }}>
                 <Sidenav />
                 <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
-                    {valueRole === 1 && (
+                    {valueRole.Code === 'AD' && (
                         <>
                             <div style={{ display: 'flex' }}>
                                 <PieChartCompareTypeFlight StorageMoney={StorageMoney} />

@@ -32,7 +32,7 @@ function FlightToday() {
     async function fetchAPI() {
         try {
             let response = await fetch(
-                `http://localhost:4000/tickets/search/getTicketByTodayOfCompany?DateGo=2024-01-15&AirlineCode=${valueRole.Code}`,
+                `http://localhost:4000/tickets/search/getTicketByTodayOfCompany?DateGo=${DateGo}&AirlineCode=${valueRole.Code}`,
             );
 
             console.log(DateGo);

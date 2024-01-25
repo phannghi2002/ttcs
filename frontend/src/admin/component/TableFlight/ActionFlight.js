@@ -188,7 +188,6 @@ export const AddFlight = ({ open, handleClose, onUpdate, setReRender }) => {
                         },
                         EconomyClass: {
                             PriceAdult: '',
-                            CodeSeat: [],
                         },
                         BusinessClass: {
                             PriceAdult: '',
@@ -375,7 +374,7 @@ export const AddFlight = ({ open, handleClose, onUpdate, setReRender }) => {
                                         seconds: renderTimeViewClock,
                                     }}
                                     value={data.FlightTime}
-                                    minDateTime={dayjs().add(15, 'day')}
+                                    // minDateTime={dayjs().add(15, 'day')}
                                     slotProps={{
                                         textField: {
                                             helperText: errors['FlightTime'] || '',
@@ -401,7 +400,7 @@ export const AddFlight = ({ open, handleClose, onUpdate, setReRender }) => {
                                         seconds: renderTimeViewClock,
                                     }}
                                     value={data.LandingTime}
-                                    minDateTime={dayjs().add(15, 'day')}
+                                    // minDateTime={dayjs().add(15, 'day')}
                                     slotProps={{
                                         textField: {
                                             helperText: errors['LandingTime'] || '',

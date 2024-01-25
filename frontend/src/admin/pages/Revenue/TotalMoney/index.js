@@ -68,7 +68,7 @@ function TotalMoney() {
                 let VNA = await fetchAPICompany('VNA');
                 let QH = await fetchAPICompany('QH');
                 let BL = await fetchAPICompany('BL');
-                console.log('gọi nhiều vãi cả bìu');
+
                 setMoneyOneway(getTotalMoney(Oneway));
                 setMoneyRoundtrip(getTotalMoney(Roundtrip));
 

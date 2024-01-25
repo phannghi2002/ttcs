@@ -12,17 +12,18 @@ import MoreIcon from '@mui/icons-material/MoreVert';
 import { Helmet } from 'react-helmet';
 import LogoutIcon from '@mui/icons-material/Logout';
 import { useAppStore } from '../../index';
-import { useState, useEffect } from 'react';
+// import { useState,useEffect } from 'react';
+import Divider from '@mui/material/Divider';
 
 import AvatarPeople from '../AvatarPeople';
-import NotificationsIcon from '@mui/icons-material/Notifications';
-import classNames from 'classnames/bind';
-import styles from './Navbar.module.scss';
-import ShowNotifyCancel from '../ShowNotifyCancel';
+// import NotificationsIcon from '@mui/icons-material/Notifications';
+// import classNames from 'classnames/bind';
+// import styles from './Navbar.module.scss';
+// import ShowNotifyCancel from '../ShowNotifyCancel';
 import AccountBoxIcon from '@mui/icons-material/AccountBox';
 import { useNavigate } from 'react-router-dom';
 
-const cx = classNames.bind(styles);
+// const cx = classNames.bind(styles);
 
 const AppBar = styled(
     MuiAppBar,
@@ -67,7 +68,6 @@ export default function Navbar() {
 
     const handleProfile = () => {
         navigate('/admin/myaccount');
-        alert('hello may cung');
     };
 
     const menuId = 'primary-search-account-menu';
@@ -94,20 +94,6 @@ export default function Navbar() {
             }}
         >
             {/* <MenuItem onClick={handleMenuClose}> */}
-            <MenuItem onClick={handleLogout} sx={{ height: '30px' }}>
-                Đăng xuất
-                <IconButton
-                    size="large"
-                    edge="end"
-                    aria-label="account of current user"
-                    aria-controls={menuId}
-                    aria-haspopup="true"
-                    // onClick={handleLogout}
-                    color="inherit"
-                >
-                    <LogoutIcon />
-                </IconButton>
-            </MenuItem>
 
             <MenuItem onClick={handleProfile} sx={{ height: '30px' }}>
                 Tài khoản
@@ -121,6 +107,22 @@ export default function Navbar() {
                     color="inherit"
                 >
                     <AccountBoxIcon />
+                </IconButton>
+            </MenuItem>
+
+            <Divider />
+            <MenuItem onClick={handleLogout} sx={{ height: '30px' }}>
+                Đăng xuất
+                <IconButton
+                    size="large"
+                    edge="end"
+                    aria-label="account of current user"
+                    aria-controls={menuId}
+                    aria-haspopup="true"
+                    // onClick={handleLogout}
+                    color="inherit"
+                >
+                    <LogoutIcon />
                 </IconButton>
             </MenuItem>
         </Menu>
@@ -147,55 +149,35 @@ export default function Navbar() {
 
     const getName = JSON.parse(localStorage.getItem('Login')).Name;
 
-    const [quantityNotify, setQuantityNotify] = useState(0);
-    const [data, setData] = useState();
+    // const [quantityNotify, setQuantityNotify] = useState(0);
+    // const [data, setData] = useState();
 
-    const fetchAPI = async () => {
-        try {
-            let response = await fetch(`http://localhost:4000/cancel`);
+    // const fetchAPI = async () => {
+    //     try {
+    //         let response = await fetch(`http://localhost:4000/cancel`);
 
-            if (!response.ok) {
-                throw new Error('Failed to fetch data');
-            }
+    //         if (!response.ok) {
+    //             throw new Error('Failed to fetch data');
+    //         }
 
-            let data1 = await response.json();
-            setQuantityNotify(data1.data.length);
-            setData(data1.data);
-            return data1.data;
-        } catch (error) {
-            console.error(error);
-        }
-    };
+    //         let data1 = await response.json();
+    //         setQuantityNotify(data1.data.length);
+    //         setData(data1.data);
+    //         return data1.data;
+    //     } catch (error) {
+    //         console.error(error);
+    //     }
+    // };
 
-    useEffect(() => {
-        fetchAPI();
-    }, [quantityNotify]);
+    // useEffect(() => {
+    //     fetchAPI();
+    // }, [quantityNotify]);
 
     // const [clickNotify, setClickNotify] = useState(false);
 
     // const handleClickNotify = () => {
     //     setClickNotify(!clickNotify);
     // };
-
-    // const handleClickOutside = (event) => {
-    //     if (clickNotify && !event.target.closest('.notify')) {
-    //         setClickNotify(false);
-    //     }
-    // };
-
-    // useEffect(() => {
-    //     document.addEventListener('click', handleClickOutside);
-
-    //     return () => {
-    //         document.removeEventListener('click', handleClickOutside);
-    //     };
-    // }, [clickNotify]);
-
-    const [clickNotify, setClickNotify] = useState(false);
-
-    const handleClickNotify = () => {
-        setClickNotify(!clickNotify);
-    };
 
     return (
         <Box sx={{ flexGrow: 1 }}>
@@ -220,7 +202,7 @@ export default function Navbar() {
 
                     <Box sx={{ flexGrow: 1 }} />
                     <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
-                        <div
+                        {/* <div
                             style={{ display: 'flex', alignItems: 'center', marginRight: '100px' }}
                             onClick={handleClickNotify}
                         >
@@ -234,7 +216,7 @@ export default function Navbar() {
                                     ))}
                                 </div>
                             )}
-                        </div>
+                        </div> */}
 
                         <span className="d-flex align-items-center ">{getName}</span>
                         <IconButton

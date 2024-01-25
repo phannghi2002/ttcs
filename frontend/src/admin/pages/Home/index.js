@@ -85,7 +85,7 @@ function Home() {
     }
     const options = {
         chart: {
-            title: `Biểu đồ so sánh lợi nhuận mỗi ngày trong tháng  của hãng hàng không`,
+            title: `Biểu đồ so sánh lợi nhuận mỗi ngày trong tháng của hãng hàng không`,
             subtitle: 'Được tính theo đồng (VNĐ)',
         },
         // colors: ['blue'], // Set custom color (e.g., blue)

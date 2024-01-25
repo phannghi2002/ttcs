@@ -88,7 +88,8 @@ function Paying() {
             DateReturn: storedInforFlightReturn.item.DateGo,
             CodeSeatReturn: storedInforSeatReturn.join(' - '),
 
-            TotalMoney: storedInforFlight.total + storedInforFlightReturn.total,
+            // TotalMoney: storedInforFlight.total + storedInforFlightReturn.total,
+            TotalMoney: storedInforFlight.moneyAdult + storedInforFlightReturn.moneyAdult,
         };
         return data;
     };
@@ -109,7 +110,6 @@ function Paying() {
             CodeSeat: storedInforSeat.join(' - '),
             Email: storedInforPerson.Email,
             TotalMoneyGo: storedInforFlight.total,
-
             TotalMoney: storedInforFlight.total,
         };
         return data;
@@ -318,6 +318,13 @@ function Paying() {
 
         for (let i = 0; i < Number(storedQuantity.adults); i++) {
             const newCodeTicket = handleGetNewCodeTicket(data00.CodeTicket, 'A') + i;
+            let total;
+            if (data00.TypeFlight === 'Roundtrip') {
+                total = storedInforFlight.moneyAdult + data00.TotalMoneyReturn;
+            } else {
+                total = storedInforFlight.moneyAdult;
+            }
+
             axios
                 .post('http://localhost:4000/info', {
                     TypeFlight: data00.TypeFlight,
@@ -329,7 +336,10 @@ function Paying() {
                     DateGo: data00.DateGo,
                     TotalMoneyGo: storedInforFlight.moneyAdult,
                     TotalMoneyReturn: data00.TotalMoneyReturn,
-                    TotalMoney: data00.TotalMoney,
+                    // TotalMoney: storedInforFlight.moneyAdult + data00.TotalMoneyReturn,
+                    // TotalMoney: data00.TotalMoney,
+                    TotalMoney: total,
+
                     CodeTicket: newCodeTicket,
                     FlightNumber: data00.FlightNumber,
                     UserName: user[i].Username,
@@ -390,7 +400,8 @@ function Paying() {
                 LandingTime: data00.LandingTime,
                 DateGo: data00.DateGo,
                 TotalMoneyGo: storedInforFlight.moneyChildren,
-                TotalMoney: data00.TotalMoney,
+                // TotalMoney: data00.TotalMoney,
+                // TotalMoney: storedInforFlight.moneyChildren,
                 CodeTicket: newCodeTicketChildren,
                 FlightNumber: data00.FlightNumber,
                 UserName: user[i].Username,
@@ -406,7 +417,10 @@ function Paying() {
             };
 
             if (data00.TotalMoneyReturn) {
+                let totalAll = storedInforFlight.moneyChildren + data00.TotalMoneyReturn * 0.75;
                 postData.TotalMoneyReturn = data00.TotalMoneyReturn * 0.75;
+                postData.TotalMoney = totalAll;
+                // postData.TotalMoney = storedInforFlight.moneyChildren + data00.TotalMoneyReturn * 0.75;
             }
 
             axios
@@ -444,6 +458,7 @@ function Paying() {
 
         for (let i = totalPeople - Number(storedQuantity.baby); i < totalPeople; i++) {
             const newCodeTicketBaby = handleGetNewCodeTicket(data00.CodeTicket, 'B') + i;
+            // let totalAll = storedInforFlight.moneyAdult + data00.TotalMoneyReturn * 0.5;
 
             const postData = {
                 TypeFlight: data00.TypeFlight,
@@ -454,7 +469,8 @@ function Paying() {
                 LandingTime: data00.LandingTime,
                 DateGo: data00.DateGo,
                 TotalMoneyGo: storedInforFlight.moneyBaby,
-                TotalMoney: data00.TotalMoney,
+                // TotalMoney: data00.TotalMoney,
+                // TotalMoney:totalAll,
                 CodeTicket: newCodeTicketBaby,
                 FlightNumber: data00.FlightNumber,
                 UserName: user[i].Username,
@@ -470,7 +486,9 @@ function Paying() {
             };
 
             if (data00.TotalMoneyReturn) {
+                let total = storedInforFlight.moneyBaby + data00.TotalMoneyReturn * 0.5;
                 postData.TotalMoneyReturn = data00.TotalMoneyReturn * 0.5;
+                postData.TotalMoney = total;
             }
 
             axios

@@ -114,51 +114,49 @@ function CheckRevenue() {
         }
     }, [valueRole]);
 
-    const [pushData, setPushData] = useState(null);
+    // const [pushData, setPushData] = useState(null);
 
-    const handlePushData = async (company, month, year) => {
-        const endOfMonth = new Date(year, month, 0).getDate();
-        console.log('co chay dau');
+    // const handlePushData = async (company, month, year) => {
+    //     const endOfMonth = new Date(year, month, 0).getDate();
+    //     console.log('co chay dau');
 
-        try {
-            const result_1 = await fetchAPIOnewayAndCompanyThisMonth(company, month, year);
-            const result_2 = await fetchAPIRoundtripAndCompanyAndDateThisMonth(company, 'DateGo', month, year);
-            const result_3 = await fetchAPIRoundtripAndCompanyAndDateThisMonth(company, 'DateReturn', month, year);
-            console.log(company, month, year, result_1, result_2, result_3);
-            console.log('cahy ma');
+    //     try {
+    //         const result_1 = await fetchAPIOnewayAndCompanyThisMonth(company, month, year);
+    //         const result_2 = await fetchAPIRoundtripAndCompanyAndDateThisMonth(company, 'DateGo', month, year);
+    //         const result_3 = await fetchAPIRoundtripAndCompanyAndDateThisMonth(company, 'DateReturn', month, year);
+    //         console.log(company, month, year, result_1, result_2, result_3);
+    //         console.log('cahy ma');
 
-            if (result_1 || result_2 || result_3) {
-                let calculatedResult_1, calculatedResult_2, calculatedResult_3;
-                if (result_1 && result_1.length > 0)
-                    calculatedResult_1 = calculateMoneyPerDay(result_1, 'TotalMoneyGo');
-                else calculatedResult_1 = generateEmptyResult(endOfMonth, month);
-                if (result_2 && result_2.length > 0)
-                    calculatedResult_2 = calculateMoneyPerDay(result_2, 'TotalMoneyGo');
-                else calculatedResult_2 = generateEmptyResult(endOfMonth, month);
-                if (result_3 && result_3.length > 0)
-                    calculatedResult_3 = calculateMoneyPerDay(result_3, 'TotalMoneyReturn');
-                else calculatedResult_3 = generateEmptyResult(endOfMonth, month);
+    //         if (result_1 || result_2 || result_3) {
+    //             let calculatedResult_1, calculatedResult_2, calculatedResult_3;
+    //             if (result_1 && result_1.length > 0)
+    //                 calculatedResult_1 = calculateMoneyPerDay(result_1, 'TotalMoneyGo');
+    //             else calculatedResult_1 = generateEmptyResult(endOfMonth, month);
+    //             if (result_2 && result_2.length > 0)
+    //                 calculatedResult_2 = calculateMoneyPerDay(result_2, 'TotalMoneyGo');
+    //             else calculatedResult_2 = generateEmptyResult(endOfMonth, month);
+    //             if (result_3 && result_3.length > 0)
+    //                 calculatedResult_3 = calculateMoneyPerDay(result_3, 'TotalMoneyReturn');
+    //             else calculatedResult_3 = generateEmptyResult(endOfMonth, month);
 
-                const mergedResult = mergeResults(calculatedResult_1, calculatedResult_2, calculatedResult_3);
-                setPushData(mergedResult);
-                // console.log('chay voa day');
-                // console.log(calculatedResult_1, calculatedResult_2, calculatedResult_3);
-            } else {
-                // Handle the case where the API response has count: 0 or an error occurred
+    //             const mergedResult = mergeResults(calculatedResult_1, calculatedResult_2, calculatedResult_3);
+    //             setPushData(mergedResult);
+    //         } else {
+    //             // Handle the case where the API response has count: 0 or an error occurred
 
-                const emptyResult = generateEmptyResult(endOfMonth, month);
-                setData(emptyResult);
-                console.log('chay duoi nay');
-            }
-        } catch (error) {
-            console.error(error);
-        }
-    };
+    //             const emptyResult = generateEmptyResult(endOfMonth, month);
+    //             setData(emptyResult);
+    //             console.log('chay duoi nay');
+    //         }
+    //     } catch (error) {
+    //         console.error(error);
+    //     }
+    // };
 
-    useEffect(() => {
-        handlePushData('VNA', '1', '2024');
-        console.log('khong chay ham nay');
-    }, []);
+    // useEffect(() => {
+    //     handlePushData('VNA', '1', '2024');
+    //     console.log('khong chay ham nay');
+    // }, []);
 
     return {
         render: (
@@ -228,7 +226,7 @@ function CheckRevenue() {
                 {searchTriggered && <LineChartOption data={data} date={monthYear} company={company} month={month} />}
             </div>
         ),
-        pushData,
+        // pushData,
     };
 }
 

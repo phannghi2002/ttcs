@@ -171,6 +171,10 @@ export const AddUser = ({ open, handleClose, setReRender }) => {
                 })
                 .catch((res) => {
                     console.log(res);
+
+                    console.log(res.response.data.message);
+
+                    toast.error(`${Object.keys(res.response.data.message.keyPattern)[0]} đã tồn tại`);
                 });
         }
     };
@@ -465,8 +469,11 @@ export const EditUser = ({ row, open, setOpen, handleClose, reRender, setReRende
                     toast.success('Cập nhật người dùng một chiều thành công');
                     setOpen(false);
                 })
-                .catch((err) => {
-                    console.log('in loi', err);
+                .catch((res) => {
+                    console.log('in loi', res);
+                    console.log(res.response.data.message);
+
+                    toast.error(`${Object.keys(res.response.data.message.keyPattern)[0]} đã tồn tại`);
                 });
         }
 
@@ -854,8 +861,10 @@ export const AddUserRoundtrip = ({ open, handleClose, setReRender }) => {
                     setReRender(true);
                     toast.success('Thêm thông tin hành khách khứ hồi thành công');
                 })
-                .catch((err) => {
-                    console.log(err);
+                .catch((res) => {
+                    console.log(res.response.data.message);
+
+                    toast.error(`${Object.keys(res.response.data.message.keyPattern)[0]} đã tồn tại`);
                 });
         }
     };
@@ -1280,8 +1289,11 @@ export const EditUserRoundtrip = ({ row, open, setOpen, handleClose, reRender, s
                     toast.success('Cập nhật người dùng khứ hồi thành công');
                     setOpen(false);
                 })
-                .catch((err) => {
-                    console.log(err);
+                .catch((res) => {
+                    console.log(res);
+                    console.log(res.response.data.message);
+
+                    toast.error(`${Object.keys(res.response.data.message.keyPattern)[0]} đã tồn tại`);
                 });
         }
 
