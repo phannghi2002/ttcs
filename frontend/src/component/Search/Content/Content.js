@@ -296,7 +296,7 @@ function Content(props) {
                                             props.airF(data.AirportFrom);
                                             props.airT(data.AirportTo);
                                             props.dp(data.DateGo.split('T')[0]);
-                                            props.checkDate(data.DateGo.split('T')[0]);
+                                            // props.checkDate(data.DateGo.split('T')[0]);
                                             window.scrollTo(0, 0);
                                         }}
                                     >

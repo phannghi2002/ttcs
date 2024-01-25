@@ -421,6 +421,8 @@ function Paying() {
                 postData.TotalMoneyReturn = data00.TotalMoneyReturn * 0.75;
                 postData.TotalMoney = totalAll;
                 // postData.TotalMoney = storedInforFlight.moneyChildren + data00.TotalMoneyReturn * 0.75;
+            } else {
+                postData.TotalMoney = storedInforFlight.moneyChildren;
             }
 
             axios
@@ -489,6 +491,8 @@ function Paying() {
                 let total = storedInforFlight.moneyBaby + data00.TotalMoneyReturn * 0.5;
                 postData.TotalMoneyReturn = data00.TotalMoneyReturn * 0.5;
                 postData.TotalMoney = total;
+            } else {
+                postData.TotalMoney = storedInforFlight.moneyBaby;
             }
 
             axios
