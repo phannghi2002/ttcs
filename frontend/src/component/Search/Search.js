@@ -528,7 +528,7 @@ function Search() {
             )}
             <ToastCustom />
 
-            <Content airF={setAirportFrom} airT={setAirportTo} dp={setDepart} />
+            <Content airF={setAirportFrom} airT={setAirportTo} dp={setDepart} checkDate={handleCheckDate} />
             <Footer />
         </div>
     );
