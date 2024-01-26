@@ -115,16 +115,19 @@ router.post('/all', (req, res) => {
             return timeNew;
         };
 
+        let listEmails = [];
+
         const handleGetEmail = () => {
-            let emailSend = '';
             for (let i = 0; i < data.length; i++) {
                 if (data[i].Email !== '') {
-                    emailSend = data[i].Email;
-                    break;
+                    listEmails = [...listEmails, data[i].Email];
                 }
             }
-            return emailSend;
+            return listEmails;
         };
+
+        handleGetEmail();
+        console.log('listEmails', listEmails);
 
         const handleSendmail = () => {
             let html = '';
@@ -419,24 +422,24 @@ router.post('/all', (req, res) => {
             return html;
         };
 
-        console.log('html', handleSendmail());
-        console.log('data-length', data.length);
+        const htmlEmail = handleSendmail();
 
         const mailOptions = {
             from: process.env.EMAIL,
-            to: handleGetEmail(),
-
             subject: 'Sending Email With ReactJS and NodeJS',
-            html: handleSendmail(),
+            html: htmlEmail,
         };
 
-        transporter.sendMail(mailOptions, (error, info) => {
-            if (error) {
-                console.log('Error-super', error);
-            } else {
-                console.log('Email sent', info.response);
-                res.status(201).json({ status: 201, info });
-            }
+        listEmails.forEach((listEmail) => {
+            mailOptions.to = listEmail;
+            transporter.sendMail(mailOptions, (error, info) => {
+                if (error) {
+                    console.log('Error-super', error);
+                } else {
+                    console.log('Email sent', info.response);
+                    res.status(201).json({ status: 201, info });
+                }
+            });
         });
     } catch (error) {
         res.status(201).json({ status: 401, error });
