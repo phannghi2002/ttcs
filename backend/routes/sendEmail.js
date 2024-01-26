@@ -426,7 +426,7 @@ router.post('/all', (req, res) => {
 
         const mailOptions = {
             from: process.env.EMAIL,
-            subject: 'Sending Email With ReactJS and NodeJS',
+            subject: 'Vé điện tử và xác nhận hành trình',
             html: htmlEmail,
         };
 
