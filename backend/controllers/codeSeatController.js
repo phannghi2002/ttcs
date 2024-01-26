@@ -140,7 +140,7 @@ export const updateCodeSeatRoundTrip = async (req, res) => {
             const updatedCodeSeatReturn = await CodeSeat.updateOne(
                 { FlightNumber: idReturn },
                 {
-                    $set: { [type]: codeSeatReturnPresent.concat(codeSeatReturn) },
+                    $set: { [typeReturn]: codeSeatReturnPresent.concat(codeSeatReturn) },
                 },
                 { new: true },
             );

@@ -116,11 +116,11 @@ export function DefaultPage2({ data, typeTrip, onData, AirportFrom, AirportTo, d
         // console.log("Value sent to parent:", value);
     };
 
-    // console.log("ko co du lieu:", data);
+    // console.log('ko co du lieu:', data);
 
-    if (data.length === 0) {
-        console.log('m ngu lam nghi à');
-    }
+    // if (data.length === 0) {
+    //     console.log('m ngu lam nghi à');
+    // }
     const handleOption = (e) => {
         return e.target.value;
     };
@@ -130,7 +130,11 @@ export function DefaultPage2({ data, typeTrip, onData, AirportFrom, AirportTo, d
     const convertToHourMinute = (progress) => {
         const hours = Math.floor(progress / 60);
         const minutes = progress % 60;
-        return `${hours}h${minutes < 10 ? '0' : ''}${minutes}`;
+        if (minutes === 0) {
+            return `${hours}h`;
+        } else {
+            return `${hours}h${minutes < 10 ? '0' : ''}${minutes}`;
+        }
     };
 
     const handleProgressChange = (event) => {

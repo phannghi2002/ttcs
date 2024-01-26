@@ -68,8 +68,16 @@ function FlightToday() {
     const convertMinutesToHourMinute = (minutes) => {
         const hours = Math.floor(minutes / 60);
         const remainingMinutes = minutes % 60;
-        const formattedMinutes = remainingMinutes < 10 ? `0${remainingMinutes}` : remainingMinutes;
-        return `${hours}h${formattedMinutes}`;
+        // const formattedMinutes = remainingMinutes < 10 ? `0${remainingMinutes}` : remainingMinutes;
+        let formattedMinutes = remainingMinutes < 10 ? `0${remainingMinutes}` : remainingMinutes;
+
+        if (remainingMinutes === 0) {
+            formattedMinutes = '';
+            return <span style={{ right: '10px', position: 'absolute' }}>{hours}h</span>;
+        } else {
+            formattedMinutes = remainingMinutes < 10 ? `0${remainingMinutes}` : remainingMinutes;
+            return `${hours}h${formattedMinutes}`;
+        }
     };
 
     const allPassenger = (item) => {

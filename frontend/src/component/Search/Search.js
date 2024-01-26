@@ -42,12 +42,12 @@ function Search() {
     const handleGetValueDepart = (e) => {
         setShow(false);
         setDepart(e.target.value);
-        // handleCheckDate();
+        handleCheckDate();
     };
     const handleGetValueReturn = (e) => {
         setShow(false);
         setReturn(e.target.value);
-        // handleCheckDate();
+        handleCheckDate();
     };
     const handleClick = (value) => {
         setShow(false);
@@ -109,6 +109,7 @@ function Search() {
             `${BASE_URL}/search/getTicketBySearch?AirportFrom=${AirportFrom}&AirportTo=${AirportTo}&DateGo=${depart}`,
         );
         let data1 = await response.json();
+
         setData(data1.data);
         return data1;
     }
@@ -193,87 +194,78 @@ function Search() {
     }, [depart, return1]);
 
     const handleShowFlight = () => {
-        // if (typeTrip === 'Roundtrip') {
-        //     if (checkRoundTrip === true) {
-        //         if (!show) {
-        //             fetch_API_Go();
-        //             localStorage.setItem('TypeTrip', JSON.stringify(typeTrip));
-        //         }
-        //         if (typeTrip === 'Roundtrip') {
-        //             fetch_API_Return();
-        //         }
-        //         handleSetQuantity();
-        //         setShow(!show);
-        //     } else {
-        //         toast.error('Ngày bị lỗi!');
-        //     }
-        // } else if (typeTrip === 'Oneway') {
-        //     if (checkOneway === true) {
-        //         if (!show) {
-        //             fetch_API_Go();
-        //             localStorage.setItem('TypeTrip', JSON.stringify(typeTrip));
-        //         }
-        //         if (typeTrip === 'Roundtrip') {
-        //             fetch_API_Return();
-        //         }
-        //         handleSetQuantity();
-        //         setShow(!show);
-        //     } else {
-        //         toast.error('Ngày bị lỗi!');
-        //     }
-        // } else {
-        //     toast.error('Vui lòng chọn 1 chiều hoặc khứ hồi');
-        // }
-        if (!show) {
-            fetch_API_Go();
-            localStorage.setItem('TypeTrip', JSON.stringify(typeTrip));
-        }
         if (typeTrip === 'Roundtrip') {
-            fetch_API_Return();
+            if (checkRoundTrip === true) {
+                if (!show) {
+                    fetch_API_Go();
+                    localStorage.setItem('TypeTrip', JSON.stringify(typeTrip));
+                }
+                if (typeTrip === 'Roundtrip') {
+                    fetch_API_Return();
+                }
+                handleSetQuantity();
+                setShow(!show);
+            } else {
+                toast.error('Ngày không hợp lệ !');
+            }
+        } else if (typeTrip === 'Oneway') {
+            if (checkOneway === true) {
+                if (!show) {
+                    fetch_API_Go();
+                    localStorage.setItem('TypeTrip', JSON.stringify(typeTrip));
+                }
+                if (typeTrip === 'Roundtrip') {
+                    fetch_API_Return();
+                }
+                handleSetQuantity();
+                setShow(!show);
+            } else {
+                toast.error('Ngày không hợp lệ !');
+            }
+        } else {
+            toast.error('Vui lòng chọn 1 chiều hoặc khứ hồi');
         }
-        handleSetQuantity();
-        setShow(!show);
     };
 
-    // const handleCheckDate = () => {
-    //     if (typeTrip === 'Roundtrip') {
-    //         const dateTo = document.querySelector('#txtDate').value;
-    //         const dateFrom = document.querySelector('#txtDate2').value;
-    //         checkDateRoundTrip(dateTo, dateFrom);
-    //     } else {
-    //         const dateTo = document.querySelector('#txtDate').value;
-    //         checkDateOneway(dateTo);
-    //     }
-    // };
+    const handleCheckDate = () => {
+        if (typeTrip === 'Roundtrip') {
+            const dateTo = document.querySelector('#txtDate').value;
+            const dateFrom = document.querySelector('#txtDate2').value;
+            checkDateRoundTrip(dateTo, dateFrom);
+        } else {
+            const dateTo = document.querySelector('#txtDate').value;
+            checkDateOneway(dateTo);
+        }
+    };
 
-    // const checkDateRoundTrip = (dateTo, dateFrom) => {
-    //     const DateCurrent = new Date();
-    //     const DateTo = new Date(dateTo);
-    //     const DateFrom = new Date(dateFrom);
+    const checkDateRoundTrip = (dateTo, dateFrom) => {
+        const DateCurrent = new Date();
+        const DateTo = new Date(dateTo);
+        const DateFrom = new Date(dateFrom);
 
-    //     DateCurrent.setHours(0, 0, 0, 0);
-    //     DateTo.setHours(0, 0, 0, 0);
-    //     DateFrom.setHours(0, 0, 0, 0);
+        DateCurrent.setHours(0, 0, 0, 0);
+        DateTo.setHours(0, 0, 0, 0);
+        DateFrom.setHours(0, 0, 0, 0);
 
-    //     if (DateCurrent <= DateTo && DateFrom > DateTo) {
-    //         setCheckRoundTrip(true);
-    //     } else {
-    //         setCheckRoundTrip(false);
-    //     }
-    // };
+        if (DateCurrent <= DateTo && DateFrom > DateTo) {
+            setCheckRoundTrip(true);
+        } else {
+            setCheckRoundTrip(false);
+        }
+    };
 
-    // const checkDateOneway = (dateTo) => {
-    //     const DateCurrent = new Date();
-    //     const DateTo = new Date(dateTo);
-    //     DateCurrent.setHours(0, 0, 0, 0);
-    //     DateTo.setHours(0, 0, 0, 0);
+    const checkDateOneway = (dateTo) => {
+        const DateCurrent = new Date();
+        const DateTo = new Date(dateTo);
+        DateCurrent.setHours(0, 0, 0, 0);
+        DateTo.setHours(0, 0, 0, 0);
 
-    //     if (DateCurrent > DateTo) {
-    //         setCheckOneway(false);
-    //     } else {
-    //         setCheckOneway(true);
-    //     }
-    // };
+        if (DateCurrent > DateTo) {
+            setCheckOneway(false);
+        } else {
+            setCheckOneway(true);
+        }
+    };
 
     const handleConvert = () => {
         setConvert(!convert);
@@ -537,12 +529,7 @@ function Search() {
             )}
             <ToastCustom />
 
-            <Content
-                airF={setAirportFrom}
-                airT={setAirportTo}
-                dp={setDepart}
-                // checkDate={handleCheckDate}
-            />
+            <Content airF={setAirportFrom} airT={setAirportTo} dp={setDepart} checkDate={handleCheckDate} />
             <Footer />
         </div>
     );
