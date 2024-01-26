@@ -109,6 +109,7 @@ function Search() {
             `${BASE_URL}/search/getTicketBySearch?AirportFrom=${AirportFrom}&AirportTo=${AirportTo}&DateGo=${depart}`,
         );
         let data1 = await response.json();
+
         setData(data1.data);
         return data1;
     }

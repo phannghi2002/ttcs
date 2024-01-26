@@ -317,7 +317,15 @@ function InforFlightRoundTrip({ item, name, handleConvert, handleSwitchPage, swi
     const convertMinutesToHourMinute = (minutes) => {
         const hours = Math.floor(minutes / 60);
         const remainingMinutes = minutes % 60;
-        return `${hours}h${remainingMinutes}`;
+        // return `${hours}h${remainingMinutes}`;
+        let formattedMinutes;
+        if (remainingMinutes === 0) {
+            formattedMinutes = '';
+            return <span style={{ right: '10px', position: 'absolute' }}>{hours}h</span>;
+        } else {
+            formattedMinutes = remainingMinutes < 10 ? `0${remainingMinutes}` : remainingMinutes;
+            return `${hours}h${formattedMinutes}`;
+        }
     };
 
     //change value money adult, money children when change select other
