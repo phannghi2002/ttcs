@@ -176,7 +176,7 @@ function Paying() {
         }
     }
 
-    if (checkTypeTrip()) {
+    if (!checkTypeTrip()) {
         if (numberCard && expirationDate && name && isNumberCard) {
             if (dataNew2) {
                 array2 = dataNew2[data00.TypeTicketReturn].CodeSeat;
@@ -203,7 +203,6 @@ function Paying() {
                 // PriceAdult: dataNew[data00.FirstClass].PriceAdult,
                 // PriceChildren: dataNew[data00.FirstClass].Children,
                 PriceAdult: dataNew[data00.TypeTicket].PriceAdult,
-                PriceChildren: dataNew[data00.TypeTicket].PriceChildren,
                 CodeSeat: array1,
             },
         };
@@ -227,7 +226,6 @@ function Paying() {
                 // PriceAdult: dataNew[data00.FirstClass].PriceAdult,
                 // PriceChildren: dataNew[data00.FirstClass].Children,
                 PriceAdult: dataNew2[data00.TypeTicketReturn].PriceAdult,
-                PriceChildren: dataNew2[data00.TypeTicketReturn].PriceChildren,
                 CodeSeat: array2,
             },
         };
@@ -537,7 +535,7 @@ function Paying() {
 
                 pushSeat(storedInforFlight.item._id);
 
-                if (checkTypeTrip()) {
+                if (!checkTypeTrip()) {
                     pushSeat2(storedInforFlightReturn.item._id);
                 }
                 handlePustTicketDetail();
