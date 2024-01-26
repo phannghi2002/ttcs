@@ -206,7 +206,7 @@ export const updateCodeSeatPayingFail = async (req, res) => {
 export const deleteCodeSeat = async (req, res) => {
     const id = req.params.id;
     try {
-        await CodeSeat.findByIdAndDelete(id);
+        await CodeSeat.findOneAndDelete({ FlightNumber: id });
 
         res.status(200).json({
             success: true,

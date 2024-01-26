@@ -124,6 +124,7 @@ const TableFlight = ({ param, title, onUpdate }) => {
                                 onClick={() => {
                                     handleCloseConfirmDelete();
                                     setGetID(params.row._id);
+                                    setGetFlightNumber(params.row.FlightNumber);
                                 }}
                             >
                                 <DeleteIcon />
@@ -141,6 +142,7 @@ const TableFlight = ({ param, title, onUpdate }) => {
 
     //Handle Delete
     const [getID, setGetID] = useState('');
+    const [getFlightNumber, setGetFlightNumber] = useState('');
     const [openConfirmDelete, setOpenConfirmDelete] = useState(false);
     const handleCloseConfirmDelete = (value) => {
         setOpenConfirmDelete(true);
@@ -157,6 +159,10 @@ const TableFlight = ({ param, title, onUpdate }) => {
                 .catch((err) => {
                     console.log(err);
                 });
+            axios
+                .delete(`http://localhost:4000/codeSeat/${getFlightNumber}`)
+                .then((res) => console.log(res))
+                .catch((err) => console.log(err));
         }
     };
 
