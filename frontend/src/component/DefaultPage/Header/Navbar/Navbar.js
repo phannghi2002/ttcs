@@ -27,9 +27,9 @@ function Navbar() {
                         <li className={cx('navbar-item')}>Liên hệ</li>
                     </Link>
 
-                    {/* <Link to="/cancelTicket" className={cx('home')}>
+                    <Link to="/cancelTicket" className={cx('home')}>
                         <li className={cx('navbar-item')}>Hủy vé</li>
-                    </Link> */}
+                    </Link>
                 </ul>
 
                 <Link to="/signin" className={cx('home')}>

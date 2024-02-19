@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import * as React from 'react';
 import { styled } from '@mui/material/styles';
 import MuiAppBar from '@mui/material/AppBar';
@@ -12,18 +13,19 @@ import MoreIcon from '@mui/icons-material/MoreVert';
 import { Helmet } from 'react-helmet';
 import LogoutIcon from '@mui/icons-material/Logout';
 import { useAppStore } from '../../index';
-// import { useState,useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import Divider from '@mui/material/Divider';
 
 import AvatarPeople from '../AvatarPeople';
-// import NotificationsIcon from '@mui/icons-material/Notifications';
-// import classNames from 'classnames/bind';
-// import styles from './Navbar.module.scss';
-// import ShowNotifyCancel from '../ShowNotifyCancel';
+import NotificationsIcon from '@mui/icons-material/Notifications';
+import classNames from 'classnames/bind';
+import styles from './Navbar.module.scss';
+import ShowNotifyCancel from '../ShowNotifyCancel';
 import AccountBoxIcon from '@mui/icons-material/AccountBox';
 import { useNavigate } from 'react-router-dom';
+import CheckRole from '../CheckRole';
 
-// const cx = classNames.bind(styles);
+const cx = classNames.bind(styles);
 
 const AppBar = styled(
     MuiAppBar,
@@ -148,36 +150,39 @@ export default function Navbar() {
     );
 
     const getName = JSON.parse(localStorage.getItem('Login')).Name;
+    const valueRole = CheckRole();
+    console.log(valueRole.Code);
 
-    // const [quantityNotify, setQuantityNotify] = useState(0);
-    // const [data, setData] = useState();
+    const [quantityNotify, setQuantityNotify] = useState(0);
+    const [data, setData] = useState();
 
-    // const fetchAPI = async () => {
-    //     try {
-    //         let response = await fetch(`http://localhost:4000/cancel`);
+    const fetchAPI = async () => {
+        try {
+            let response = await fetch(`http://localhost:4000/cancel/notifyCompany?Company=${valueRole.Code}`);
 
-    //         if (!response.ok) {
-    //             throw new Error('Failed to fetch data');
-    //         }
+            if (!response.ok) {
+                throw new Error('Failed to fetch data');
+            }
 
-    //         let data1 = await response.json();
-    //         setQuantityNotify(data1.data.length);
-    //         setData(data1.data);
-    //         return data1.data;
-    //     } catch (error) {
-    //         console.error(error);
-    //     }
-    // };
+            let data1 = await response.json();
+            setQuantityNotify(data1.data.length);
+            console.log('du ma van show af', data1, data1.data.length);
+            setData(data1.data);
+            return data1.data;
+        } catch (error) {
+            console.error(error);
+        }
+    };
 
-    // useEffect(() => {
-    //     fetchAPI();
-    // }, [quantityNotify]);
+    useEffect(() => {
+        fetchAPI();
+    }, [quantityNotify]);
 
-    // const [clickNotify, setClickNotify] = useState(false);
+    const [clickNotify, setClickNotify] = useState(false);
 
-    // const handleClickNotify = () => {
-    //     setClickNotify(!clickNotify);
-    // };
+    const handleClickNotify = () => {
+        setClickNotify(!clickNotify);
+    };
 
     return (
         <Box sx={{ flexGrow: 1 }}>
@@ -202,10 +207,7 @@ export default function Navbar() {
 
                     <Box sx={{ flexGrow: 1 }} />
                     <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
-                        {/* <div
-                            style={{ display: 'flex', alignItems: 'center', marginRight: '100px' }}
-                            onClick={handleClickNotify}
-                        >
+                        <div className={cx('container', { 'click-notify': clickNotify })} onClick={handleClickNotify}>
                             <NotificationsIcon />
                             {quantityNotify !== 0 && <span className={cx('quantity')}>{quantityNotify}</span>}
 
@@ -216,7 +218,7 @@ export default function Navbar() {
                                     ))}
                                 </div>
                             )}
-                        </div> */}
+                        </div>
 
                         <span className="d-flex align-items-center ">{getName}</span>
                         <IconButton
@@ -231,6 +233,7 @@ export default function Navbar() {
                             <AvatarPeople string={getName} />
                         </IconButton>
                     </Box>
+
                     <Box sx={{ display: { xs: 'flex', md: 'none' } }}>
                         <IconButton
                             size="large"

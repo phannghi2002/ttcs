@@ -15,6 +15,7 @@ import {
     getTicketCompletedMonthNowOfCompany,
     getTicketIncompletedMonthNowOfCompany,
     getAllTicketOfCompany,
+    getTicketByFlightNumber,
 } from './../controllers/ticketController.js';
 
 const router = express.Router();
@@ -65,4 +66,7 @@ router.get('/search/getTicketIncompletedMonthNowOfCompany', getTicketIncompleted
 
 //get all ticket of each company
 router.get('/search/getAllTicketOfCompany', getAllTicketOfCompany);
+
+//get ticket by FlightNumber
+router.get('/search/getTicketByFlightNumber', getTicketByFlightNumber);
 export default router;

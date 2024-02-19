@@ -485,3 +485,26 @@ export const getAllTicketOfCompany = async (req, res) => {
         });
     }
 };
+
+//get ticket by FlightNumber
+export const getTicketByFlightNumber = async (req, res) => {
+    const flightNumber = new RegExp(`^${req.query.FlightNumber}$`);
+
+    try {
+        const tickets = await Ticket.find({
+            FlightNumber: flightNumber,
+        });
+
+        res.status(200).json({
+            success: true,
+            message: 'Successfully found search',
+            count: tickets.length,
+            data: tickets,
+        });
+    } catch (error) {
+        res.status(404).json({
+            success: false,
+            message: 'Not found ',
+        });
+    }
+};

@@ -5,24 +5,19 @@ const cancelSchema = new mongoose.Schema({
         type: String,
         require: true,
     },
+    TypeFlight: {
+        type: String,
+        require: true,
+    },
     CodeTicket: {
         type: String,
         require: true,
     },
-    FlightNumber: {
-        type: String,
-        require: true,
-    },
-    ID_Card: {
-        type: String,
-    },
+
     Phone: {
         type: String,
     },
-    UserName: {
-        type: String,
-        require: true,
-    },
+
     Email: {
         type: String,
     },
@@ -30,6 +25,23 @@ const cancelSchema = new mongoose.Schema({
         type: String,
         require: true,
         unique: true,
+    },
+    ID_Ticket: {
+        type: String,
+        require: true,
+        unique: true,
+    },
+    Company: {
+        type: String,
+        require: true,
+    },
+    TypeTicket: {
+        type: String,
+        require: true,
+    },
+    CodeSeat: {
+        type: String,
+        require: true,
     },
 });
 

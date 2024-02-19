@@ -7,7 +7,7 @@ import NodeMailer from 'nodemailer';
 //create new ticket
 // router.post("/", emailController.sendMail);
 router.post('/', (req, res) => {
-    const { email, code } = req.body;
+    const { email, company } = req.body;
 
     try {
         const transporter = NodeMailer.createTransport({
@@ -21,9 +21,8 @@ router.post('/', (req, res) => {
         const mailOptions = {
             from: process.env.EMAIL,
             to: email,
-            subject: 'Sending Email With ReactJS and NodeJS',
-            html: `<h1> Mã code của bạn là: ${code} </h1>
-      Vui lòng đến trang web: http://192.168.237.1:3000/myFlight để tra cứu chuyến bay của bạn`,
+            subject: 'Vé điện tử và xác nhận hủy vé',
+            html: `Bạn đã hủy vé thành công. ${company} vui lòng gửi thông báo đến bạn.`,
         };
 
         transporter.sendMail(mailOptions, (error, info) => {

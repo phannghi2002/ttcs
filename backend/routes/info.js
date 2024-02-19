@@ -18,6 +18,8 @@ import {
     fetchAPICancelInfoTicket,
     getAllInfoBookedOnewayOfCompany,
     getAllInfoBookedRoundtripOfCompany,
+    updateInfoBookedRoundtripReturn,
+    updateInfoBookedRoundtripGo,
 } from './../controllers/infoBookedController.js';
 
 const router = express.Router();
@@ -30,6 +32,12 @@ router.delete('/:id', deleteInfoBooked);
 
 //update new ticket
 router.put('/:id', updateInfoBooked);
+
+//update new ticket
+router.patch('/updateReturn/:id', updateInfoBookedRoundtripReturn);
+
+//update new ticket
+router.patch('/updateGo/:id', updateInfoBookedRoundtripGo);
 
 //get single ticket
 router.get('/:id', getSingleInfoBooked);

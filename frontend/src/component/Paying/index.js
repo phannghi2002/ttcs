@@ -31,7 +31,7 @@ const randomCharacters = () => {
             codeTicket += letters[randomIndex];
         }
     }
-    console.log('chay di ma lam on');
+
     return codeTicket;
 };
 codeTicket = randomCharacters();
@@ -176,7 +176,7 @@ function Paying() {
         }
     }
 
-    if (!checkTypeTrip()) {
+    if (!checkTypeTrip(storedTypeTrip)) {
         if (numberCard && expirationDate && name && isNumberCard) {
             if (dataNew2) {
                 array2 = dataNew2[data00.TypeTicketReturn].CodeSeat;
@@ -535,7 +535,7 @@ function Paying() {
 
                 pushSeat(storedInforFlight.item._id);
 
-                if (!checkTypeTrip()) {
+                if (!checkTypeTrip(storedTypeTrip)) {
                     pushSeat2(storedInforFlightReturn.item._id);
                 }
                 handlePustTicketDetail();

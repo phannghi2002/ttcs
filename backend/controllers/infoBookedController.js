@@ -25,11 +25,63 @@ export const createInfoBooked = async (req, res) => {
 
 export const updateInfoBooked = async (req, res) => {
     const id = req.params.id;
+    console.log('no khong chay bao day bao s', req.body);
     try {
         const updatedInfoBooked = await InfoBooked.findByIdAndUpdate(
             id,
             {
                 $set: req.body,
+            },
+            // {
+            //     $unset: {
+            //         TotalMoneyReturn: 1,
+            //         TypeTicketReturn: 1,
+            //         FlightNumberReturn: 1,
+            //         FlightTimeReturn: 1,
+            //         LandingTimeReturn: 1,
+            //         CodeSeatReturn: 1,
+            //         DateReturn: 1,
+            //         // _id: 1,
+            //     },
+            // },
+            { new: true },
+        );
+
+        res.status(200).json({
+            success: true,
+            message: 'Successfully updated',
+            data: updatedInfoBooked,
+        });
+    } catch (error) {
+        console.log('Loi o day ne', error);
+        res.status(500).json({
+            success: false,
+            message: error,
+        });
+    }
+};
+
+//update ticket
+
+export const updateInfoBookedRoundtripReturn = async (req, res) => {
+    const id = req.params.id;
+    console.log('cap nhat chuyen ve', req.body);
+    try {
+        const updatedInfoBooked = await InfoBooked.findByIdAndUpdate(
+            id,
+
+            {
+                $set: req.body,
+                $unset: {
+                    TotalMoneyReturn: 1,
+                    TypeTicketReturn: 1,
+                    FlightNumberReturn: 1,
+                    FlightTimeReturn: 1,
+                    LandingTimeReturn: 1,
+                    CodeSeatReturn: 1,
+                    DateReturn: 1,
+                    // _id: 1,
+                },
             },
             { new: true },
         );
@@ -48,6 +100,42 @@ export const updateInfoBooked = async (req, res) => {
     }
 };
 
+export const updateInfoBookedRoundtripGo = async (req, res) => {
+    const id = req.params.id;
+    console.log('cap nhat chuyen ve', req.body);
+    try {
+        const updatedInfoBooked = await InfoBooked.findByIdAndUpdate(
+            id,
+
+            {
+                $set: req.body,
+                $unset: {
+                    TotalMoneyReturn: 1,
+                    TypeTicketReturn: 1,
+                    FlightNumberReturn: 1,
+                    FlightTimeReturn: 1,
+                    LandingTimeReturn: 1,
+                    CodeSeatReturn: 1,
+                    DateReturn: 1,
+                    // _id: 1,
+                },
+            },
+            { new: true },
+        );
+
+        res.status(200).json({
+            success: true,
+            message: 'Successfully updated',
+            data: updatedInfoBooked,
+        });
+    } catch (error) {
+        console.log('Loi o day ne', error);
+        res.status(500).json({
+            success: false,
+            message: error,
+        });
+    }
+};
 //delete ticket
 
 export const deleteInfoBooked = async (req, res) => {
@@ -495,21 +583,12 @@ export const fetchAPIRoundtripAndCompanyAndDateReturnThisMonth = async (req, res
 
 export const fetchAPICancelInfoTicket = async (req, res) => {
     const codeTicket = new RegExp(`^${req.query.CodeTicket}$`);
-    const flightNumber = new RegExp(`^${req.query.FlightNumber}$`);
-    const email = new RegExp(`^${req.query.Email}$`);
-
-    const id_Card = new RegExp(`^${req.query.ID_Card}$`);
-    const userName = new RegExp(`^${req.query.UserName}$`);
-
-    // console.log('In ra nào:', codeTicket, flightNumber, email, id_Card, userName);
+    const typeFlight = new RegExp(req.query.TypeFlight, 'i');
 
     try {
         const InfoBookeds = await InfoBooked.find({
             CodeTicket: codeTicket,
-            FlightNumber: flightNumber,
-            Email: email,
-            ID_Card: id_Card,
-            UserName: userName,
+            TypeFlight: typeFlight,
         });
 
         res.status(200).json({

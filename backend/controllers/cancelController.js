@@ -23,16 +23,13 @@ export const getAllCancel = async (req, res) => {
 
 export const getCancel = async (req, res) => {
     const codeTicket = new RegExp(`^${req.query.CodeTicket}$`);
-
-    const id_Card = new RegExp(`^${req.query.ID_Card}$`);
     const customer = new RegExp(`^${req.query.Customer}$`);
 
-    console.log(codeTicket, id_Card, customer);
+    console.log(codeTicket, customer);
 
     try {
         const cancels = await Cancel.find({
             CodeTicket: codeTicket,
-            ID_Card: id_Card,
             Customer: customer,
         });
 
@@ -84,6 +81,28 @@ export const deleteCancel = async (req, res) => {
         res.status(500).json({
             success: false,
             message: 'Failed to delete. Try again ',
+        });
+    }
+};
+
+export const notifyCompany = async (req, res) => {
+    const Company = new RegExp(`^${req.query.Company}$`);
+
+    try {
+        const cancels = await Cancel.find({
+            Company: Company,
+        });
+
+        res.status(200).json({
+            success: true,
+            message: 'Successfully found search',
+            count: cancels.length,
+            data: cancels,
+        });
+    } catch (error) {
+        res.status(404).json({
+            success: false,
+            message: 'Not found ',
         });
     }
 };
