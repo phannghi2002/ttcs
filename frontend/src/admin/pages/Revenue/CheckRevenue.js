@@ -12,6 +12,7 @@ import { calculateMoneyPerDay, generateEmptyResult, mergeResults } from './Reven
 // import { RevenueOnewayOfCompany } from './RevenueEachCompany';
 import { LineChartOption } from '../../component/Chart';
 import CheckRole from '../../component/CheckRole';
+import GetDateNow from '../../../function/GetDateNow';
 
 const selectCompany = [
     {
@@ -58,7 +59,11 @@ for (let year = startYear; year <= currentYear; year++) {
 function CheckRevenue() {
     const [company, setCompany] = useState('VNA');
     // const [monthYear, setMonthYear] = useState(`${selectMonthAndYear[selectMonthAndYear.length - 1].value}`);
-    const [monthYear, setMonthYear] = useState('01/2024');
+    const date = GetDateNow();
+    console.log('get darte now', date.Month, date.Year);
+    // const [monthYear, setMonthYear] = useState('01/2024');
+    const [monthYear, setMonthYear] = useState(`${date.Month}/${date.Year}`);
+
     let [month, year] = [];
 
     if (typeof monthYear === 'string') {
