@@ -182,7 +182,6 @@ export function DefaultPage2({ data, typeTrip, onData, AirportFrom, AirportTo, d
             });
             setIsAction(false);
         }
-        console.log('e cu');
     };
 
     return (

@@ -273,7 +273,7 @@ function Content(props) {
                         {newData.map((data, index) => {
                             return (
                                 <div key={index} className={cx('sale-content')}>
-                                    <img src={imgData[index]} alt="img-ticket" />
+                                    <img src={imgData[index]} alt="img-ticket" className={cx('img-ticket')} />
                                     <span className={cx('sale-location')}>
                                         {handleLocation(data.AirportFrom)}{' '}
                                         <FontAwesomeIcon icon={faArrowRight} className={cx('arrow-icon')} />

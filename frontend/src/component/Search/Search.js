@@ -131,17 +131,6 @@ function Search() {
         return data1;
     }
 
-    // async function fetchAPI4(dataFromChild) {
-
-    //     let response = await fetch(
-    //         `${BASE_URL}/search/getTicketBySearchCompany?AirportFrom=${AirportTo}&AirportTo=${AirportFrom}&DateGo=${return1}&AirlineCode=${dataFromChild}`,
-    //     );
-    //     let data1 = await response.json();
-    //     setData2(data1.data);
-    // console.log('in ra anh xem nao 2', data2);
-    //     return data1;
-    // }
-
     async function fetch_API_Company_Duration_Go(dataFromChild, duration) {
         let response = await fetch(
             `${BASE_URL}/search/getTicketBySearchCompanyAndDuration?AirportFrom=${AirportFrom}&AirportTo=${AirportTo}&DateGo=${depart}&AirlineCode=${dataFromChild}&Duration=${duration}`,
@@ -191,9 +180,14 @@ function Search() {
         return () => {
             document.removeEventListener('keydown', handleKeyPress);
         };
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [depart, return1]);
 
     const handleShowFlight = () => {
+        if (AirportTo === AirportFrom) {
+            toast.error('Vui lòng không chọn điểm đi trùng điểm đến');
+            return;
+        }
         if (typeTrip === 'Roundtrip') {
             if (checkRoundTrip === true) {
                 if (!show) {
@@ -317,6 +311,7 @@ function Search() {
                             id="select-search-departure"
                             className={cx('location-list')}
                             onChange={handleGetValueAirportFrom}
+                            defaultValue="HAN"
                         >
                             <optgroup label="MIỀN BẮC">
                                 <option value="HAN">Hà Nội (HAN) </option>
@@ -355,6 +350,7 @@ function Search() {
                             id="select-search-destination"
                             className={cx('location-list')}
                             onChange={handleGetValueAirportTo}
+                            defaultValue="SGN"
                         >
                             <optgroup label="MIỀN BẮC">
                                 <option value="HAN">Hà Nội (HAN) </option>

@@ -102,6 +102,8 @@ function CancelTicket() {
         setErrors(newErrors);
     };
     const handleClear = () => {
+        // toast.warning('Yêu cầu của quý khách đang trong quá trình xử lý, vui lòng chờ đợi');
+
         setData({
             Customer: 'Adult',
             TypeFlight: 'Oneway',
@@ -198,7 +200,7 @@ function CancelTicket() {
                     CodeTicket: data.CodeTicket,
                     ID_Info: fetchResult[0]._id,
                     ID_Ticket: ID_Ticket,
-                    // Company: extractText(fetchResult[0].FlightNumber),
+                    FlightNumber: fetchResult[0].FlightNumber,
                     TypeTicket: fetchResult[0].TypeTicket,
                     CodeSeat: fetchResult[0].CodeSeat.trim(),
                 };
@@ -377,7 +379,7 @@ function CancelTicket() {
                                 <ListSubheader>Khứ hồi</ListSubheader>
                                 <MenuItem value="RoundtripGo">Chuyến đi</MenuItem>
                                 <MenuItem value="RoundtripReturn">Chuyến về</MenuItem>
-                                <MenuItem value="RoundtripAll">Cả chuyến đi và về</MenuItem>
+                                {/* <MenuItem value="RoundtripAll">Cả chuyến đi và về</MenuItem> */}
                             </Select>
                         </FormControl>
                     </div>

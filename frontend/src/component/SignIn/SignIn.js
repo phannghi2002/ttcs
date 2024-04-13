@@ -1,5 +1,5 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faLock, faUser } from '@fortawesome/free-solid-svg-icons';
+import { faLock, faUser, faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 
 import axios from 'axios';
 import classNames from 'classnames/bind';
@@ -13,6 +13,11 @@ function SignIn() {
     const [userName, setUserName] = useState('');
     const [password, setPassword] = useState('');
     const [isSuccess, setIsSuccess] = useState(true);
+    const [typePassword, setTypePassword] = useState('password');
+
+    const handleShowPassword = () => {
+        setTypePassword((prevType) => (prevType === 'password' ? 'text' : 'password'));
+    };
 
     useEffect(() => {
         axios.get(`http://localhost:4000/login`).then((reponse) => {
@@ -59,6 +64,10 @@ function SignIn() {
         }
     };
 
+    const handleReturnHome = () => {
+        window.location = 'http://localhost:3000';
+    };
+
     return (
         <div className={cx('wrapper')}>
             <div className={cx('container')}>
@@ -86,11 +95,16 @@ function SignIn() {
                     <FontAwesomeIcon className={cx('icon')} icon={faLock} />
                     <input
                         value={password}
-                        type="text"
+                        type={typePassword}
                         id="Password"
                         placeholder="Mật khẩu"
                         className={cx('input')}
                         onChange={handlePassword}
+                    />
+                    <FontAwesomeIcon
+                        className={cx('iconPassword')}
+                        icon={typePassword === 'password' ? faEye : faEyeSlash}
+                        onClick={handleShowPassword}
                     />
                     <span className={cx('error-message')}>Trường này phải là email</span>
                 </div>
@@ -98,6 +112,12 @@ function SignIn() {
                 <div className={cx('button-wrapper')}>
                     <button type="button" className={cx('login-btn')} onClick={handleLogin}>
                         Đăng nhập
+                    </button>
+                </div>
+
+                <div className={cx('button-wrapper')}>
+                    <button type="button" className={cx('home-btn')} onClick={handleReturnHome}>
+                        Quay về trang chủ
                     </button>
                 </div>
             </div>

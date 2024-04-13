@@ -145,7 +145,7 @@ const deleteCodeSeat = (data) => {
                 // Modify the data as needed
                 if (dataFetch && dataFetch[data.TypeTicket] && Array.isArray(dataFetch[data.TypeTicket].CodeSeat)) {
                     dataFetch[data.TypeTicket].CodeSeat = dataFetch[data.TypeTicket].CodeSeat.filter(
-                        (code) => code !== data.CodeSeat,
+                        (code) => code !== data.CodeSeatCancel,
                     );
                 }
 
@@ -169,6 +169,18 @@ const deleteCodeSeat = (data) => {
     }
 };
 
+const deleteCodeSeatInCheck = (data) => {
+    console.log('dang lam ma', data);
+    try {
+        console.log('lay du lieu', data);
+        axios.put(`http://localhost:4000/codeSeat/removeCodeSeat/${data.FlightNumber}`, {
+            CodeSeatCancel: data.CodeSeatCancel,
+            TypeTicket: data.TypeTicket,
+        });
+    } catch (error) {
+        console.log(error);
+    }
+};
 const handleSendEmailCancelTicket = async (data) => {
     await axios;
     fetch('http://localhost:4000/sendEmail/', {
@@ -197,6 +209,7 @@ function ShowNotifyCancel({ data }) {
         }
         handleSendEmailCancelTicket(data);
         deleteNotify(data);
+        deleteCodeSeatInCheck(data);
     };
 
     return (

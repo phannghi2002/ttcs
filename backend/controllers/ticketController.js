@@ -118,6 +118,7 @@ export const getAllTicket = async (req, res) => {
     //for pagination
     // const page = parseInt(req.query.page);
 
+    console.log('e cu in ra t xem nao');
     try {
         const tickets = await Ticket.find({});
         // .skip(page * 5)

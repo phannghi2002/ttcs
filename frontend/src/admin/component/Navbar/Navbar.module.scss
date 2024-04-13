@@ -4,6 +4,10 @@
     margin-right: 100px;
     position: relative;
 
+    &:hover {
+        cursor: pointer;
+    }
+
     &::before {
         content: '';
         position: absolute;

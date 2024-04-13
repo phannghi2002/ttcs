@@ -61,7 +61,9 @@ function MyFlight() {
     }, [CodeTicket]);
 
     const handleSearch = () => {
-        fetchAPI();
+        if (CodeTicket === '') {
+            toast.error('Không được để trống');
+        } else fetchAPI();
     };
 
     return (

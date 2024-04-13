@@ -39,7 +39,11 @@ const cancelSchema = new mongoose.Schema({
         type: String,
         require: true,
     },
-    CodeSeat: {
+    CodeSeatCancel: {
+        type: String,
+        require: true,
+    },
+    FlightNumber: {
         type: String,
         require: true,
     },

@@ -307,7 +307,60 @@ export const getAllCodeSeat = async (req, res) => {
     } catch (error) {
         res.status(404).json({
             success: false,
-            message: 'Not found ',
+            //message: 'Not found ',
+            message: 'co gọi deo dau ma thay ',
+        });
+    }
+};
+
+// export const updateCodeSeatAfterCancel = async (req, res) => {
+//     const { FlightNumber } = req.params;
+//     const { CodeSeat, TypeTicket } = req.body;
+//     console.log('ko lot luon af', req.body, CodeSeat, TypeTicket);
+//     try {
+//         const updatedCodeSeat = await CodeSeat.findOneAndUpdate(
+//             { FlightNumber: FlightNumber },
+
+//             { $pull: { [TypeTicket]: CodeSeat } },
+//             { new: true },
+//         );
+//         console.log('Data ne m', updatedCodeSeat);
+//         res.status(200).json({
+//             success: true,
+//             message: 'CodeSeat removed successfully',
+//             data: updatedCodeSeat,
+//         });
+//     } catch (error) {
+//         console.log('Loi o day ne', error);
+//         res.status(500).json({
+//             success: false,
+//             message: 'Error removing CodeSeat',
+//         });
+//     }
+// };
+
+export const updateCodeSeatAfterCancel = async (req, res) => {
+    const { FlightNumber } = req.params;
+    const { CodeSeatCancel, TypeTicket } = req.body;
+    console.log('ko lot luon af', req.body, CodeSeatCancel, TypeTicket);
+    try {
+        const filter = { FlightNumber: FlightNumber };
+        const update = { $pull: { [TypeTicket]: { $in: [CodeSeatCancel] } } };
+        const options = { new: true };
+
+        const updatedCodeSeat = await CodeSeat.updateOne(filter, update, options).exec();
+
+        console.log('Data ne m', updatedCodeSeat);
+        res.status(200).json({
+            success: true,
+            message: 'CodeSeat removed successfully',
+            data: updatedCodeSeat,
+        });
+    } catch (error) {
+        console.log('Loi o day ne', error);
+        res.status(500).json({
+            success: false,
+            message: 'Error removing CodeSeat',
         });
     }
 };
